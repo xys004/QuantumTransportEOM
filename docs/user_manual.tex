@@ -1,0 +1,490 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\geometry{margin=1in}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue,
+  pdftitle={QuantumTransportEOM User Manual},
+  pdfauthor={QuantumTransportEOM Project}
+}
+
+\lstdefinestyle{py}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{teal},
+  stringstyle=\color{purple},
+  breaklines=true,
+  showstringspaces=false,
+  frame=single
+}
+
+\lstdefinestyle{ps}{
+  language=bash,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{teal},
+  stringstyle=\color{purple},
+  breaklines=true,
+  showstringspaces=false,
+  frame=single
+}
+
+\title{QuantumTransportEOM\\Detailed User Manual}
+\author{Project Documentation}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Purpose and Scope}
+QuantumTransportEOM is a standalone Python package for analytical and numerical workflows in quantum transport theory, with special focus on:
+\begin{itemize}[leftmargin=1.5em]
+  \item commutator and anticommutator calculations for operator algebras,
+  \item equation-of-motion (EOM) closure analysis,
+  \item Rashba-Hubbard tight-binding ring Hamiltonians in real space and reciprocal space,
+  \item retarded, advanced, lesser, and greater Green functions in equilibrium,
+  \item self-consistent collinear-Hartree loops,
+  \item transport observables (current density, persistent current, and Drude finite-difference proxy).
+\end{itemize}
+
+This manual describes the full package architecture, installation, API behavior, formula conventions, and practical workflows.
+
+\section{Project Layout}
+The standalone folder is:
+\begin{lstlisting}[style=ps]
+QuantumTransportEOM/
+  pyproject.toml
+  setup.py
+  run_all.ps1
+  README.md
+  src/quantum_transport/
+    __init__.py
+    algebra.py
+    eom.py
+    hamiltonians.py
+    greens.py
+    mean_field.py
+    transport.py
+  examples/
+    demo.py
+  tests/
+    test_quantum_transport.py
+  docs/
+    user_manual.tex
+    user_manual.pdf
+\end{lstlisting}
+
+\section{Installation and Environment}
+\subsection{Python Requirements}
+\begin{itemize}[leftmargin=1.5em]
+  \item Python 3.9 or newer.
+  \item Package dependencies:
+  \begin{itemize}[leftmargin=1.5em]
+    \item \texttt{numpy}
+    \item \texttt{sympy}
+  \end{itemize}
+\end{itemize}
+
+\subsection{Editable Install}
+From \texttt{QuantumTransportEOM/}:
+\begin{lstlisting}[style=ps]
+python -m pip install -e .
+\end{lstlisting}
+
+\subsection{Running the Demo}
+\begin{lstlisting}[style=ps]
+$env:PYTHONPATH=".\src"
+python .\examples\demo.py
+\end{lstlisting}
+
+\subsection{Running Tests}
+\begin{lstlisting}[style=ps]
+python -m pip install pytest
+python -m pytest .\tests\test_quantum_transport.py
+\end{lstlisting}
+
+\subsection{Automation Script}
+Use the provided script:
+\begin{lstlisting}[style=ps]
+.\run_all.ps1
+\end{lstlisting}
+
+Useful switches:
+\begin{itemize}[leftmargin=1.5em]
+  \item \texttt{-SkipInstall}
+  \item \texttt{-SkipDemo}
+  \item \texttt{-SkipTests}
+  \item \texttt{-InstallPytest}
+  \item \texttt{-BuildManual}
+\end{itemize}
+
+\section{Mathematical Conventions}
+\subsection{Basis and Indexing}
+In the numerical modules, the spinful site basis is ordered as
+\[
+(0,\uparrow),(0,\downarrow),(1,\uparrow),(1,\downarrow),\dots,(N-1,\uparrow),(N-1,\downarrow).
+\]
+Hence the Hamiltonian dimension is \(2N \times 2N\).
+
+\subsection{Rashba-Hubbard Ring Hamiltonian}
+The implemented mean-field real-space Hamiltonian is:
+\begin{align}
+H &= \sum_{n,\sigma} E'_{n\sigma}\, c^\dagger_{n\sigma} c_{n\sigma}
+ + \sum_n \left(c^\dagger_{n+1}\,\Gamma_{n+1,n}\,c_n + \mathrm{h.c.}\right),\\
+E'_{n\uparrow} &= E_{n\uparrow} + U\langle n_{n\downarrow}\rangle,\quad
+E'_{n\downarrow} = E_{n\downarrow} + U\langle n_{n\uparrow}\rangle.
+\end{align}
+The nearest-neighbor spin matrix \(\Gamma_{n+1,n}\) contains both hopping and Rashba terms with Peierls phase
+\[
+\theta = \frac{2\pi}{N}\frac{\phi}{\phi_0}.
+\]
+
+\subsection{Green Functions}
+For a quadratic Hamiltonian \(H\):
+\begin{align}
+G^r(\omega) &= \left[(\omega + i\eta)I - H\right]^{-1},\\
+G^a(\omega) &= \left[(\omega - i\eta)I - H\right]^{-1}.
+\end{align}
+Equilibrium lesser and greater functions:
+\begin{align}
+G^<(\omega) &= f(\omega)\left(G^a(\omega)-G^r(\omega)\right),\\
+G^>(\omega) &= \left(f(\omega)-1\right)\left(G^a(\omega)-G^r(\omega)\right),
+\end{align}
+with Fermi function \(f(\omega)\).
+
+\subsection{Transport Quantities}
+The package computes:
+\begin{itemize}[leftmargin=1.5em]
+  \item \(J_c(\omega)\): current density integrand built from matrix elements of \(G^r-G^a\), hopping \(\gamma\), Rashba \(\lambda_R\), and flux phase factors.
+  \item \(I_c(\phi)\): persistent current by numerical integration over \(\omega\):
+  \[
+  I_c(\phi)=\int J_c(\omega)\,d\omega.
+  \]
+  \item Drude proxy:
+  \[
+  D \sim \frac{dI}{d\phi}\approx\frac{I(\phi+\delta\phi)-I(\phi-\delta\phi)}{2\delta\phi}.
+  \]
+\end{itemize}
+
+\section{Module-by-Module API Reference}
+\subsection{\texttt{quantum\_transport.algebra}}
+\textbf{Purpose:} symbolic noncommutative algebra utilities.
+
+\begin{longtable}{>{\ttfamily}p{0.28\textwidth} p{0.67\textwidth}}
+\toprule
+Function & Behavior \\
+\midrule
+\endhead
+commutator(a,b,simplify=True) & Returns \([a,b]=ab-ba\). Uses SymPy expand and optional simplify. \\
+anticommutator(a,b,simplify=True) & Returns \(\{a,b\}=ab+ba\). \\
+decompose\_in\_basis(expr,basis) & Returns \((\mathbf{c}, r)\) such that \(expr=\sum_j c_j\,basis_j + r\). Useful for EOM projection diagnostics. \\
+operator\_symbols(prefix,size) & Creates noncommutative SymPy symbols (for example \texttt{c0,c1,...}). \\
+\bottomrule
+\end{longtable}
+
+\subsection{\texttt{quantum\_transport.eom}}
+\textbf{Purpose:} EOM closure checks and symbolic retarded Green solver on closed bases.
+
+\begin{longtable}{>{\ttfamily}p{0.28\textwidth} p{0.67\textwidth}}
+\toprule
+Object / Function & Behavior \\
+\midrule
+\endhead
+EOMClosureResult & Dataclass with fields: \texttt{operators}, \texttt{eom\_matrix}, \texttt{residuals}. Property \texttt{is\_closed} is true if all residuals are zero. \\
+check\_eom\_closure(operators,H) & Builds matrix \(M\) from \([O_i,H]=\sum_j M_{ij}O_j+\mathrm{residual}_i\). \\
+retarded\_green\_from\_eom(closure,C,\(\omega\),\(\eta\)) & Solves \(((\omega+i\eta)I-M)G^r=C\). Raises if basis is not closed. \\
+source\_anticommutator\_matrix(A,B) & Builds symbolic \(C_{ij}=\{A_i,B_j\}\). \\
+\bottomrule
+\end{longtable}
+
+\subsection{\texttt{quantum\_transport.hamiltonians}}
+\textbf{Purpose:} numerical Hamiltonian builders and real\(\leftrightarrow\)k-space transforms.
+
+\begin{longtable}{>{\ttfamily}p{0.28\textwidth} p{0.67\textwidth}}
+\toprule
+Function & Behavior \\
+\midrule
+\endhead
+build\_rashba\_hubbard\_ring\_real\_space(...) & Builds \(2N\times2N\) Hermitian matrix with on-site MF shift, NN hopping, Rashba coupling, and Peierls phase. \\
+real\_to\_k\_space(h\_real,n\_sites,spin\_dim=2) & Applies discrete Fourier transform over site index and returns \((H_k, k\_values)\). \\
+split\_k\_blocks(h\_k,n\_sites,spin\_dim=2) & Splits \(H_k\) into contiguous \(spin\_dim\times spin\_dim\) diagonal blocks (per k index in the transformed ordering). \\
+\bottomrule
+\end{longtable}
+
+\subsection{\texttt{quantum\_transport.greens}}
+\textbf{Purpose:} retarded/advanced and equilibrium Keldysh components.
+
+\begin{longtable}{>{\ttfamily}p{0.28\textwidth} p{0.67\textwidth}}
+\toprule
+Function & Behavior \\
+\midrule
+\endhead
+fermi\_dirac(\(\omega\),mu=0,T=0) & At \(T=0\): returns 1 below \(\mu\), 0 above, and 0.5 at equality. At \(T>0\): returns logistic form. \\
+retarded\_green(h,\(\omega\),eta) & Matrix inverse for scalar or vector \(\omega\). Returns shape \((dim,dim)\) or \((n\_\omega,dim,dim)\). \\
+advanced\_green(h,\(\omega\),eta) & Same shape behavior as retarded, with \(-i\eta\). \\
+spectral\_function(G\_r,G\_a) & Returns \(A=i(G^r-G^a)\). \\
+lesser\_green\_equilibrium(...) & Returns \(G^<=f(G^a-G^r)\). Supports scalar/vector \(\omega\). \\
+greater\_green\_equilibrium(...) & Returns \(G^>=(f-1)(G^a-G^r)\). \\
+\bottomrule
+\end{longtable}
+
+\subsection{\texttt{quantum\_transport.mean\_field}}
+\textbf{Purpose:} self-consistent collinear-Hartree loop for on-site Hubbard decoupling.
+
+\begin{longtable}{>{\ttfamily}p{0.28\textwidth} p{0.67\textwidth}}
+\toprule
+Object / Function & Behavior \\
+\midrule
+\endhead
+HartreeFockResult & Dataclass containing final Hamiltonian, eigenpairs, \(n_\uparrow\), \(n_\downarrow\), occupations, iteration count, and convergence flag. \\
+hartree\_fock\_self\_consistent(...) & Iterative density update with linear mixing until max density change \(<\) \texttt{tol} or \texttt{max\_iter}. \\
+\bottomrule
+\end{longtable}
+
+Important implementation details:
+\begin{itemize}[leftmargin=1.5em]
+  \item Zero-temperature filling with optional fractional last occupation for non-integer \(N_e\).
+  \item Density matrix construction:
+  \[
+  \rho = V \,\mathrm{diag}(occ)\, V^\dagger.
+  \]
+  \item Spin densities sampled from diagonal entries in interleaved basis:
+  \[
+  n_{\uparrow}(n)=\rho_{2n,2n},\quad n_{\downarrow}(n)=\rho_{2n+1,2n+1}.
+  \]
+\end{itemize}
+
+\subsection{\texttt{quantum\_transport.transport}}
+\textbf{Purpose:} transport observables from Green functions.
+
+\begin{longtable}{>{\ttfamily}p{0.28\textwidth} p{0.67\textwidth}}
+\toprule
+Function & Behavior \\
+\midrule
+\endhead
+current\_density\_omega(...) & Computes \(J_c(\omega)\) in the manuscript-style structure, combining spin-preserving and Rashba spin-flip terms. Returns real scalar. \\
+persistent\_current(...) & Builds \(G^r,G^a\) over \(\omega\) grid and integrates \(J_c(\omega)\) with trapezoidal rule. \\
+drude\_weight(Iplus,Iminus,dphi) & Central finite difference \((I_+-I_-)/(2\,d\phi)\). \\
+\bottomrule
+\end{longtable}
+
+\section{End-to-End Workflows}
+\subsection{Workflow A: HF + Current + Drude}
+\begin{lstlisting}[style=py]
+import numpy as np
+from quantum_transport import (
+    hartree_fock_self_consistent,
+    persistent_current,
+    drude_weight,
+)
+
+n_sites = 8
+n_electrons = 8
+gamma = 1.0
+lambda_r = 0.4
+u_hubbard = 0.4
+phi = 0.2
+dphi = 1e-3
+
+hf = hartree_fock_self_consistent(
+    n_sites=n_sites,
+    n_electrons=n_electrons,
+    gamma=gamma,
+    lambda_r=lambda_r,
+    phi_over_phi0=phi,
+    u_hubbard=u_hubbard,
+)
+
+mu = 0.5 * (hf.eigenvalues[n_electrons - 1] + hf.eigenvalues[n_electrons])
+omega_grid = np.linspace(-6.0, 6.0, 2001)
+
+I0 = persistent_current(
+    hamiltonian=hf.hamiltonian,
+    omega_grid=omega_grid,
+    n_sites=n_sites,
+    gamma=gamma,
+    lambda_r=lambda_r,
+    phi_over_phi0=phi,
+    mu=mu,
+)
+
+hf_plus = hartree_fock_self_consistent(n_sites, n_electrons, gamma, lambda_r, phi + dphi, u_hubbard)
+hf_minus = hartree_fock_self_consistent(n_sites, n_electrons, gamma, lambda_r, phi - dphi, u_hubbard)
+
+Iplus = persistent_current(hf_plus.hamiltonian, omega_grid, n_sites, gamma, lambda_r, phi + dphi, mu)
+Iminus = persistent_current(hf_minus.hamiltonian, omega_grid, n_sites, gamma, lambda_r, phi - dphi, mu)
+
+D = drude_weight(Iplus, Iminus, dphi)
+print(I0, D)
+\end{lstlisting}
+
+\subsection{Workflow B: Symbolic EOM Closure}
+\begin{lstlisting}[style=py]
+import sympy as sp
+from quantum_transport import commutator, anticommutator, check_eom_closure
+
+c0, c1 = sp.symbols("c0 c1", commutative=False)
+H = c0*c1 + c1*c0
+
+print(commutator(c0, H))
+print(anticommutator(c0, c1))
+
+closure = check_eom_closure([c0, c1], H)
+print("Closed basis?", closure.is_closed)
+print("Residuals:", closure.residuals)
+\end{lstlisting}
+
+\subsection{Workflow C: Real to Reciprocal Space}
+\begin{lstlisting}[style=py]
+import numpy as np
+from quantum_transport import (
+    build_rashba_hubbard_ring_real_space,
+    real_to_k_space,
+    split_k_blocks
+)
+
+H = build_rashba_hubbard_ring_real_space(
+    n_sites=8,
+    gamma=1.0,
+    lambda_r=0.3,
+    phi_over_phi0=0.1,
+)
+Hk, k = real_to_k_space(H, n_sites=8, spin_dim=2)
+blocks = split_k_blocks(Hk, n_sites=8, spin_dim=2, require_block_diagonal=False)
+
+print(k[:3])
+print(blocks[0])
+\end{lstlisting}
+
+\section{Using \texttt{run\_all.ps1}}
+Basic use:
+\begin{lstlisting}[style=ps]
+.\run_all.ps1
+\end{lstlisting}
+
+Install package and pytest if missing, run demo and tests, and build manual PDF:
+\begin{lstlisting}[style=ps]
+.\run_all.ps1 -InstallPytest -BuildManual
+\end{lstlisting}
+
+Run only docs build:
+\begin{lstlisting}[style=ps]
+.\run_all.ps1 -SkipInstall -SkipDemo -SkipTests -BuildManual
+\end{lstlisting}
+
+\section{Testing and Validation}
+Current tests verify:
+\begin{itemize}[leftmargin=1.5em]
+  \item commutator and anticommutator identities,
+  \item Hermiticity of the built ring Hamiltonian,
+  \item spectrum invariance under real-to-k transformation,
+  \item shape consistency of \(G^r,G^a,G^<,G^>\),
+  \item execution of HF loop with physically valid returned densities.
+\end{itemize}
+
+Recommended additional tests for research-grade studies:
+\begin{itemize}[leftmargin=1.5em]
+  \item convergence sensitivity vs mixing and tolerance,
+  \item finite-size scaling of persistent current with \(N\),
+  \item cross-check between derivative-of-energy and Green-function current,
+  \item benchmark against exact diagonalization for small \(N\),
+  \item regression tests for particle-hole symmetry in even bipartite rings.
+\end{itemize}
+
+\section{Troubleshooting}
+\subsection{Import Errors}
+If Python cannot import \texttt{quantum\_transport}, run:
+\begin{lstlisting}[style=ps]
+python -m pip install -e .
+\end{lstlisting}
+or set:
+\begin{lstlisting}[style=ps]
+$env:PYTHONPATH=".\src"
+\end{lstlisting}
+
+\subsection{pytest Missing}
+\begin{lstlisting}[style=ps]
+python -m pip install pytest
+\end{lstlisting}
+or:
+\begin{lstlisting}[style=ps]
+.\run_all.ps1 -InstallPytest
+\end{lstlisting}
+
+\subsection{No PDF Generated}
+If \texttt{pdflatex} is not installed, install MiKTeX or TeX Live, then run:
+\begin{lstlisting}[style=ps]
+.\run_all.ps1 -BuildManual -SkipInstall -SkipDemo -SkipTests
+\end{lstlisting}
+
+\subsection{HF Not Converging}
+Try:
+\begin{itemize}[leftmargin=1.5em]
+  \item lower \texttt{mixing} (for example 0.2),
+  \item higher \texttt{max\_iter},
+  \item relaxed \texttt{tol} for exploratory scans,
+  \item better initial densities if a specific ordered phase is expected.
+\end{itemize}
+
+\section{Practical Notes for Research Use}
+\begin{itemize}[leftmargin=1.5em]
+  \item The equilibrium lesser/greater relations implemented here assume closed-system equilibrium.
+  \item For open systems with leads, add self-energies and Keldysh equations with contact distribution functions.
+  \item The current implementation is optimized for clarity and correctness, not large-scale performance.
+  \item For production sweeps, vectorize parameter scans externally and cache Hamiltonians where possible.
+\end{itemize}
+
+\section{Extension Roadmap}
+Suggested next extensions:
+\begin{enumerate}[leftmargin=1.5em]
+  \item Add lead self-energy support for nonequilibrium transport.
+  \item Add finite-temperature HF occupations in the self-consistent loop.
+  \item Add exact diagonalization backend for small clusters.
+  \item Add automatic symmetry checks (particle-hole, time reversal, inversion where applicable).
+  \item Add plotting utilities for spectra, \(I(\phi)\), and \(D(\lambda_R)\).
+\end{enumerate}
+
+\section{License and Citation}
+If used in academic work, cite the corresponding project repository and include the exact commit hash used to generate numerical results.
+
+\appendix
+\section{Quick API Summary}
+\begin{longtable}{>{\ttfamily}p{0.38\textwidth} p{0.55\textwidth}}
+\toprule
+Name & Summary \\
+\midrule
+\endhead
+commutator, anticommutator & Symbolic operator algebra primitives. \\
+check\_eom\_closure & EOM matrix and residual closure check. \\
+build\_rashba\_hubbard\_ring\_real\_space & Core spinful real-space Hamiltonian constructor. \\
+real\_to\_k\_space, split\_k\_blocks & Reciprocal-space transform and block extraction. \\
+retarded\_green, advanced\_green & Frequency-domain matrix Green functions. \\
+lesser\_green\_equilibrium, greater\_green\_equilibrium & Equilibrium Keldysh components. \\
+hartree\_fock\_self\_consistent & Mean-field self-consistent solver. \\
+current\_density\_omega, persistent\_current & Transport observables from Green functions. \\
+drude\_weight & Finite difference Drude proxy from current response. \\
+\bottomrule
+\end{longtable}
+
+\end{document}

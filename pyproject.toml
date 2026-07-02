@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantum-transport-eom"
+version = "0.1.0b1"
+description = "Analytical and numerical tools for commutators, EOM Green functions, and transport in Rashba-Hubbard rings"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "numpy>=2.0",
+  "sympy>=1.11",
+  "matplotlib>=3.7",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8",
+]
+docs = [
+  "matplotlib>=3.7",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
