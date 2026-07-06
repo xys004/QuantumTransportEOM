@@ -9,6 +9,17 @@ import numpy as np
 
 from .greens import fermi_dirac
 from .hamiltonians import build_rashba_hubbard_ring_real_space
+from .numerics import (
+    batched_current_spectral_density,
+    batched_keldysh_component,
+    batched_retarded_green,
+    batched_transmission,
+    blocked_over_grid,
+    gamma_from_sigma_stack,
+    get_backend,
+    sigma_stack,
+    to_numpy,
+)
 
 
 ArrayLike = np.ndarray
@@ -500,11 +511,80 @@ class MatrixTransportView:
     def keldysh_green(self, omega: float, eta: float = 0.0) -> np.ndarray:
         return self.lesser(omega, eta=eta) + self.greater(omega, eta=eta)
 
-    def lesser_values(self, omega_grid: np.ndarray, eta: float = 0.0) -> np.ndarray:
-        return np.array([self.lesser(float(omega), eta=eta) for omega in np.asarray(omega_grid, dtype=float)], dtype=np.complex128)
+    def _lead_sigma_stacks(
+        self,
+        omega_grid: np.ndarray,
+        *,
+        components: Sequence[str] = ("retarded",),
+        workers: int | None = None,
+    ) -> dict[str, tuple[np.ndarray, np.ndarray]]:
+        """Evaluate (left, right) lead self-energy stacks on the host for the requested components."""
+        grid = np.asarray(omega_grid, dtype=float)
+        stacks: dict[str, tuple[np.ndarray, np.ndarray]] = {}
+        for component in components:
+            left_fn = getattr(self.left_lead, f"sigma_{component}")
+            right_fn = getattr(self.right_lead, f"sigma_{component}")
+            stacks[component] = (
+                sigma_stack(left_fn, grid, workers=workers),
+                sigma_stack(right_fn, grid, workers=workers),
+            )
+        return stacks
 
-    def greater_values(self, omega_grid: np.ndarray, eta: float = 0.0) -> np.ndarray:
-        return np.array([self.greater(float(omega), eta=eta) for omega in np.asarray(omega_grid, dtype=float)], dtype=np.complex128)
+    def retarded_values(
+        self,
+        omega_grid: np.ndarray,
+        eta: float = 0.0,
+        *,
+        backend: Any = None,
+        workers: int | None = None,
+    ) -> np.ndarray:
+        """Retarded Green function on a frequency grid via blocked batched inversions, shape (n, dim, dim)."""
+        xp = get_backend(backend)
+
+        def compute(subgrid: np.ndarray) -> np.ndarray:
+            sig_l, sig_r = self._lead_sigma_stacks(subgrid)["retarded"]
+            g_r = batched_retarded_green(self.hamiltonian, xp.asarray(sig_l + sig_r), subgrid, eta=eta, xp=xp)
+            return to_numpy(g_r)
+
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
+
+    def lesser_values(
+        self,
+        omega_grid: np.ndarray,
+        eta: float = 0.0,
+        *,
+        backend: Any = None,
+        workers: int | None = None,
+    ) -> np.ndarray:
+        xp = get_backend(backend)
+
+        def compute(subgrid: np.ndarray) -> np.ndarray:
+            stacks = self._lead_sigma_stacks(subgrid, components=("retarded", "lesser"))
+            sig_l, sig_r = stacks["retarded"]
+            g_r = batched_retarded_green(self.hamiltonian, xp.asarray(sig_l + sig_r), subgrid, eta=eta, xp=xp)
+            less_l, less_r = stacks["lesser"]
+            return to_numpy(batched_keldysh_component(g_r, xp.asarray(less_l + less_r), xp=xp))
+
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
+
+    def greater_values(
+        self,
+        omega_grid: np.ndarray,
+        eta: float = 0.0,
+        *,
+        backend: Any = None,
+        workers: int | None = None,
+    ) -> np.ndarray:
+        xp = get_backend(backend)
+
+        def compute(subgrid: np.ndarray) -> np.ndarray:
+            stacks = self._lead_sigma_stacks(subgrid, components=("retarded", "greater"))
+            sig_l, sig_r = stacks["retarded"]
+            g_r = batched_retarded_green(self.hamiltonian, xp.asarray(sig_l + sig_r), subgrid, eta=eta, xp=xp)
+            great_l, great_r = stacks["greater"]
+            return to_numpy(batched_keldysh_component(g_r, xp.asarray(great_l + great_r), xp=xp))
+
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
 
     def current_spectral_density(self, omega: float, lead: str = "left", charge: float = 1.0, eta: float = 0.0) -> float:
         selected = self._lead(lead)
@@ -515,8 +595,47 @@ class MatrixTransportView:
         integrand = (charge / (2.0 * np.pi)) * np.trace(sigma_less @ g_greater - sigma_greater @ g_less)
         return float(np.real(integrand))
 
-    def current_spectral_density_values(self, omega_grid: np.ndarray, lead: str = "left", charge: float = 1.0, eta: float = 0.0) -> np.ndarray:
-        return np.array([self.current_spectral_density(float(omega), lead=lead, charge=charge, eta=eta) for omega in np.asarray(omega_grid, dtype=float)], dtype=float)
+    def current_spectral_density_values(
+        self,
+        omega_grid: np.ndarray,
+        lead: str = "left",
+        charge: float = 1.0,
+        eta: float = 0.0,
+        *,
+        backend: Any = None,
+        workers: int | None = None,
+        spin_projector: np.ndarray | None = None,
+    ) -> np.ndarray:
+        xp = get_backend(backend)
+        lead_index = 0 if self._lead(lead) is self.left_lead else 1
+
+        def compute(subgrid: np.ndarray) -> np.ndarray:
+            stacks = self._lead_sigma_stacks(subgrid, components=("retarded", "lesser", "greater"))
+            sig_l, sig_r = stacks["retarded"]
+            g_r = batched_retarded_green(self.hamiltonian, xp.asarray(sig_l + sig_r), subgrid, eta=eta, xp=xp)
+            less_l, less_r = stacks["lesser"]
+            great_l, great_r = stacks["greater"]
+            g_lesser = batched_keldysh_component(g_r, xp.asarray(less_l + less_r), xp=xp)
+            g_greater = batched_keldysh_component(g_r, xp.asarray(great_l + great_r), xp=xp)
+            sigma_lesser_lead = (less_l, less_r)[lead_index]
+            sigma_greater_lead = (great_l, great_r)[lead_index]
+            if spin_projector is not None:
+                projected_lesser = spin_projector @ sigma_lesser_lead @ spin_projector
+                projected_greater = spin_projector @ sigma_greater_lead @ spin_projector
+            else:
+                projected_lesser = sigma_lesser_lead
+                projected_greater = sigma_greater_lead
+            density = batched_current_spectral_density(
+                g_lesser,
+                g_greater,
+                xp.asarray(projected_lesser),
+                xp.asarray(projected_greater),
+                charge=charge,
+                xp=xp,
+            )
+            return to_numpy(density).astype(float)
+
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
 
     def current_from_keldysh(self, omega_grid: np.ndarray, lead: str = "left", charge: float = 1.0, eta: float = 0.0) -> float:
         omega_grid = np.asarray(omega_grid, dtype=float)
@@ -553,10 +672,18 @@ class MatrixTransportView:
         charge: float = 1.0,
         eta: float = 0.0,
         axis: str = "z",
+        backend: Any = None,
+        workers: int | None = None,
     ) -> np.ndarray:
-        return np.array(
-            [self.spin_resolved_current_spectral_density(float(omega), spin, lead=lead, charge=charge, eta=eta, axis=axis) for omega in np.asarray(omega_grid, dtype=float)],
-            dtype=float,
+        projector = self._spin_axis_projector(axis, spin)
+        return self.current_spectral_density_values(
+            omega_grid,
+            lead=lead,
+            charge=charge,
+            eta=eta,
+            backend=backend,
+            workers=workers,
+            spin_projector=projector,
         )
 
     def spin_resolved_current_from_keldysh(
@@ -576,8 +703,20 @@ class MatrixTransportView:
     def spin_current_spectral_density(self, omega: float, lead: str = "left", charge: float = 1.0, eta: float = 0.0, axis: str = "z") -> float:
         return self.spin_resolved_current_spectral_density(omega, "+", lead=lead, charge=charge, eta=eta, axis=axis) - self.spin_resolved_current_spectral_density(omega, "-", lead=lead, charge=charge, eta=eta, axis=axis)
 
-    def spin_current_spectral_density_values(self, omega_grid: np.ndarray, lead: str = "left", charge: float = 1.0, eta: float = 0.0, axis: str = "z") -> np.ndarray:
-        return np.array([self.spin_current_spectral_density(float(omega), lead=lead, charge=charge, eta=eta, axis=axis) for omega in np.asarray(omega_grid, dtype=float)], dtype=float)
+    def spin_current_spectral_density_values(
+        self,
+        omega_grid: np.ndarray,
+        lead: str = "left",
+        charge: float = 1.0,
+        eta: float = 0.0,
+        axis: str = "z",
+        *,
+        backend: Any = None,
+        workers: int | None = None,
+    ) -> np.ndarray:
+        plus = self.spin_resolved_current_spectral_density_values(omega_grid, "+", lead=lead, charge=charge, eta=eta, axis=axis, backend=backend, workers=workers)
+        minus = self.spin_resolved_current_spectral_density_values(omega_grid, "-", lead=lead, charge=charge, eta=eta, axis=axis, backend=backend, workers=workers)
+        return plus - minus
 
     def spin_current_from_keldysh(self, omega_grid: np.ndarray, lead: str = "left", charge: float = 1.0, eta: float = 0.0, axis: str = "z") -> float:
         omega_grid = np.asarray(omega_grid, dtype=float)
@@ -605,8 +744,41 @@ class MatrixTransportView:
         gamma_r = self.right_lead.gamma(omega)
         return float(np.real(np.trace(gamma_l @ g_r @ gamma_r @ g_a)))
 
-    def transmission_values(self, omega_grid: np.ndarray, eta: float = 0.0) -> np.ndarray:
-        return np.array([self.transmission(float(omega), eta=eta) for omega in np.asarray(omega_grid, dtype=float)], dtype=float)
+    def _transmission_values_batched(
+        self,
+        omega_grid: np.ndarray,
+        eta: float,
+        *,
+        backend: Any,
+        workers: int | None,
+        left_projector: np.ndarray | None = None,
+        right_projector: np.ndarray | None = None,
+    ) -> np.ndarray:
+        xp = get_backend(backend)
+
+        def compute(subgrid: np.ndarray) -> np.ndarray:
+            sig_l, sig_r = self._lead_sigma_stacks(subgrid)["retarded"]
+            g_r = batched_retarded_green(self.hamiltonian, xp.asarray(sig_l + sig_r), subgrid, eta=eta, xp=xp)
+            gamma_l = gamma_from_sigma_stack(sig_l)
+            gamma_r = gamma_from_sigma_stack(sig_r)
+            if left_projector is not None:
+                gamma_l = left_projector @ gamma_l @ left_projector
+            if right_projector is not None:
+                gamma_r = right_projector @ gamma_r @ right_projector
+            values = batched_transmission(g_r, xp.asarray(gamma_l), xp.asarray(gamma_r), xp=xp)
+            return to_numpy(values).astype(float)
+
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
+
+    def transmission_values(
+        self,
+        omega_grid: np.ndarray,
+        eta: float = 0.0,
+        *,
+        backend: Any = None,
+        workers: int | None = None,
+    ) -> np.ndarray:
+        return self._transmission_values_batched(omega_grid, eta, backend=backend, workers=workers)
 
     def spin_transmission(self, omega: float, left_spin: str, right_spin: str, eta: float = 0.0) -> float:
         g_r = self.retarded(omega, eta=eta)
@@ -615,8 +787,24 @@ class MatrixTransportView:
         gamma_r = self._project_spin_block(self.right_lead.gamma(omega), right_spin)
         return float(np.real(np.trace(gamma_l @ g_r @ gamma_r @ g_a)))
 
-    def spin_transmission_values(self, omega_grid: np.ndarray, left_spin: str, right_spin: str, eta: float = 0.0) -> np.ndarray:
-        return np.array([self.spin_transmission(float(omega), left_spin, right_spin, eta=eta) for omega in np.asarray(omega_grid, dtype=float)], dtype=float)
+    def spin_transmission_values(
+        self,
+        omega_grid: np.ndarray,
+        left_spin: str,
+        right_spin: str,
+        eta: float = 0.0,
+        *,
+        backend: Any = None,
+        workers: int | None = None,
+    ) -> np.ndarray:
+        return self._transmission_values_batched(
+            omega_grid,
+            eta,
+            backend=backend,
+            workers=workers,
+            left_projector=self._spin_projector(left_spin),
+            right_projector=self._spin_projector(right_spin),
+        )
 
     def spin_resolved_transmission(self, omega: float, spin: str, eta: float = 0.0, axis: str = "z") -> float:
         g_r = self.retarded(omega, eta=eta)
@@ -625,8 +813,23 @@ class MatrixTransportView:
         gamma_r = self._project_spin_axis_block(self.right_lead.gamma(omega), axis, spin)
         return float(np.real(np.trace(gamma_l @ g_r @ gamma_r @ g_a)))
 
-    def spin_resolved_transmission_values(self, omega_grid: np.ndarray, spin: str, eta: float = 0.0, axis: str = "z") -> np.ndarray:
-        return np.array([self.spin_resolved_transmission(float(omega), spin, eta=eta, axis=axis) for omega in np.asarray(omega_grid, dtype=float)], dtype=float)
+    def spin_resolved_transmission_values(
+        self,
+        omega_grid: np.ndarray,
+        spin: str,
+        eta: float = 0.0,
+        axis: str = "z",
+        *,
+        backend: Any = None,
+        workers: int | None = None,
+    ) -> np.ndarray:
+        return self._transmission_values_batched(
+            omega_grid,
+            eta,
+            backend=backend,
+            workers=workers,
+            right_projector=self._spin_axis_projector(axis, spin),
+        )
 
     def spin_polarization(self, omega: float, eta: float = 0.0, axis: str = "z") -> float:
         plus = self.spin_resolved_transmission(omega, "+", eta=eta, axis=axis)
@@ -636,8 +839,22 @@ class MatrixTransportView:
             return 0.0
         return float((plus - minus) / total)
 
-    def spin_polarization_values(self, omega_grid: np.ndarray, eta: float = 0.0, axis: str = "z") -> np.ndarray:
-        return np.array([self.spin_polarization(float(omega), eta=eta, axis=axis) for omega in np.asarray(omega_grid, dtype=float)], dtype=float)
+    def spin_polarization_values(
+        self,
+        omega_grid: np.ndarray,
+        eta: float = 0.0,
+        axis: str = "z",
+        *,
+        backend: Any = None,
+        workers: int | None = None,
+    ) -> np.ndarray:
+        plus = self.spin_resolved_transmission_values(omega_grid, "+", eta=eta, axis=axis, backend=backend, workers=workers)
+        minus = self.spin_resolved_transmission_values(omega_grid, "-", eta=eta, axis=axis, backend=backend, workers=workers)
+        total = plus + minus
+        polarization = np.zeros_like(total)
+        mask = np.abs(total) >= 1e-15
+        polarization[mask] = (plus[mask] - minus[mask]) / total[mask]
+        return polarization
 
     def conductance(self, mu: float = 0.0, temperature: float = 0.0, charge: float = 1.0, eta: float = 0.0, omega_grid: np.ndarray | None = None) -> float:
         prefactor = charge**2 / (2.0 * np.pi)

@@ -10,7 +10,7 @@ from sympy import KroneckerDelta
 from sympy.physics.secondquant import AnnihilateFermion, CreateFermion, F, Fd, wicks
 
 from .algebra import decompose_in_basis
-from .symbolic_base import SymbolicOperator
+from .symbolic_base import SymbolicOperator, eom_system_latex
 
 
 @dataclass
@@ -22,6 +22,9 @@ class FermionicEOMResult:
     @property
     def is_closed(self) -> bool:
         return all(sp.simplify(residual) == 0 for residual in self.residuals)
+
+    def _repr_latex_(self) -> str:
+        return eom_system_latex(self.operators, self.eom_matrix, self.residuals)
 
 
 def annihilate(index: sp.Expr) -> sp.Expr:
@@ -56,7 +59,9 @@ def number_operator(index: sp.Expr, simplify: bool = True) -> sp.Expr:
 
 
 def _unwrap(expr: sp.Expr | "SQObj") -> sp.Expr:
-    return expr.expr if isinstance(expr, SQObj) else expr
+    # Unwrap any operator wrapper (SQObj, BQObj, ...) so mixed
+    # fermion-boson products like fd(0) * b(0) build cleanly.
+    return expr.expr if isinstance(expr, SymbolicOperator) else expr
 
 
 def _wrap(expr: sp.Expr | "SQObj") -> "SQObj":
@@ -187,6 +192,61 @@ def _collapse_partition_of_unity(expr: sp.Expr) -> sp.Expr:
     return current
 
 
+def _normal_order_ladder_factors(factors: list[sp.Expr]) -> sp.Expr:
+    """
+    Normal-order a string of fermionic ladder operators with the CAR algebra.
+
+    Rewrites adjacent ``F(i) Fd(j)`` pairs as ``KroneckerDelta(i, j) - Fd(j) F(i)``,
+    kills adjacent identical operators (nilpotency), and sorts same-type runs
+    canonically with anticommutation signs so equivalent strings cancel.
+    Terminates because each rewrite strictly reduces a lexicographic measure
+    (annihilator-before-creator inversions, then within-run disorder).
+    """
+    for position in range(len(factors) - 1):
+        left, right = factors[position], factors[position + 1]
+        if type(left) is type(right):
+            if left.args[0] == right.args[0]:
+                return sp.Integer(0)
+            if sp.default_sort_key(left.args[0]) > sp.default_sort_key(right.args[0]):
+                swapped = [*factors[:position], right, left, *factors[position + 2 :]]
+                return -_normal_order_ladder_factors(swapped)
+            continue
+        if isinstance(left, AnnihilateFermion) and isinstance(right, CreateFermion):
+            contracted = factors[:position] + factors[position + 2 :]
+            swapped = [*factors[:position], right, left, *factors[position + 2 :]]
+            return KroneckerDelta(left.args[0], right.args[0]) * _normal_order_ladder_factors(contracted) - _normal_order_ladder_factors(swapped)
+    return sp.Mul(*factors) if factors else sp.Integer(1)
+
+
+def normal_order_fermionic(expr: sp.Expr) -> sp.Expr:
+    """
+    Normal-order a polynomial in fermionic ladder operators without ``wicks``.
+
+    This is the robust path for Hamiltonians with symbolic mode labels
+    (e.g. ``"up"``/``"down"`` from ``custom_model``), where sympy's ``wicks``
+    machinery fails while sorting repeated operators. Raises ``ValueError`` if
+    the expression contains non-fermionic noncommutative factors.
+    """
+    expanded = sp.expand(_reduce_fermion_powers(_unwrap(expr)))
+    if expanded == 0:
+        return sp.Integer(0)
+    terms = expanded.args if isinstance(expanded, sp.Add) else (expanded,)
+    ordered_terms = []
+    for term in terms:
+        factors = term.args if isinstance(term, sp.Mul) else (term,)
+        coefficient = sp.Integer(1)
+        ladder: list[sp.Expr] = []
+        for factor in factors:
+            if factor.is_commutative:
+                coefficient *= factor
+            elif isinstance(factor, (AnnihilateFermion, CreateFermion)):
+                ladder.append(factor)
+            else:
+                raise ValueError(f"normal_order_fermionic cannot handle factor {factor!r} in term {term}.")
+        ordered_terms.append(coefficient * _normal_order_ladder_factors(ladder))
+    return sp.expand(sp.Add(*ordered_terms))
+
+
 def simplify_secondquant(
     expr: sp.Expr,
     *,
@@ -203,12 +263,19 @@ def simplify_secondquant(
     reduced = _reduce_fermion_powers(_unwrap(expr))
     if reduced == 0:
         return sp.Integer(0)
-    simplified = wicks(
-        reduced,
-        expand=expand,
-        simplify_kronecker_deltas=simplify_kronecker_deltas,
-        simplify_dummies=simplify_dummies,
-    )
+    try:
+        simplified = wicks(
+            reduced,
+            expand=expand,
+            simplify_kronecker_deltas=simplify_kronecker_deltas,
+            simplify_dummies=simplify_dummies,
+        )
+    except AttributeError:
+        # sympy's wicks machinery chokes on symbolic mode labels (its internal
+        # sorting builds F(i)**2 powers it cannot handle); fall back to a
+        # direct CAR normal-ordering that leaves explicit KroneckerDelta
+        # factors for callers to collapse.
+        simplified = normal_order_fermionic(reduced)
     simplified = sp.factor_terms(_reduce_fermion_powers(simplified))
     simplified = _collapse_partition_of_unity(simplified)
     return sp.expand(_reduce_fermion_powers(simplified))

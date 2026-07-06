@@ -3,16 +3,34 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 
 import numpy as np
 import sympy as sp
 
 from .bosonic import destroy_b, num_b
-from .devices import LeadSelfEnergy, spin_axis_projector_numeric
+from .devices import LeadSelfEnergy, MatrixDevice, MatrixTransportView, spin_axis_projector_numeric
 from .greens import bose_einstein, fermi_dirac
 from .keldysh import KeldyshSelfEnergy
-from .models import SymbolicModel, anderson_impurity_model, bosonic_harmonic_mode_model, fermionic_single_level_model
+from .models import (
+    SymbolicModel,
+    anderson_impurity_model,
+    bosonic_harmonic_mode_model,
+    custom_model,
+    fermionic_single_level_model,
+    single_particle_hamiltonian_matrix,
+)
+from .numerics import (
+    batched_current_spectral_density,
+    batched_keldysh_component,
+    batched_retarded_green,
+    batched_transmission,
+    blocked_over_grid,
+    gamma_from_sigma_stack,
+    get_backend,
+    sigma_stack,
+    to_numpy,
+)
 from .observables import conductance as observable_conductance, landauer_current as observable_landauer_current, transmission as observable_transmission
 from .secondquant import destroy, num
 
@@ -893,6 +911,128 @@ class OpenAndersonTransportView:
     def spectral_density(self, omega: float, *, eta: float = 0.0, method: str = "hubbard_i", occupations: Mapping[str, float] | None = None) -> np.ndarray:
         return self.spectral_function(omega, eta=eta, method=method, occupations=occupations) / (2.0 * np.pi)
 
+    def _interaction_self_energy_diag_values(
+        self,
+        omega_grid: np.ndarray,
+        sigma_env_diag: np.ndarray,
+        *,
+        eta: float,
+        method: str,
+        occupations: Mapping[str, float] | None,
+    ) -> np.ndarray:
+        """Vectorized interaction self-energy diagonal, shape (n, 2)."""
+        epsilon_up, epsilon_down, interaction_u = self._parameters()
+        occ = self._occupation_map(occupations)
+        z = omega_grid + 1j * eta
+        normalized = self._normalized_method(method)
+        result = np.zeros((omega_grid.size, 2), dtype=np.complex128)
+        if normalized in {"noninteracting", "free"}:
+            return result
+        if normalized == "hartree":
+            result[:, 0] = interaction_u * occ["down"]
+            result[:, 1] = interaction_u * occ["up"]
+            return result
+        if normalized == "hubbard_i":
+            n_down = occ["down"]
+            n_up = occ["up"]
+            result[:, 0] = interaction_u * n_down + interaction_u**2 * n_down * (1.0 - n_down) / (
+                z - epsilon_up - sigma_env_diag[:, 0] - interaction_u * (1.0 - n_down)
+            )
+            result[:, 1] = interaction_u * n_up + interaction_u**2 * n_up * (1.0 - n_up) / (
+                z - epsilon_down - sigma_env_diag[:, 1] - interaction_u * (1.0 - n_up)
+            )
+            return result
+        raise ValueError(f"Unsupported open Anderson method: {method}")
+
+    def retarded_values(
+        self,
+        omega_grid: np.ndarray,
+        *,
+        eta: float = 0.0,
+        method: str = "hubbard_i",
+        occupations: Mapping[str, float] | None = None,
+        backend: Any = None,
+        workers: int | None = None,
+    ) -> np.ndarray:
+        """Retarded Green function on a frequency grid via batched inversions, shape (n, 2, 2)."""
+        xp = get_backend(backend)
+
+        def compute(subgrid: np.ndarray) -> np.ndarray:
+            sigma_env = sigma_stack(lambda omega: self.sigma_retarded(omega, lead="total"), subgrid)
+            sigma_int_diag = self._interaction_self_energy_diag_values(
+                subgrid,
+                sigma_env[:, (0, 1), (0, 1)],
+                eta=eta,
+                method=method,
+                occupations=occupations,
+            )
+            sigma_total = sigma_env.copy()
+            sigma_total[:, 0, 0] += sigma_int_diag[:, 0]
+            sigma_total[:, 1, 1] += sigma_int_diag[:, 1]
+            g_r = batched_retarded_green(self.local_hamiltonian(), xp.asarray(sigma_total), subgrid, eta=eta, xp=xp)
+            return to_numpy(g_r)
+
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
+
+    def lesser_values(
+        self,
+        omega_grid: np.ndarray,
+        *,
+        eta: float = 0.0,
+        method: str = "hubbard_i",
+        occupations: Mapping[str, float] | None = None,
+        backend: Any = None,
+        workers: int | None = None,
+    ) -> np.ndarray:
+        xp = get_backend(backend)
+
+        def compute(subgrid: np.ndarray) -> np.ndarray:
+            g_r = self.retarded_values(subgrid, eta=eta, method=method, occupations=occupations, backend=backend)
+            sigma_less = sigma_stack(lambda omega: self.sigma_lesser(omega, lead="total"), subgrid)
+            return to_numpy(batched_keldysh_component(xp.asarray(g_r), xp.asarray(sigma_less), xp=xp))
+
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
+
+    def greater_values(
+        self,
+        omega_grid: np.ndarray,
+        *,
+        eta: float = 0.0,
+        method: str = "hubbard_i",
+        occupations: Mapping[str, float] | None = None,
+        backend: Any = None,
+        workers: int | None = None,
+    ) -> np.ndarray:
+        xp = get_backend(backend)
+
+        def compute(subgrid: np.ndarray) -> np.ndarray:
+            g_r = self.retarded_values(subgrid, eta=eta, method=method, occupations=occupations, backend=backend)
+            sigma_great = sigma_stack(lambda omega: self.sigma_greater(omega, lead="total"), subgrid)
+            return to_numpy(batched_keldysh_component(xp.asarray(g_r), xp.asarray(sigma_great), xp=xp))
+
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
+
+    def transmission_values(
+        self,
+        omega_grid: np.ndarray,
+        *,
+        eta: float = 0.0,
+        method: str = "hubbard_i",
+        occupations: Mapping[str, float] | None = None,
+        backend: Any = None,
+        workers: int | None = None,
+    ) -> np.ndarray:
+        xp = get_backend(backend)
+
+        def compute(subgrid: np.ndarray) -> np.ndarray:
+            g_r = self.retarded_values(subgrid, eta=eta, method=method, occupations=occupations, backend=backend)
+            gamma_l = gamma_from_sigma_stack(sigma_stack(self.left_lead.sigma_retarded, subgrid))
+            gamma_r = gamma_from_sigma_stack(sigma_stack(self.right_lead.sigma_retarded, subgrid))
+            values = batched_transmission(xp.asarray(g_r), xp.asarray(gamma_l), xp.asarray(gamma_r), xp=xp)
+            return to_numpy(values).astype(float)
+
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
+
     def transmission(self, omega: float, *, eta: float = 0.0, method: str = "hubbard_i", occupations: Mapping[str, float] | None = None) -> float:
         g_r = self.retarded(omega, eta=eta, method=method, occupations=occupations)
         g_a = g_r.conj().T
@@ -927,10 +1067,7 @@ class OpenAndersonTransportView:
         omega_grid = np.asarray(omega_grid, dtype=float)
         f = fermi_dirac(omega_grid, mu=mu, temperature=temperature)
         kernel = np.real(f * (1.0 - f) / temperature)
-        transmission_values = np.array(
-            [self.transmission(float(omega), eta=eta, method=method, occupations=occupations) for omega in omega_grid],
-            dtype=float,
-        )
+        transmission_values = self.transmission_values(omega_grid, eta=eta, method=method, occupations=occupations)
         return float(prefactor * np.trapezoid(kernel * transmission_values, omega_grid))
 
     def meir_wingreen_current_density(
@@ -959,16 +1096,29 @@ class OpenAndersonTransportView:
         eta: float = 0.0,
         method: str = "hubbard_i",
         occupations: Mapping[str, float] | None = None,
+        backend: Any = None,
+        workers: int | None = None,
     ) -> float:
-        omega_grid = np.asarray(omega_grid, dtype=float)
-        values = np.array(
-            [
-                self.meir_wingreen_current_density(float(omega), lead=lead, charge=charge, eta=eta, method=method, occupations=occupations)
-                for omega in omega_grid
-            ],
-            dtype=float,
+        xp = get_backend(backend)
+        grid = np.asarray(omega_grid, dtype=float)
+        g_lesser = self.lesser_values(grid, eta=eta, method=method, occupations=occupations, backend=backend, workers=workers)
+        g_greater = self.greater_values(grid, eta=eta, method=method, occupations=occupations, backend=backend, workers=workers)
+        selected = self._lead(lead) if lead in {"left", "right"} else None
+        if selected is not None:
+            sigma_less = sigma_stack(selected.sigma_lesser, grid, workers=workers)
+            sigma_great = sigma_stack(selected.sigma_greater, grid, workers=workers)
+        else:
+            sigma_less = sigma_stack(lambda omega: self.sigma_lesser(omega, lead=lead), grid, workers=workers)
+            sigma_great = sigma_stack(lambda omega: self.sigma_greater(omega, lead=lead), grid, workers=workers)
+        values = batched_current_spectral_density(
+            xp.asarray(g_lesser),
+            xp.asarray(g_greater),
+            xp.asarray(sigma_less),
+            xp.asarray(sigma_great),
+            charge=charge,
+            xp=xp,
         )
-        return float(np.trapezoid(values, omega_grid))
+        return float(np.trapezoid(to_numpy(values), grid))
 
     def spin_resolved_meir_wingreen_current_density(
         self,
@@ -1062,14 +1212,13 @@ class OpenAndersonTransportView:
         eta: float = 0.0,
         method: str = "hubbard_i",
         occupations: Mapping[str, float] | None = None,
+        backend: Any = None,
+        workers: int | None = None,
     ) -> float:
         index = self._channel_index(channel)
-        omega_grid = np.asarray(omega_grid, dtype=float)
-        lesser_values = np.array(
-            [self.lesser(float(omega), eta=eta, method=method, occupations=occupations)[index, index] for omega in omega_grid],
-            dtype=np.complex128,
-        )
-        return float(np.trapezoid(lesser_values / (2j * np.pi), omega_grid).real)
+        grid = np.asarray(omega_grid, dtype=float)
+        lesser = self.lesser_values(grid, eta=eta, method=method, occupations=occupations, backend=backend, workers=workers)
+        return float(np.trapezoid(lesser[:, index, index] / (2j * np.pi), grid).real)
 
     def self_consistent_occupations(
         self,
@@ -1081,15 +1230,19 @@ class OpenAndersonTransportView:
         mixing: float = 0.5,
         tol: float = 1e-8,
         max_iter: int = 200,
+        backend: Any = None,
+        workers: int | None = None,
     ) -> OccupationResult:
         current = {"up": 0.5, "down": 0.5}
         if initial is not None:
             current.update({key: float(value) for key, value in initial.items()})
 
+        grid = np.asarray(omega_grid, dtype=float)
         max_delta = float("inf")
         for iteration in range(1, max_iter + 1):
-            raw_up = self.channel_occupation("up", omega_grid, eta=eta, method=method, occupations=current)
-            raw_down = self.channel_occupation("down", omega_grid, eta=eta, method=method, occupations=current)
+            lesser = self.lesser_values(grid, eta=eta, method=method, occupations=current, backend=backend, workers=workers)
+            raw_up = float(np.trapezoid(lesser[:, 0, 0] / (2j * np.pi), grid).real)
+            raw_down = float(np.trapezoid(lesser[:, 1, 1] / (2j * np.pi), grid).real)
             updated = {
                 "up": float((1.0 - mixing) * current["up"] + mixing * raw_up),
                 "down": float((1.0 - mixing) * current["down"] + mixing * raw_down),
@@ -1124,6 +1277,9 @@ class SymbolicModelAPI:
 
     def latex_hamiltonian(self) -> str:
         return self.model.latex_hamiltonian()
+
+    def _repr_latex_(self) -> str:
+        return f"$H = {self.model.latex_hamiltonian()}$"
 
 
 class AndersonImpurity(SymbolicModelAPI):
@@ -1240,3 +1396,110 @@ class FermionicSingleLevel(SymbolicModelAPI):
 class BosonicHarmonicMode(SymbolicModelAPI):
     def __init__(self, *, omega0: sp.Expr, index: Any = 0):
         super().__init__(bosonic_harmonic_mode_model(omega0, index=index))
+
+
+def _coerce_matrix_lead(
+    lead: LeadSelfEnergy | Any,
+    *,
+    dim: int,
+    mu: float = 0.0,
+    temperature: float = 0.0,
+    name: str,
+    basis_labels: Sequence[str] | None = None,
+) -> LeadSelfEnergy:
+    if isinstance(lead, LeadSelfEnergy):
+        if lead.dim != dim:
+            raise ValueError(f"{name} must have dimension {dim}, got {lead.dim}.")
+        return lead
+    if isinstance(lead, Mapping):
+        if basis_labels is None:
+            raise ValueError(f"{name}: site-resolved couplings need known basis labels.")
+        positions = {str(label): index for index, label in enumerate(basis_labels)}
+        gamma = np.zeros((dim, dim), dtype=np.complex128)
+        for site, coupling in lead.items():
+            key = str(site)
+            if key not in positions:
+                raise ValueError(f"{name}: unknown site {site!r}; available sites: {sorted(positions)}.")
+            gamma[positions[key], positions[key]] = _to_numeric_parameter(coupling, name=f"{name}[{site!r}]")
+        return LeadSelfEnergy.wide_band(gamma, mu=mu, temperature=temperature, name=name)
+    if np.isscalar(lead):
+        gamma = np.eye(dim, dtype=np.complex128) * complex(lead)
+    else:
+        gamma = np.asarray(lead, dtype=np.complex128)
+        if gamma.shape != (dim, dim):
+            raise ValueError(f"{name} coupling matrix must have shape {(dim, dim)}, got {gamma.shape}.")
+    return LeadSelfEnergy.wide_band(gamma, mu=mu, temperature=temperature, name=name)
+
+
+class CustomModel(SymbolicModelAPI):
+    """
+    High-level wrapper for an arbitrary second-quantized Hamiltonian.
+
+    Build the Hamiltonian with the operator constructors ``f``/``fd`` (fermions)
+    and ``b``/``bd`` (bosons); statistics and the seed operator basis are
+    detected automatically::
+
+        eps, U = sp.symbols("epsilon U", real=True)
+        model = CustomModel(eps * (n("up") + n("down")) + U * n("up") * n("down"))
+        model.eom_basis().analyze(method="hartree")
+
+    Quadratic (non-interacting) fermionic models can additionally be opened
+    into a numeric two-terminal device with :meth:`open`.
+    """
+
+    def __init__(
+        self,
+        hamiltonian: Any,
+        basis: Sequence[Any] | None = None,
+        *,
+        name: str = "custom",
+        check_hermitian: bool = True,
+    ):
+        super().__init__(custom_model(hamiltonian, basis, name=name, check_hermitian=check_hermitian))
+
+    def single_particle_matrix(self, parameters: Mapping[Any, Any] | None = None) -> tuple[sp.Matrix, list[sp.Expr]]:
+        """Single-particle matrix ``h`` of a quadratic fermionic Hamiltonian, with mode labels."""
+        matrix, modes = single_particle_hamiltonian_matrix(self.model.hamiltonian)
+        if parameters:
+            substitutions = _normalize_substitutions(sp.Matrix(matrix), parameters)
+            matrix = matrix.subs(substitutions)
+        return matrix, modes
+
+    def matrix_device(self, parameters: Mapping[Any, Any] | None = None) -> MatrixDevice:
+        """Numeric :class:`MatrixDevice` for a quadratic fermionic Hamiltonian."""
+        matrix, modes = self.single_particle_matrix(parameters)
+        remaining = sorted(sp.Matrix(matrix).free_symbols, key=lambda symbol: symbol.sort_key())
+        if remaining:
+            raise ValueError(f"Hamiltonian still has free symbols after substitutions: {remaining}; pass parameters={{...}}.")
+        numeric = np.asarray(sp.Matrix(matrix), dtype=np.complex128)
+        labels = [str(mode) for mode in modes]
+        return MatrixDevice(hamiltonian=numeric, basis_labels=labels, name=self.model.name)
+
+    def open(
+        self,
+        left: LeadSelfEnergy | Any,
+        right: LeadSelfEnergy | Any,
+        *,
+        parameters: Mapping[Any, Any] | None = None,
+        mu_left: float = 0.0,
+        mu_right: float = 0.0,
+        temperature_left: float = 0.0,
+        temperature_right: float = 0.0,
+    ) -> MatrixTransportView:
+        """
+        Open a quadratic fermionic model into a two-terminal transport view.
+
+        ``left``/``right`` accept a :class:`LeadSelfEnergy`, a scalar wide-band
+        coupling applied to every site, a full coupling matrix, or a mapping
+        from mode labels to couplings for site-resolved contacts, e.g.
+        ``open({"0": 0.5}, {"2": 0.5})`` to contact only the chain ends.
+        Symbolic parameters must be fixed via ``parameters`` (by symbol or name).
+        """
+        device = self.matrix_device(parameters)
+        left_lead = _coerce_matrix_lead(
+            left, dim=device.dim, mu=mu_left, temperature=temperature_left, name="left", basis_labels=device.basis_labels
+        )
+        right_lead = _coerce_matrix_lead(
+            right, dim=device.dim, mu=mu_right, temperature=temperature_right, name="right", basis_labels=device.basis_labels
+        )
+        return device.transport(left_lead, right_lead)

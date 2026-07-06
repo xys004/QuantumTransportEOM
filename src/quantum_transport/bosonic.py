@@ -10,7 +10,7 @@ from sympy import KroneckerDelta
 from sympy.physics.secondquant import AnnihilateBoson, B, Bd, CreateBoson
 
 from .algebra import decompose_in_basis
-from .symbolic_base import SymbolicOperator
+from .symbolic_base import SymbolicOperator, eom_system_latex
 
 
 @dataclass
@@ -22,6 +22,9 @@ class BosonicEOMResult:
     @property
     def is_closed(self) -> bool:
         return all(sp.simplify(residual) == 0 for residual in self.residuals)
+
+    def _repr_latex_(self) -> str:
+        return eom_system_latex(self.operators, self.eom_matrix, self.residuals)
 
 
 def annihilate_boson(index: sp.Expr) -> sp.Expr:
@@ -60,7 +63,9 @@ def bqobj(expr: sp.Expr | "BQObj") -> "BQObj":
 
 
 def _unwrap(expr: sp.Expr | "BQObj") -> sp.Expr:
-    return expr.expr if isinstance(expr, BQObj) else expr
+    # Unwrap any operator wrapper (BQObj, SQObj, ...) so mixed
+    # fermion-boson products like bd(0) * f(0) build cleanly.
+    return expr.expr if isinstance(expr, SymbolicOperator) else expr
 
 
 def _dagger_boson(expr: sp.Expr) -> sp.Expr:

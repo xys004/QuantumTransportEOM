@@ -36,8 +36,14 @@ $env:PYTHONPATH = Join-Path $projectRoot "src"
 Write-Host "PYTHONPATH=$env:PYTHONPATH"
 
 if (-not $SkipDemo) {
-    Invoke-Step "Running demo" {
+    Invoke-Step "Running core demo" {
         & $Python examples/demo.py
+    }
+    Invoke-Step "Running custom-model demo" {
+        & $Python examples/demo_custom_model.py
+    }
+    Invoke-Step "Running acceleration demo (parallel/GPU)" {
+        & $Python examples/demo_parallel_gpu.py
     }
 }
 

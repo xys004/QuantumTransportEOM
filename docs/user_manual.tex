@@ -48,7 +48,7 @@
   frame=single
 }
 
-\title{QuantumTransportEOM\\Detailed User Manual}
+\title{QuantumTransportEOM\\Detailed User Manual\\\large v0.2.0}
 \author{Project Documentation}
 \date{\today}
 
@@ -60,12 +60,15 @@
 \section{Purpose and Scope}
 QuantumTransportEOM is a standalone Python package for analytical and numerical workflows in quantum transport theory, with special focus on:
 \begin{itemize}[leftmargin=1.5em]
-  \item commutator and anticommutator calculations for operator algebras,
-  \item equation-of-motion (EOM) closure analysis,
+  \item commutator and anticommutator calculations for fermionic, bosonic, and mixed operator algebras,
+  \item equation-of-motion (EOM) closure analysis for predefined and \emph{arbitrary user-supplied} Hamiltonians (\texttt{custom\_model} / \texttt{CustomModel}), with automatic basis expansion and mean-field (Hartree) or Hubbard-I truncations,
+  \item Keldysh contour algebra: Langreth rules, Dyson equations, symbolic Meir--Wingreen currents, and numeric Keldysh self-energies,
   \item Rashba-Hubbard tight-binding ring Hamiltonians in real space and reciprocal space,
-  \item retarded, advanced, lesser, and greater Green functions in equilibrium,
-  \item self-consistent collinear-Hartree loops,
-  \item transport observables (current density, persistent current, and Drude finite-difference proxy).
+  \item retarded, advanced, lesser, and greater Green functions, both symbolic and numeric,
+  \item numeric two-terminal devices (\texttt{MatrixDevice} and friends) with structured leads (wide band, spin polarized, ferromagnetic, semi-infinite chain, sampled),
+  \item interacting open Anderson dots (Hubbard-I / Hartree self-energies, self-consistent occupations, finite-bias currents),
+  \item transport observables: transmission, conductance, Landauer and Meir--Wingreen currents, spin-resolved variants, persistent currents, and a Drude finite-difference proxy,
+  \item \emph{acceleration}: batched frequency sweeps (stacked LAPACK/BLAS), multi-core CPU execution via \texttt{workers=}, and optional CUDA GPU execution via CuPy (\texttt{backend="cupy"}).
 \end{itemize}
 
 This manual describes the full package architecture, installation, API behavior, formula conventions, and practical workflows.
@@ -75,21 +78,29 @@ The standalone folder is:
 \begin{lstlisting}[style=ps]
 QuantumTransportEOM/
   pyproject.toml
-  setup.py
+  LICENSE
   run_all.ps1
   README.md
   src/quantum_transport/
-    __init__.py
-    algebra.py
-    eom.py
-    hamiltonians.py
-    greens.py
-    mean_field.py
-    transport.py
-  examples/
-    demo.py
-  tests/
-    test_quantum_transport.py
+    __init__.py        # public API surface
+    algebra.py         # commutators, basis decomposition
+    secondquant.py     # fermionic wrappers, Wick + exact CAR ordering
+    bosonic.py         # bosonic wrappers and EOM
+    models.py          # predefined + custom symbolic models
+    highlevel.py       # QuTiP-style API, CustomModel, open Anderson
+    eom.py             # EOM closure checks
+    hamiltonians.py    # Rashba-Hubbard ring builders
+    greens.py          # equilibrium Green functions
+    keldysh.py         # numeric Keldysh self-energies and views
+    keldysh_symbolic.py# contour algebra, Langreth, Dyson
+    devices.py         # MatrixDevice, leads, transport views
+    observables.py     # transmission, currents, conductance
+    rings.py           # Aharonov-Bohm ring devices
+    mean_field.py      # self-consistent Hartree(-Fock)
+    transport.py       # persistent currents, Drude proxy
+    numerics.py        # backends, batched kernels, parallel sweeps
+  examples/            # 20+ runnable demos incl. keldysh guide
+  tests/               # 169 tests incl. physics validation
   docs/
     user_manual.tex
     user_manual.pdf
@@ -98,18 +109,17 @@ QuantumTransportEOM/
 \section{Installation and Environment}
 \subsection{Python Requirements}
 \begin{itemize}[leftmargin=1.5em]
-  \item Python 3.9 or newer.
-  \item Package dependencies:
-  \begin{itemize}[leftmargin=1.5em]
-    \item \texttt{numpy}
-    \item \texttt{sympy}
-  \end{itemize}
+  \item Python 3.10 or newer.
+  \item Core dependencies (installed automatically): \texttt{numpy>=2.0}, \texttt{sympy>=1.11}, \texttt{matplotlib>=3.7}, \texttt{threadpoolctl>=3}.
+  \item Optional extras: \texttt{[test]} adds \texttt{pytest}; \texttt{[gpu]} adds \texttt{cupy-cuda12x} for CUDA GPU execution (use \texttt{cupy-cuda11x} manually on CUDA 11 hosts).
 \end{itemize}
 
 \subsection{Editable Install}
 From \texttt{QuantumTransportEOM/}:
 \begin{lstlisting}[style=ps]
 python -m pip install -e .
+python -m pip install -e ".[test]"   # with pytest
+python -m pip install -e ".[gpu]"    # CUDA hosts only
 \end{lstlisting}
 
 \subsection{Running the Demo}
@@ -447,22 +457,131 @@ Try:
   \item better initial densities if a specific ordered phase is expected.
 \end{itemize}
 
+\section{Custom Models and the Exact CAR Engine}
+\subsection{Building a Model from Any Hamiltonian}
+\texttt{CustomModel} (or the lower-level \texttt{custom\_model}) accepts an arbitrary
+second-quantized Hamiltonian built from the constructors \texttt{f}/\texttt{fd}
+(fermions) and \texttt{b}/\texttt{bd} (bosons). Statistics
+(\texttt{"fermion"}, \texttt{"boson"}, \texttt{"mixed"}), the mode content, and a seed
+operator basis (one annihilator per mode) are detected automatically:
+\begin{lstlisting}[style=py]
+import sympy as sp
+from quantum_transport import CustomModel, n
+
+eps, U = sp.symbols("epsilon U", real=True)
+dot = CustomModel(eps*(n("up") + n("down")) + U*n("up")*n("down"))
+dot.model.eom()                     # exact projected EOM
+dot.model.eom(auto_expand_steps=1)  # closes on the atomic hierarchy (4x4)
+dot.model.eom(truncation="hartree") # mean-field closure on the seed basis
+\end{lstlisting}
+Unless \texttt{check\_hermitian=False} is passed, a visibly non-Hermitian
+Hamiltonian (typically a missing conjugate hopping term) raises a
+\texttt{UserWarning}.
+
+\subsection{Exact CAR Normal Ordering}
+For symbolic mode labels (\texttt{"up"}, \texttt{"L"}, \dots) SymPy's
+\texttt{wicks} machinery is unreliable, so custom fermionic models are processed by
+an exact canonical anticommutation engine (\texttt{normal\_order\_fermionic}):
+adjacent pairs are rewritten with
+\begin{equation}
+  c_i c_j^\dagger = \delta_{ij} - c_j^\dagger c_i ,
+\end{equation}
+identical adjacent operators vanish by nilpotency, and same-type runs are sorted
+canonically with anticommutation signs so equivalent strings cancel. Because
+\texttt{custom\_model} enumerates every ladder index as an independent orthogonal
+mode, Kronecker deltas between \emph{distinct} labels are then collapsed to zero
+(\texttt{collapse\_orthogonal\_mode\_deltas}). The projected EOM matrix accepts only
+scalar coefficients; operator strings that do not close on the basis land in the
+residuals, from which \texttt{auto\_expand\_steps} harvests new composite basis
+operators.
+
+\subsection{Generic Hartree Truncation}
+\texttt{truncation="hartree"} applies a Wick-style mean-field factorization to the
+cubic strings generated by quartic interactions,
+\begin{equation}
+  ABC \;\longrightarrow\; \langle AB\rangle C - \langle AC\rangle B + \langle BC\rangle A ,
+\end{equation}
+keeping density contractions $\langle c_i^\dagger c_i\rangle$ (symbols
+\texttt{n\_<i>\_avg} unless numbers are supplied via
+\texttt{truncation\_params=\{"occupations": ...\}}). With
+\texttt{include\_fock=True} the off-diagonal coherences
+$\langle c_i^\dagger c_j\rangle$ are retained as symbols. This works for any
+fermionic model, not just the Anderson impurity.
+
+\subsection{Opening a Quadratic Model into a Device}
+For non-interacting fermionic Hamiltonians
+$H=\sum_{ij}h_{ij}c_i^\dagger c_j$, the single-particle matrix $h$ is extracted
+symbolically (\texttt{single\_particle\_hamiltonian\_matrix}) and converted into a
+numeric \texttt{MatrixTransportView}:
+\begin{lstlisting}[style=py]
+view = model.open({"0": 0.4}, {"2": 0.4}, parameters={"t": 1.0})
+\end{lstlisting}
+Lead arguments accept a scalar (wide-band coupling on every site), a mapping from
+mode labels to couplings (site-resolved contacts), a full coupling matrix, or a
+\texttt{LeadSelfEnergy}. Interacting Hamiltonians raise a \texttt{ValueError} here;
+use the EOM layer with a truncation instead.
+
+\section{Acceleration: Batched Kernels, CPU Parallelism, GPU}
+\subsection{Batched Frequency Sweeps}
+All \texttt{*\_values} methods on \texttt{MatrixTransportView} and
+\texttt{OpenAndersonTransportView} replace the per-frequency Python loop with
+stacked linear algebra: the retarded Green function for the whole grid,
+\begin{equation}
+  G^r(\omega_k) = \left[(\omega_k + i\eta)\mathbb{1} - H - \Sigma^r(\omega_k)\right]^{-1},
+  \qquad k = 1,\dots,n,
+\end{equation}
+is computed as a single batched inversion of an $(n,d,d)$ stack, and the Landauer
+trace $T(\omega)=\mathrm{Re}\,\mathrm{tr}[\Gamma_L G^r \Gamma_R G^a]$ as chained
+batched matrix products. The scalar per-frequency methods remain available and the
+test suite enforces bit-level agreement between both paths.
+
+\subsection{Memory Blocking and CPU Workers}
+Grids are processed in blocks whose $(n_{\mathrm{block}},d,d)$ stacks stay under a
+memory target (default 64\,MiB shared across workers), which caps peak memory for
+large devices. Passing \texttt{workers=N} maps blocks onto $N$ threads; NumPy
+releases the GIL inside LAPACK, and small-matrix factorizations (dimension
+$\le 1024$) are pinned to a single BLAS thread via \texttt{threadpoolctl} --- on
+many-core machines multithreaded OpenBLAS factorizations of small matrices are
+otherwise up to $30\times$ slower than single-threaded ones. Typical measured
+gains for a 120-orbital ring on 400 frequencies: $\sim$30\,s scalar loop
+$\rightarrow$ 2.4\,s batched $\rightarrow$ $<$1\,s with \texttt{workers=8}.
+
+\subsection{GPU Backend}
+\texttt{backend="cupy"} (or \texttt{"gpu"}) runs the same kernels on a CUDA device
+through CuPy; \texttt{backend="auto"} selects CuPy when a usable GPU is present
+and falls back to NumPy otherwise. Install with
+\texttt{pip install -e ".[gpu]"} on a CUDA 12 host. The helpers
+\texttt{available\_backends()}, \texttt{get\_backend()}, and \texttt{to\_numpy()}
+expose the backend layer directly, and \texttt{parallel\_map} /
+\texttt{blocked\_over\_grid} are available for custom sweeps:
+\begin{lstlisting}[style=py]
+from quantum_transport import available_backends, parallel_map
+available_backends()      # {"numpy": True, "cupy": False}
+T = view.transmission_values(grid, workers=8)          # CPU threads
+T = view.transmission_values(grid, backend="cupy")     # CUDA GPU
+occ = anderson_view.self_consistent_occupations(grid, workers=4)
+\end{lstlisting}
+
 \section{Practical Notes for Research Use}
 \begin{itemize}[leftmargin=1.5em]
   \item The equilibrium lesser/greater relations implemented here assume closed-system equilibrium.
-  \item For open systems with leads, add self-energies and Keldysh equations with contact distribution functions.
-  \item The current implementation is optimized for clarity and correctness, not large-scale performance.
-  \item For production sweeps, vectorize parameter scans externally and cache Hamiltonians where possible.
+  \item For open systems with leads, use the device layer (\texttt{MatrixDevice}, \texttt{LeadSelfEnergy}) or \texttt{AndersonImpurity.open}, which assemble the contact self-energies and Keldysh equations for you.
+  \item Frequency integrals use \texttt{numpy.trapezoid} on user-supplied grids; resolve sharp resonances (width $\sim\Gamma$) with an adequate grid, especially at low temperature.
+  \item For production sweeps use \texttt{workers=} and, on CUDA hosts, \texttt{backend="cupy"}; \texttt{parallel\_map} parallelizes external parameter scans.
+  \item \texttt{tests/test\_physics\_validation.py} pins the package to exact analytic results (Lorentzian transmission, spectral sum rule, fluctuation--dissipation, current conservation); run it after modifying physics code.
 \end{itemize}
 
 \section{Extension Roadmap}
-Suggested next extensions:
+Delivered in v0.2.0: lead self-energies and nonequilibrium transport (device layer,
+open Anderson dots), arbitrary custom models with an exact CAR engine and generic
+Hartree truncation, batched/parallel/GPU numerics, and analytic physics-validation
+tests. Suggested next extensions:
 \begin{enumerate}[leftmargin=1.5em]
-  \item Add lead self-energy support for nonequilibrium transport.
-  \item Add finite-temperature HF occupations in the self-consistent loop.
-  \item Add exact diagonalization backend for small clusters.
-  \item Add automatic symmetry checks (particle-hole, time reversal, inversion where applicable).
-  \item Add plotting utilities for spectra, \(I(\phi)\), and \(D(\lambda_R)\).
+  \item Exact diagonalization backend for small interacting clusters.
+  \item Automatic symmetry checks (particle-hole, time reversal, inversion where applicable).
+  \item Plotting utilities for spectra, \(I(\phi)\), and \(D(\lambda_R)\).
+  \item Higher-order EOM truncations (second Born, GW-like) for custom models.
+  \item Adaptive frequency grids for sharp resonances at low temperature.
 \end{enumerate}
 
 \section{License and Citation}
@@ -484,6 +603,16 @@ lesser\_green\_equilibrium, greater\_green\_equilibrium & Equilibrium Keldysh co
 hartree\_fock\_self\_consistent & Mean-field self-consistent solver. \\
 current\_density\_omega, persistent\_current & Transport observables from Green functions. \\
 drude\_weight & Finite difference Drude proxy from current response. \\
+CustomModel, custom\_model & Arbitrary Hamiltonians: statistics detection, exact EOM, Hartree, open(). \\
+normal\_order\_fermionic & Exact CAR normal ordering (wicks-free). \\
+single\_particle\_hamiltonian\_matrix & $h_{ij}$ extraction from quadratic $H$. \\
+build\_fermionic\_hartree\_eom\_system & Generic mean-field EOM closure. \\
+dagger\_expression & Hermitian conjugate of second-quantized expressions. \\
+MatrixDevice, LeadSelfEnergy & Numeric devices and structured leads. \\
+AndersonImpurity.open & Interacting open dot (Hubbard-I, SCF, currents). \\
+get\_backend, available\_backends & NumPy/CuPy backend resolution. \\
+parallel\_map, blocked\_over\_grid & CPU-parallel and memory-blocked sweeps. \\
+batched\_retarded\_green, batched\_transmission & Stacked Green-function kernels. \\
 \bottomrule
 \end{longtable}
 

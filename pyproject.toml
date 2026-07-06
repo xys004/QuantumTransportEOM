@@ -4,19 +4,49 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "quantum-transport-eom"
-version = "0.1.0b1"
-description = "Analytical and numerical tools for commutators, EOM Green functions, and transport in Rashba-Hubbard rings"
+version = "0.2.0"
+description = "Symbolic equation-of-motion Green functions and fast numerical quantum transport (Landauer, Keldysh, Meir-Wingreen) with optional GPU acceleration"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Nelson Bolívar", email = "nelson.bolivar.c@gmail.com" },
+]
+keywords = [
+  "quantum transport",
+  "green functions",
+  "equation of motion",
+  "keldysh",
+  "landauer",
+  "second quantization",
+  "sympy",
+  "mesoscopic physics",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Physics",
+]
 dependencies = [
   "numpy>=2.0",
   "sympy>=1.11",
   "matplotlib>=3.7",
+  "threadpoolctl>=3",
 ]
 
 [project.optional-dependencies]
 test = [
   "pytest>=8",
+]
+gpu = [
+  # pick the wheel matching your CUDA toolkit; cupy-cuda11x also works
+  "cupy-cuda12x>=12",
 ]
 docs = [
   "matplotlib>=3.7",
