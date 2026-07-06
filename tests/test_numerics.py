@@ -162,6 +162,40 @@ class TestMatrixTransportBatchedEquivalence:
         threaded = view.transmission_values(GRID, eta=ETA, workers=4)
         np.testing.assert_allclose(threaded, serial, atol=1e-12)
 
+    def test_wide_band_fast_path_matches_scalar(self):
+        """Omega-independent leads take a broadcast fast path; results must not change."""
+        device = RashbaRingDevice(n_sites=5, gamma=1.0, lambda_r=0.3, phi_over_phi0=0.15)
+        dim = device.dim
+        gl = np.zeros((dim, dim))
+        gl[0, 0] = gl[1, 1] = 0.6
+        gr = np.zeros((dim, dim))
+        gr[4, 4] = gr[5, 5] = 0.4
+        left = LeadSelfEnergy.wide_band(gl, mu=0.3, temperature=0.1)
+        right = LeadSelfEnergy.wide_band(gr, mu=-0.3, temperature=0.1)
+        assert left.omega_independent and right.omega_independent
+        view = device.transport(left, right)
+        for scalar, batched in (
+            (view.transmission, view.transmission_values),
+            (view.lesser, view.lesser_values),
+            (view.greater, view.greater_values),
+        ):
+            loop = np.array([scalar(float(w), eta=ETA) for w in GRID])
+            np.testing.assert_allclose(batched(GRID, eta=ETA), loop, atol=1e-12)
+        current_loop = np.array(
+            [view.current_spectral_density(float(w), lead="left", eta=ETA) for w in GRID]
+        )
+        np.testing.assert_allclose(
+            view.current_spectral_density_values(GRID, lead="left", eta=ETA), current_loop, atol=1e-12
+        )
+
+    def test_single_precision_close_to_double(self):
+        view = _ring_view()
+        double = view.transmission_values(GRID, eta=1e-4)
+        single = view.transmission_values(GRID, eta=1e-4, precision="single")
+        np.testing.assert_allclose(single, double, rtol=5e-4, atol=5e-4)
+        with pytest.raises(ValueError):
+            view.transmission_values(GRID, eta=1e-4, precision="half")
+
     def test_kernels_directly(self):
         view = _ring_view()
         sig_l = sigma_stack(view.left_lead.sigma_retarded, GRID)

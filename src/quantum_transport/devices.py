@@ -15,8 +15,10 @@ from .numerics import (
     batched_retarded_green,
     batched_transmission,
     blocked_over_grid,
+    default_block_target,
     gamma_from_sigma_stack,
     get_backend,
+    precision_dtype,
     sigma_stack,
     to_numpy,
 )
@@ -249,6 +251,9 @@ class LeadSelfEnergy:
     name: str = "lead"
     sigma_lesser_fn: Callable[[float], np.ndarray] | None = None
     sigma_greater_fn: Callable[[float], np.ndarray] | None = None
+    # True when sigma_retarded does not depend on omega (wide-band limit);
+    # frequency sweeps then evaluate it once and broadcast.
+    omega_independent: bool = False
 
     @classmethod
     def wide_band(cls, gamma: Any, *, mu: float = 0.0, temperature: float = 0.0, name: str = "lead") -> "LeadSelfEnergy":
@@ -259,7 +264,14 @@ class LeadSelfEnergy:
             local_gamma = gamma_matrix if gamma_matrix is not None else _as_matrix(gamma, dim=dim)
             return -0.5j * local_gamma
 
-        return cls(dim=dim, sigma_retarded_fn=sigma_retarded_fn, mu=mu, temperature=temperature, name=name)
+        return cls(
+            dim=dim,
+            sigma_retarded_fn=sigma_retarded_fn,
+            mu=mu,
+            temperature=temperature,
+            name=name,
+            omega_independent=True,
+        )
 
     @classmethod
     def polarized_wide_band(
@@ -429,6 +441,25 @@ class LeadSelfEnergy:
         return 1j * (f - 1.0) * self.gamma(omega)
 
 
+def _lead_component_stack(
+    lead: LeadSelfEnergy,
+    grid: np.ndarray,
+    component: str,
+    *,
+    workers: int | None = None,
+) -> np.ndarray:
+    """Self-energy component over a grid: (n, d, d) stack, or (d, d) when omega-independent."""
+    if component == "retarded" and lead.omega_independent:
+        return lead.sigma_retarded(0.0)
+    if component == "lesser" and lead.omega_independent and lead.sigma_lesser_fn is None:
+        occupation = fermi_dirac(grid, mu=lead.mu, temperature=lead.temperature)
+        return 1j * occupation[:, None, None] * lead.gamma(0.0)
+    if component == "greater" and lead.omega_independent and lead.sigma_greater_fn is None:
+        occupation = fermi_dirac(grid, mu=lead.mu, temperature=lead.temperature)
+        return 1j * (occupation - 1.0)[:, None, None] * lead.gamma(0.0)
+    return sigma_stack(getattr(lead, f"sigma_{component}"), grid, workers=workers)
+
+
 @dataclass
 class MatrixTransportView:
     hamiltonian: np.ndarray
@@ -518,15 +549,20 @@ class MatrixTransportView:
         components: Sequence[str] = ("retarded",),
         workers: int | None = None,
     ) -> dict[str, tuple[np.ndarray, np.ndarray]]:
-        """Evaluate (left, right) lead self-energy stacks on the host for the requested components."""
+        """
+        Evaluate (left, right) lead self-energy stacks on the host.
+
+        Entries are ``(n, dim, dim)`` stacks, or plain ``(dim, dim)`` matrices
+        for omega-independent components (wide-band leads) — the batched
+        kernels broadcast those without copying, which keeps the setup cost
+        O(d^2) instead of O(n d^2).
+        """
         grid = np.asarray(omega_grid, dtype=float)
         stacks: dict[str, tuple[np.ndarray, np.ndarray]] = {}
         for component in components:
-            left_fn = getattr(self.left_lead, f"sigma_{component}")
-            right_fn = getattr(self.right_lead, f"sigma_{component}")
             stacks[component] = (
-                sigma_stack(left_fn, grid, workers=workers),
-                sigma_stack(right_fn, grid, workers=workers),
+                _lead_component_stack(self.left_lead, grid, component, workers=workers),
+                _lead_component_stack(self.right_lead, grid, component, workers=workers),
             )
         return stacks
 
@@ -537,16 +573,24 @@ class MatrixTransportView:
         *,
         backend: Any = None,
         workers: int | None = None,
+        precision: str | None = None,
     ) -> np.ndarray:
-        """Retarded Green function on a frequency grid via blocked batched inversions, shape (n, dim, dim)."""
+        """
+        Retarded Green function on a frequency grid via blocked batched inversions, shape (n, dim, dim).
+
+        ``precision="single"`` runs the inversions in complex64 — roughly 1e-6
+        relative accuracy, and the fast path on consumer GPUs whose float64
+        throughput is capped.
+        """
         xp = get_backend(backend)
+        dtype = precision_dtype(precision)
 
         def compute(subgrid: np.ndarray) -> np.ndarray:
             sig_l, sig_r = self._lead_sigma_stacks(subgrid)["retarded"]
-            g_r = batched_retarded_green(self.hamiltonian, xp.asarray(sig_l + sig_r), subgrid, eta=eta, xp=xp)
+            g_r = batched_retarded_green(self.hamiltonian, xp.asarray(sig_l + sig_r), subgrid, eta=eta, xp=xp, dtype=dtype)
             return to_numpy(g_r)
 
-        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers, target_bytes=default_block_target(xp))
 
     def lesser_values(
         self,
@@ -565,7 +609,7 @@ class MatrixTransportView:
             less_l, less_r = stacks["lesser"]
             return to_numpy(batched_keldysh_component(g_r, xp.asarray(less_l + less_r), xp=xp))
 
-        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers, target_bytes=default_block_target(xp))
 
     def greater_values(
         self,
@@ -584,7 +628,7 @@ class MatrixTransportView:
             great_l, great_r = stacks["greater"]
             return to_numpy(batched_keldysh_component(g_r, xp.asarray(great_l + great_r), xp=xp))
 
-        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers, target_bytes=default_block_target(xp))
 
     def current_spectral_density(self, omega: float, lead: str = "left", charge: float = 1.0, eta: float = 0.0) -> float:
         selected = self._lead(lead)
@@ -635,7 +679,7 @@ class MatrixTransportView:
             )
             return to_numpy(density).astype(float)
 
-        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers, target_bytes=default_block_target(xp))
 
     def current_from_keldysh(self, omega_grid: np.ndarray, lead: str = "left", charge: float = 1.0, eta: float = 0.0) -> float:
         omega_grid = np.asarray(omega_grid, dtype=float)
@@ -751,24 +795,26 @@ class MatrixTransportView:
         *,
         backend: Any,
         workers: int | None,
+        precision: str | None = None,
         left_projector: np.ndarray | None = None,
         right_projector: np.ndarray | None = None,
     ) -> np.ndarray:
         xp = get_backend(backend)
+        dtype = precision_dtype(precision)
 
         def compute(subgrid: np.ndarray) -> np.ndarray:
             sig_l, sig_r = self._lead_sigma_stacks(subgrid)["retarded"]
-            g_r = batched_retarded_green(self.hamiltonian, xp.asarray(sig_l + sig_r), subgrid, eta=eta, xp=xp)
-            gamma_l = gamma_from_sigma_stack(sig_l)
-            gamma_r = gamma_from_sigma_stack(sig_r)
+            g_r = batched_retarded_green(self.hamiltonian, xp.asarray(sig_l + sig_r), subgrid, eta=eta, xp=xp, dtype=dtype)
+            gamma_l = gamma_from_sigma_stack(sig_l).astype(dtype, copy=False)
+            gamma_r = gamma_from_sigma_stack(sig_r).astype(dtype, copy=False)
             if left_projector is not None:
-                gamma_l = left_projector @ gamma_l @ left_projector
+                gamma_l = (left_projector @ gamma_l @ left_projector).astype(dtype, copy=False)
             if right_projector is not None:
-                gamma_r = right_projector @ gamma_r @ right_projector
+                gamma_r = (right_projector @ gamma_r @ right_projector).astype(dtype, copy=False)
             values = batched_transmission(g_r, xp.asarray(gamma_l), xp.asarray(gamma_r), xp=xp)
             return to_numpy(values).astype(float)
 
-        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers)
+        return blocked_over_grid(compute, omega_grid, self.dim, workers=workers, target_bytes=default_block_target(xp))
 
     def transmission_values(
         self,
@@ -777,8 +823,16 @@ class MatrixTransportView:
         *,
         backend: Any = None,
         workers: int | None = None,
+        precision: str | None = None,
     ) -> np.ndarray:
-        return self._transmission_values_batched(omega_grid, eta, backend=backend, workers=workers)
+        """
+        Landauer transmission on a frequency grid (batched).
+
+        ``workers=N`` maps memory-capped frequency blocks onto N CPU threads;
+        ``backend="cupy"`` runs on a CUDA GPU; ``precision="single"`` uses
+        complex64 (~1e-6 accuracy, the fast path on consumer GPUs).
+        """
+        return self._transmission_values_batched(omega_grid, eta, backend=backend, workers=workers, precision=precision)
 
     def spin_transmission(self, omega: float, left_spin: str, right_spin: str, eta: float = 0.0) -> float:
         g_r = self.retarded(omega, eta=eta)

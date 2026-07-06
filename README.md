@@ -63,13 +63,19 @@ Every `*_values` sweep and the interacting self-consistency loops accept `worker
 ```python
 T = view.transmission_values(grid, workers=8)               # multi-core CPU
 T = view.transmission_values(grid, backend="cupy")          # CUDA GPU (with .[gpu])
+T = view.transmission_values(grid, backend="cupy", precision="single")  # GPU fast path
 
 from quantum_transport import AndersonImpurity
 imp = AndersonImpurity(eps=-0.5, U=2.0).open(0.3, 0.3, mu_left=0.25, mu_right=-0.25)
 occ = imp.self_consistent_occupations(grid, eta=1e-3, workers=4)   # Hubbard-I SCF
 ```
 
-Under the hood the per-frequency Python loop is replaced by stacked LAPACK/BLAS (or cuSOLVER on GPU) calls, the grid is processed in memory-capped blocks, and small-matrix factorizations are pinned to one BLAS thread so `workers` scales across cores instead of fighting OpenBLAS's pool. Measured on a 24-thread laptop, a 120-orbital ring over 400 frequencies: ~30 s scalar loop → 2.4 s batched → **under 1 s with `workers=8`** (bit-identical results; equivalence is enforced by the test suite).
+Under the hood the per-frequency Python loop is replaced by stacked LAPACK/BLAS (or cuSOLVER on GPU) calls, ω-independent (wide-band) lead self-energies are evaluated once and broadcast, the grid is processed in memory-capped blocks, and small-matrix factorizations are pinned to one BLAS thread (multithreaded OpenBLAS LAPACK is up to 30–500× slower on small matrices on many-core machines). Measured results, 400-frequency transmission sweeps:
+
+- 24-thread Windows laptop, 120 orbitals: ~30 s scalar loop → 2.4 s batched → **<1 s with `workers=8`**;
+- Ryzen 9950X3D + RTX 3080 (Linux), 600 orbitals: 8.5 s batched CPU → **1.1 s on GPU with `precision="single"`** (~1e-5 accuracy; GeForce float64 is capped at 1/64 rate, so keep `precision="double"` on CPU or datacenter GPUs).
+
+Whether `workers` beats the serial batched path depends on the machine's BLAS — benchmark both once (`examples/demo_parallel_gpu.py`); results are bit-identical either way and equivalence is enforced by the test suite.
 
 ## Capability map
 

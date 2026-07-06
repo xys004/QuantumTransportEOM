@@ -139,14 +139,47 @@ def parallel_map(
         return list(pool.map(func, items))
 
 
+# Depth of enclosing single-thread-BLAS regions. Only the main thread opens
+# regions (blocked_over_grid) so a plain int is safe; per-call contexts must
+# not re-enter from worker threads — concurrently reconfiguring the BLAS pool
+# from many threads serializes on pool re-initialization (7x slowdowns
+# measured with 16 workers).
+_BLAS_REGION_DEPTH = 0
+
+
+@contextlib.contextmanager
+def blas_single_thread_region():
+    """Pin BLAS to one thread for the duration of a parallel block map."""
+    global _BLAS_REGION_DEPTH
+    if _threadpool_limits is None:  # pragma: no cover - hard dependency
+        yield
+        return
+    _BLAS_REGION_DEPTH += 1
+    try:
+        with _threadpool_limits(limits=1, user_api="blas"):
+            yield
+    finally:
+        _BLAS_REGION_DEPTH -= 1
+
+
 @contextlib.contextmanager
 def _small_matrix_blas_context(dim: int, xp: Any):
     """Single-thread BLAS for small-matrix LAPACK bursts on the NumPy backend."""
-    if xp is np and _threadpool_limits is not None and dim <= BLAS_SINGLE_THREAD_MAX_DIM:
+    if (
+        xp is np
+        and _threadpool_limits is not None
+        and dim <= BLAS_SINGLE_THREAD_MAX_DIM
+        and _BLAS_REGION_DEPTH == 0
+    ):
         with _threadpool_limits(limits=1, user_api="blas"):
             yield
     else:
         yield
+
+
+def default_block_target(xp: Any = np) -> int:
+    """Per-block memory budget: larger on GPU backends to amortize transfers."""
+    return (64 if xp is np else 256) * 2**20
 
 
 def blocked_over_grid(
@@ -175,9 +208,18 @@ def blocked_over_grid(
     if pool_size > 1:
         per_worker = max(1, -(-grid.size // pool_size))
         block = min(block, per_worker)
+        # Floor the block size: one-frequency chunks make every temporary a
+        # separate multi-MB allocation, and concurrent mmap/munmap of large
+        # buffers serializes in the kernel (runtime grows with worker count).
+        block = max(block, min(8, per_worker))
     if block >= grid.size:
         return fn(grid)
     chunks = [grid[start : start + block] for start in range(0, grid.size, block)]
+    if pool_size > 1:
+        # One process-wide BLAS limit around the whole map: each worker then
+        # runs single-threaded LAPACK and the pool provides the parallelism.
+        with blas_single_thread_region():
+            return np.concatenate(parallel_map(fn, chunks, workers=workers), axis=0)
     return np.concatenate(parallel_map(fn, chunks, workers=workers), axis=0)
 
 
@@ -218,6 +260,21 @@ def gamma_from_sigma_stack(sigma_retarded: Any, xp: Any = np) -> Any:
     return 1j * (sig - dagger_stack(sig, xp))
 
 
+def precision_dtype(precision: str | None) -> np.dtype:
+    """Map a precision keyword to a complex dtype.
+
+    ``"single"``/``"complex64"`` trades ~1e-6 relative accuracy for large
+    speedups on consumer GPUs, whose float64 throughput is capped (1/64 on
+    GeForce); ``"double"`` (default) keeps complex128.
+    """
+    key = ("double" if precision is None else str(precision)).lower()
+    if key in {"double", "complex128", "float64", "fp64"}:
+        return np.dtype(np.complex128)
+    if key in {"single", "complex64", "float32", "fp32"}:
+        return np.dtype(np.complex64)
+    raise ValueError(f"Unknown precision {precision!r}; expected 'double' or 'single'.")
+
+
 def batched_retarded_green(
     hamiltonian: Any,
     sigma_retarded: Any,
@@ -225,20 +282,23 @@ def batched_retarded_green(
     *,
     eta: float = 0.0,
     xp: Any = np,
+    dtype: Any = None,
 ) -> Any:
     """
     Retarded Green function for every frequency at once.
 
     Computes ``G^r(omega) = [(omega + i eta) I - H - Sigma^r(omega)]^{-1}`` as a
     single batched inversion of shape ``(n, d, d)`` — one LAPACK/cuSOLVER call
-    instead of a Python loop.
+    instead of a Python loop. ``dtype=complex64`` runs the inversion in single
+    precision (the fast path on consumer GPUs).
     """
-    h = xp.asarray(hamiltonian)
+    dtype = np.dtype(np.complex128) if dtype is None else np.dtype(dtype)
+    h = xp.asarray(hamiltonian).astype(dtype, copy=False)
     dim = h.shape[-1]
     grid = xp.asarray(np.asarray(omega_grid, dtype=float))
     n = grid.shape[0]
-    sig = _as_stack(sigma_retarded, n, xp)
-    z = (grid + 1j * float(eta))[:, None, None] * xp.eye(dim, dtype=np.complex128)
+    sig = _as_stack(xp.asarray(sigma_retarded).astype(dtype, copy=False), n, xp)
+    z = ((grid + 1j * float(eta)).astype(dtype))[:, None, None] * xp.eye(dim, dtype=dtype)
     with _small_matrix_blas_context(int(dim), xp):
         return xp.linalg.inv(z - h[None, :, :] - sig)
 

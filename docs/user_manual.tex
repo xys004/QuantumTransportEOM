@@ -546,19 +546,30 @@ otherwise up to $30\times$ slower than single-threaded ones. Typical measured
 gains for a 120-orbital ring on 400 frequencies: $\sim$30\,s scalar loop
 $\rightarrow$ 2.4\,s batched $\rightarrow$ $<$1\,s with \texttt{workers=8}.
 
-\subsection{GPU Backend}
+\subsection{GPU Backend and Precision}
 \texttt{backend="cupy"} (or \texttt{"gpu"}) runs the same kernels on a CUDA device
 through CuPy; \texttt{backend="auto"} selects CuPy when a usable GPU is present
 and falls back to NumPy otherwise. Install with
-\texttt{pip install -e ".[gpu]"} on a CUDA 12 host. The helpers
-\texttt{available\_backends()}, \texttt{get\_backend()}, and \texttt{to\_numpy()}
-expose the backend layer directly, and \texttt{parallel\_map} /
-\texttt{blocked\_over\_grid} are available for custom sweeps:
+\texttt{pip install -e ".[gpu]"} on a CUDA 12 host.
+
+Consumer (GeForce) GPUs execute float64 at $1/64$ of their float32 rate, so
+complex128 inversions on such cards are no faster than a single CPU core. Pass
+\texttt{precision="single"} to run the batched inversions in complex64 —
+$\sim 10^{-5}$ relative accuracy and roughly a $10\times$ speedup on an RTX 3080
+(600-orbital device, 400 frequencies: 8.5\,s CPU $\rightarrow$ 1.1\,s GPU).
+Keep the default double precision for sharp resonances (tiny $\eta$) or on
+datacenter GPUs with full float64 throughput. Whether \texttt{workers=} beats
+the serial batched path is machine-dependent (it hinges on the local BLAS);
+benchmark once with \texttt{examples/demo\_parallel\_gpu.py}.
+
+The helpers \texttt{available\_backends()}, \texttt{get\_backend()}, and
+\texttt{to\_numpy()} expose the backend layer directly, and
+\texttt{parallel\_map} / \texttt{blocked\_over\_grid} serve custom sweeps:
 \begin{lstlisting}[style=py]
 from quantum_transport import available_backends, parallel_map
 available_backends()      # {"numpy": True, "cupy": False}
 T = view.transmission_values(grid, workers=8)          # CPU threads
-T = view.transmission_values(grid, backend="cupy")     # CUDA GPU
+T = view.transmission_values(grid, backend="cupy", precision="single")
 occ = anderson_view.self_consistent_occupations(grid, workers=4)
 \end{lstlisting}
 
