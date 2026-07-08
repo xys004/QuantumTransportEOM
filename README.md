@@ -1,5 +1,7 @@
 # QuantumTransportEOM
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21265399.svg)](https://doi.org/10.5281/zenodo.21265399)
+
 **Symbolic equation-of-motion Green functions and fast numerical quantum transport in one package.**
 
 `quantum_transport` couples a SymPy-based second-quantization layer (commutators, EOM closure, mean-field truncations, Keldysh contour algebra) to a NumPy transport engine (Landauer, Meir–Wingreen, spin-resolved observables) with batched linear algebra, multi-core frequency sweeps, and optional CUDA GPU execution via CuPy.
@@ -146,9 +148,7 @@ If this package contributes to a publication, cite it as:
 
 Machine-readable metadata lives in `CITATION.cff` (GitHub renders a "Cite this
 repository" button from it). Tagged releases are archived on Zenodo via the
-GitHub integration; cite the version DOI of the release you used (the badge
-below appears once the first archive is minted).
-
-<!-- Zenodo badge: replace CONCEPT_DOI after the first release is archived.
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.CONCEPT_DOI.svg)](https://doi.org/10.5281/zenodo.CONCEPT_DOI)
--->
+GitHub integration: the concept DOI
+[10.5281/zenodo.21265399](https://doi.org/10.5281/zenodo.21265399) always
+resolves to the latest archived version; cite the version DOI of the release
+you used (v0.3.0: [10.5281/zenodo.21265400](https://doi.org/10.5281/zenodo.21265400)).

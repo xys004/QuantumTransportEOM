@@ -3,6 +3,7 @@ message: "If you use this package, please cite this repository (and the version 
 title: "QuantumTransportEOM: symbolic equation-of-motion Green functions and fast numerical quantum transport"
 version: "0.3.0"
 date-released: "2026-07-08"
+doi: "10.5281/zenodo.21265399"
 license: MIT
 repository-code: "https://github.com/xys004/QuantumTransportEOM"
 keywords:
