@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "quantum-transport-eom"
-version = "0.2.0"
+version = "0.3.0"
 description = "Symbolic equation-of-motion Green functions and fast numerical quantum transport (Landauer, Keldysh, Meir-Wingreen) with optional GPU acceleration"
 readme = "README.md"
 requires-python = ">=3.10"

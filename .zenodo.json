@@ -1,0 +1,28 @@
+{
+  "title": "QuantumTransportEOM: symbolic equation-of-motion Green functions and fast numerical quantum transport",
+  "description": "Python package coupling a SymPy-based second-quantization layer (commutators, equation-of-motion closure, mean-field truncations, Keldysh contour algebra, exact CAR engine) to a NumPy transport engine (Landauer, Meir-Wingreen, spin-resolved observables) with batched linear algebra, multi-core frequency sweeps, and optional CUDA GPU execution via CuPy. Includes custom-model support for arbitrary fermionic/bosonic Hamiltonians, voltage-probe and dephasing-probe solvers, and the full reproduction package (models, solvers, data, and figure scripts) for the CISS voltage-probe study of chirality-induced spin selectivity in rho-tau-sigma ladder models.",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Bolivar, Nelson",
+      "affiliation": "Universidad Central de Venezuela; Astrum Drive Technologies"
+    }
+  ],
+  "keywords": [
+    "quantum transport",
+    "Green functions",
+    "equation of motion",
+    "Keldysh formalism",
+    "Landauer formula",
+    "Meir-Wingreen",
+    "second quantization",
+    "mesoscopic physics",
+    "CISS",
+    "spin selectivity",
+    "voltage probe",
+    "sympy",
+    "GPU acceleration"
+  ],
+  "license": "MIT",
+  "access_right": "open"
+}

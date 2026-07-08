@@ -4,7 +4,7 @@
 
 `quantum_transport` couples a SymPy-based second-quantization layer (commutators, EOM closure, mean-field truncations, Keldysh contour algebra) to a NumPy transport engine (Landauer, Meir–Wingreen, spin-resolved observables) with batched linear algebra, multi-core frequency sweeps, and optional CUDA GPU execution via CuPy.
 
-Version `0.2.0` — Python ≥ 3.10, MIT license.
+Version `0.3.0` — Python ≥ 3.10, MIT license.
 
 ---
 
@@ -142,4 +142,13 @@ PowerShell automation (runs demos, tests, and optionally builds the manual):
 
 If this package contributes to a publication, cite it as:
 
-> N. Bolívar, *QuantumTransportEOM: symbolic equation-of-motion Green functions and accelerated quantum transport*, v0.2.0 (2026).
+> N. Bolívar, *QuantumTransportEOM: symbolic equation-of-motion Green functions and accelerated quantum transport*, v0.3.0 (2026).
+
+Machine-readable metadata lives in `CITATION.cff` (GitHub renders a "Cite this
+repository" button from it). Tagged releases are archived on Zenodo via the
+GitHub integration; cite the version DOI of the release you used (the badge
+below appears once the first archive is minted).
+
+<!-- Zenodo badge: replace CONCEPT_DOI after the first release is archived.
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.CONCEPT_DOI.svg)](https://doi.org/10.5281/zenodo.CONCEPT_DOI)
+-->
