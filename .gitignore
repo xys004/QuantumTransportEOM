@@ -25,3 +25,7 @@ examples/output/
 
 .DS_Store
 Thumbs.db
+
+# unpublished manuscripts and scratch
+paper/
+tmp/
