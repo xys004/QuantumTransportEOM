@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_48_CHARGE_SPIN_SOURCE_PROJECTION",
+  "scope": "public charge and spin projections of the microscopic vertical source",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "6 passed",
+    "engine_full_pytest": "252 passed",
+    "app_full_pytest": "69 passed",
+    "charge_max": 0.01665016659879576,
+    "spin_max": 0.008698253943335784,
+    "source_hermiticity_error": 0.0
+  },
+  "astra": {"oracle": "local", "verdict": "PASS", "checks_total": 6, "checks_ok": 6, "targeted_pytest": "6 passed"},
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "6 passed",
+    "engine_full_pytest": "252 passed, 1 warning",
+    "app_full_pytest": "69 passed",
+    "charge_max": 0.016650166598795743,
+    "spin_max": 0.008698253943335777,
+    "source_hermiticity_error": 0.0
+  },
+  "assessment": "PASS_EXPLICIT_CHARGE_SPIN_VERTICAL_SOURCE_PROJECTION",
+  "claim_boundary": "Charge and spin projections of the microscopic vertical source are now public and reproducible. A resolved spin source is an observable diagnostic, not evidence for topological protection.",
+  "artifacts": {"verifier": "scripts/verify_gate48_charge_spin_source_projection.py", "api": "initial_correlation_charge_spin_source"}
+}

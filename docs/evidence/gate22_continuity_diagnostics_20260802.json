@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_22_CONTINUITY_DIAGNOSTICS",
+  "scope": "closed finite quadratic KBE identity with explicit collision and Hermitian charge/spin projections",
+  "checks": [
+    "zero_self_energy_collision",
+    "closed_charge_continuity",
+    "closed_spin_projection",
+    "coherent_spin_torque_resolved",
+    "nonzero_collision_is_resolved"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "targeted_pytest": "3 passed",
+    "checks_total": 5,
+    "checks_ok": 5,
+    "collision_max": 0.0,
+    "charge_residual_max": 8.889690702964629e-15,
+    "spin_residual_max": 9.769962616701378e-15,
+    "nonzero_collision_signal": 0.1680033334757598,
+    "nonzero_collision_interior_residual": 8.13744469696509e-06
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 5,
+    "checks_ok": 5,
+    "comparisons": 6
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "targeted_pytest": "3 passed",
+    "checks_total": 5,
+    "checks_ok": 5,
+    "collision_max": 0.0,
+    "charge_residual_max": 8.889920050103583e-15,
+    "spin_residual_max": 7.993605777301127e-15,
+    "nonzero_collision_signal": 0.16800333347575974,
+    "nonzero_collision_interior_residual": 8.13744469690958e-06
+  },
+  "implementation_change": [
+    "Add explicit two-time KBE collision integral contractions.",
+    "Add equal-time charge continuity balance with coherent and collision terms.",
+    "Add Hermitian observable projections for spin balance and torque bookkeeping."
+  ],
+  "claim_boundary": [
+    "The gate validates the finite-grid bookkeeping identity and nonzero collision term.",
+    "Lead-coupled interacting continuity with reservoir injection and Rashba torque remains an application-level publication gate."
+  ],
+  "artifacts": {
+    "module": "src/quantum_transport/continuity.py",
+    "verifier": "scripts/verify_gate22_continuity_diagnostics.py",
+    "test": "tests/test_continuity.py"
+  }
+}

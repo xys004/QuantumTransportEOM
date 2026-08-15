@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_45_MIXED_KBE_SYMBOLIC",
+  "scope": "explicit symbolic real/vertical Kadanoff-Baym differential equations",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "4 passed",
+    "engine_full_pytest": "249 passed",
+    "app_full_pytest": "69 passed",
+    "equation_keys": ["lceil", "rceil"]
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "4 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "4 passed",
+    "engine_full_pytest": "249 passed, 1 warning",
+    "app_full_pytest": "69 passed",
+    "equation_keys": ["lceil", "rceil"]
+  },
+  "assessment": "PASS_EXPLICIT_MIXED_KBE_BRANCH_EQUATIONS",
+  "claim_boundary": "The package emits explicit real/vertical differential KBE equations with causal real-time limits and the -i imaginary-branch measure. This is a symbolic closure contract, not evidence that a self-consistent interacting contour solver is converged.",
+  "artifacts": {
+    "verifier": "scripts/verify_gate45_mixed_kbe_symbolic.py",
+    "api": "kadanoff_baym_mixed_equations"
+  }
+}

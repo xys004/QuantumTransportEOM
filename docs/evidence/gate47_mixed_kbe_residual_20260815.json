@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-15",
+  "gate": "GATE_47_MIXED_KBE_RESIDUAL",
+  "scope": "finite-grid numerical residual evaluator for both mixed KBE branches",
+  "supersedes": "gate47_mixed_kbe_residual_20260802.json",
+  "regeneration_reason": "Regenerated after the causal-quadrature correction in initial_correlations._prefix_trapezoid_weights. Retarded and advanced kernels are stored with the theta(0)=1/2 convention, so applying the plain trapezoid endpoint weight on top halved the equal-time contribution twice and degraded every causal convolution from second to first order. The superseded record remains valid as the output of the pre-correction code.",
+  "targeted_pytest_command": "python -m pytest tests/test_initial_correlations.py -q",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "12 passed",
+    "engine_full_pytest": "302 passed",
+    "exact_lceil_residual_max": 0.08533779307320476,
+    "exact_rceil_residual_max": 0.1213095874105857,
+    "free_lceil_residual_max": 0.00031499992125075987,
+    "free_rceil_residual_max": 0.00031499992125075987
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "12 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "12 passed",
+    "engine_full_pytest": "302 passed",
+    "app_full_pytest": "82 passed",
+    "exact_lceil_residual_max": 0.0853377930732047,
+    "exact_rceil_residual_max": 0.12130958741058544,
+    "free_lceil_residual_max": 0.00031499992125075987,
+    "free_rceil_residual_max": 0.00031499992125075987
+  },
+  "astra_astrum_max_metric_difference": 2.636779683484747e-16,
+  "assessment": "PASS_NUMERICAL_MIXED_KBE_RESIDUAL_DIAGNOSTIC",
+  "claim_boundary": "The package now evaluates both mixed KBE residual branches with causal and vertical quadrature. The free control closes at finite difference accuracy; the exact finite benchmark is reported as a diagnostic, not relabeled as an interacting self-consistent solver.",
+  "artifacts": {
+    "verifier": "scripts/verify_gate47_mixed_kbe_residual.py",
+    "api": "mixed_kbe_residual"
+  }
+}

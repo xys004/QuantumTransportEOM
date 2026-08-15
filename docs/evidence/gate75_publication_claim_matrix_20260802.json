@@ -1,0 +1,65 @@
+{
+  "allowed_claims": {
+    "broad_transient_keldysh_method_novelty": "REJECTED_BY_PRIOR_ART",
+    "conserving_interacting_continuum_theorem": "NOT_READY",
+    "finite_grid_two_time_eom_keldysh_workflow": "READY_WITH_LIMITATIONS",
+    "narrow_integrated_benchmark_novelty": "UNCONFIRMED",
+    "persistent_vs_reservoir_charge_spin_observables": "READY_WITH_LIMITATIONS",
+    "self_consistent_matsubara_software_branch": "READY_AS_IMPLEMENTATION",
+    "topological_protection_of_edge_currents": "NOT_READY"
+  },
+  "assessment": "PUBLICATION_DRAFT_READY_ONLY_WITH_EXPLICIT_LIMITATIONS",
+  "checks": {
+    "all_required_records_pass": true,
+    "app_evidence_block_is_complete": true,
+    "charge_and_spin_channels_are_explicit": true,
+    "engine_evidence_block_is_complete": true,
+    "full_astra_regression_snapshot": true,
+    "full_astrum_regression_snapshot": true,
+    "gate74_rejects_broad_novelty": true,
+    "latest_app_records_have_astra_and_astrum": true,
+    "latest_engine_records_have_astra_and_astrum": true,
+    "open_continuum_gates_are_visible": true,
+    "topological_protection_is_not_claimed": true
+  },
+  "claim_boundary": "The software and bounded benchmark workflow are ready to document and reproduce. The evidence does not support a strong new-physics, conserving-continuum, broad-method-novelty, or topological-protection claim. The integrated benchmark remains an unconfirmed candidate until the open continuity, extrapolation, specialist-literature, and falsifiable-control gates close.",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate75_publication_claim_matrix.py"
+  },
+  "gate": "GATE_75_PUBLICATION_CLAIM_MATRIX",
+  "observed_records": {
+    "application": [
+      "GATE_67_CLOSED_PERSISTENT_RESERVOIR_COMPARISON",
+      "GATE_68_CLOSED_TOPOLOGY_CRITERIA",
+      "GATE_72_HUBBARD_CORBINO_SIZE_SCALING"
+    ],
+    "engine": [
+      "GATE_61_TOTAL_SELF_ENERGY_BALANCE",
+      "GATE_62_FULL_CONTOUR_LESSER_RECONSTRUCTION",
+      "GATE_63_FULL_CONTOUR_SOLVER_OPTION",
+      "GATE_64_EXACT_CONTACT_CHARGE_SPIN",
+      "GATE_65_MIXED_GRID_LEAD_SIZE_CONVERGENCE",
+      "GATE_69_INTEGRATED_CLOSED_BRANCH_AUDIT",
+      "GATE_71_SELF_CONSISTENT_MATSUBARA",
+      "GATE_73_TIME_DEPENDENT_MATRIX_EMBEDDING",
+      "GATE_74_SPECIALIST_NOVELTY_AUDIT"
+    ]
+  },
+  "open_publication_gates": [
+    "interacting real/mixed/lesser continuity with the same self-energy and reservoir spin injection",
+    "continuum or controlled lead-size extrapolation for the extended Corbino device",
+    "specialist database search beyond arXiv first-page results",
+    "falsifiable observable surviving width, time-step, contact, disorder, Rashba, and flux-ramp controls"
+  ],
+  "passed": true,
+  "regression_snapshot": {
+    "astra_app": "70 passed",
+    "astra_engine": "264 passed",
+    "astrum_app": "70 passed",
+    "astrum_engine": "264 passed"
+  },
+  "runtime": "ASTRA+ASTRUM",
+  "schema_version": 1
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-15",
+  "gate": "GATE_62_FULL_CONTOUR_LESSER_RECONSTRUCTION",
+  "scope": "explicit three-term vertical Langreth reconstruction of the lesser Dyson product",
+  "supersedes": "gate62_full_contour_lesser_reconstruction_20260802.json",
+  "regeneration_reason": "Regenerated after the causal-quadrature correction in initial_correlations._prefix_trapezoid_weights. Retarded and advanced kernels are stored with the theta(0)=1/2 convention, so applying the plain trapezoid endpoint weight on top halved the equal-time contribution twice and degraded every causal convolution from second to first order. The superseded record remains valid as the output of the pre-correction code.",
+  "targeted_pytest_command": "python -m pytest tests/test_initial_correlations.py -q",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate62_full_contour_lesser_reconstruction.py",
+    "targeted_tests": "12 passed on ASTRA and ASTRUM",
+    "engine_full_pytest": "302 passed on ASTRA and ASTRUM",
+    "app_full_pytest": "82 passed on ASTRUM"
+  },
+  "checks": {
+    "fixed_point_converges": true,
+    "full_correction_is_finite": true,
+    "matsubara_term_is_finite": true,
+    "mixed_advanced_term_is_resolved": true,
+    "propagated_mixed_term_is_resolved": true,
+    "symbolic_has_three_vertical_terms": true
+  },
+  "metrics": {
+    "antihermiticity_error": 0.0038059818634619625,
+    "full_correction_max": 0.04584224637334991,
+    "matsubara_max": 0.0,
+    "mixed_advanced_max": 0.04704335344175364,
+    "propagated_mixed_max": 0.04740305063989902
+  },
+  "passed": true,
+  "astra_astrum_max_metric_difference": 4.163336342344337e-17,
+  "assessment": "PASS_THREE_TERM_CONTOUR_LESSER_RECONSTRUCTION",
+  "claim_boundary": "The three vertical Langreth terms are explicit and finite on the interacting finite-lead benchmark. Their inclusion is a reconstruction identity; conservation still requires a self-consistent Matsubara and real/mixed fixed point."
+}

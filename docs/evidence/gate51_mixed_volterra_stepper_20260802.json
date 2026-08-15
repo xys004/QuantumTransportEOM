@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_51_MIXED_VOLTERRA_STEPPER",
+  "scope": "causal finite-grid propagation of G^rceil with retarded memory and vertical source",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "7 passed",
+    "engine_full_pytest": "253 passed",
+    "app_full_pytest": "69 passed",
+    "free_control_error": 0.00025204473512927477,
+    "contacted_residual_max": 0.006798596966302459
+  },
+  "astra": {"oracle": "local", "verdict": "PASS", "checks_total": 6, "checks_ok": 6, "targeted_pytest": "7 passed"},
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "7 passed",
+    "engine_full_pytest": "253 passed, 1 warning",
+    "app_full_pytest": "69 passed",
+    "free_control_error": 0.0002520447351291669,
+    "contacted_residual_max": 0.006798596966302416
+  },
+  "assessment": "PASS_CAUSAL_MIXED_KBE_VOLTERRA_STEPPER",
+  "claim_boundary": "A finite-grid causal Volterra stepper now propagates G^rceil from an explicit initial slice, retarded memory, and vertical source. The free control closes at first-order discretization accuracy; this is a building block, not yet a self-consistent interacting contour solver.",
+  "artifacts": {"verifier": "scripts/verify_gate51_mixed_volterra_stepper.py", "api": "propagate_mixed_kbe_rceil"}
+}

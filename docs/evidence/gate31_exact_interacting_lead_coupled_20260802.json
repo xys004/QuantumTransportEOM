@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_31_EXACT_INTERACTING_LEAD_COUPLED_KELDYSH_ORACLE",
+  "scope": "exact finite many-body contacted Hubbard device with two spinful finite leads",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 10,
+    "checks_ok": 10,
+    "targeted_pytest": "7 passed",
+    "engine_full_pytest": "243 passed",
+    "app_full_pytest": "69 passed",
+    "spectral_identity_error": 6.667118051786499e-16,
+    "charge_balance_max": 1.734723475976807e-18,
+    "spin_balance_max": 8.673617379884035e-19,
+    "initial_device_lead_coherence": 0.13536639110190762,
+    "charge_current_max": 0.011127959343239995,
+    "spin_current_max": 0.006419446045417649,
+    "hubbard_i_noninteracting_error": 4.157509959877262e-13,
+    "hubbard_i_finite_u_error": 6.498902036178284,
+    "density_eigenvalue_range": [0.09899359581812432, 0.9448478872126369]
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 10,
+    "checks_ok": 10,
+    "targeted_pytest": "7 passed",
+    "engine_full_pytest": "243 passed",
+    "hubbard_i_noninteracting_error": 4.157509959877262e-13,
+    "hubbard_i_finite_u_error": 6.498902036178284,
+    "charge_balance_max": 1.734723475976807e-18,
+    "spin_balance_max": 8.673617379884035e-19
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 10,
+    "checks_ok": 10,
+    "targeted_pytest": "7 passed",
+    "engine_full_pytest": "243 passed",
+    "app_full_pytest": "69 passed",
+    "hubbard_i_noninteracting_error": 2.0447402763361813e-13,
+    "hubbard_i_finite_u_error": 6.498902036178599,
+    "charge_balance_max": 8.673617379884035e-19,
+    "spin_balance_max": 8.673617379884035e-19,
+    "spectral_identity_error": 4.47545209131181e-16
+  },
+  "assessment": "PASS_EXACT_LEAD_COUPLED_INTERACTING_ORACLE_EOM_ERROR_QUANTIFIED",
+  "claim_boundary": "The exact finite many-body contacted oracle closes charge and spin continuity and provides a lead-coupled reference for Hubbard-I. The finite-U Hubbard-I mismatch is measured, not presented as a new effect; an interacting continuum contour closure remains open.",
+  "artifacts": {
+    "exact_oracle": "src/quantum_transport/exact_interacting.py",
+    "lead_hubbard_i": "src/quantum_transport/hubbard_open.py",
+    "verifier": "scripts/verify_gate31_exact_interacting_lead_coupled.py",
+    "tests": "tests/test_exact_interacting.py"
+  }
+}

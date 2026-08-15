@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_11_SCBA_INTERACTING_INVENTORY",
+  "scope": "stationary matrix electron-boson SCBA plus explicit two-time Fourier export",
+  "checks": [
+    "public_scba_result_contract",
+    "equilibrium_fdt_and_spectral_identity",
+    "nonequilibrium_terminal_conservation",
+    "stationary_scba_two_time_export"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "targeted_pytest": "3 passed",
+    "iterations": 25,
+    "maximum_update": 5.073221565066177e-10,
+    "equilibrium_fdt_error": 4.577566798522237e-16,
+    "equilibrium_spectral_identity_error": 8.886119947416683e-16,
+    "nonequilibrium_conservation_error": 3.4899860779091796e-13,
+    "two_time_consistency_error": 1.309227883336067e-16
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 4,
+    "checks_ok": 4,
+    "comparisons": 8
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "targeted_pytest": "3 passed",
+    "two_time_consistency_error": 2.3479724158959924e-16
+  },
+  "implementation_change": [
+    "Add a matrix-valued self_consistent_born_electron_boson solver with lesser/greater, Hilbert-reconstructed retarded self-energy, currents, and convergence metadata.",
+    "Add ScbaResult and scba_two_time_greens public APIs."
+  ],
+  "claim_boundary": [
+    "The implementation is stationary SCBA; the explicit (t,t') result is a Fourier export of the stationary solution.",
+    "Time-dependent Kadanoff–Baym memory and interacting Kane–Mele transients remain open gates."
+  ],
+  "artifacts": {
+    "module": "src/quantum_transport/scba.py",
+    "verifier": "scripts/verify_gate11_scba_inventory.py",
+    "test": "tests/test_scba.py"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_34_VERTICAL_SOURCE_CONTINUITY_ATTACHMENT",
+  "scope": "microscopic finite-lead Sigma^rceil G^lceil source attached to, but kept separate from, the KBE continuity residual",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "8 passed",
+    "engine_full_pytest": "246 passed",
+    "app_full_pytest": "69 passed",
+    "source_hermiticity_error": 0.0,
+    "raw_matrix_residual_max": 0.012776770129484694,
+    "source_corrected_matrix_residual_max": 0.00011525326817456161,
+    "raw_charge_residual_max": 0.0168643413349784,
+    "source_corrected_charge_residual_max": 0.0002171360151845801,
+    "raw_spin_residual_max": 0.008689198923990987,
+    "source_corrected_spin_residual_max": 1.3370521164543124e-05,
+    "microscopic_source_max": 0.012667243245437294
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "8 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "8 passed",
+    "engine_full_pytest": "246 passed",
+    "app_full_pytest": "69 passed",
+    "source_hermiticity_error": 0.0,
+    "raw_matrix_residual_max": 0.012776770129486498,
+    "source_corrected_matrix_residual_max": 0.00011525326817278438,
+    "raw_charge_residual_max": 0.01686434133498026,
+    "source_corrected_charge_residual_max": 0.0002171360151836893,
+    "raw_spin_residual_max": 0.008689198923992735,
+    "source_corrected_spin_residual_max": 1.3370521161879456e-05
+  },
+  "assessment": "PASS_MICROSCOPIC_VERTICAL_SOURCE_ATTACHMENT_QUADRATIC_REFERENCE",
+  "claim_boundary": "The continuity API now accepts the microscopic finite-lead vertical source and keeps raw and source-corrected residuals separate. This closes the quadratic reference at finite-grid accuracy only. An interacting second-Born mixed kernel and its continuum convergence remain open and are not inferred from this source.",
+  "artifacts": {
+    "continuity_api": "src/quantum_transport/continuity.py",
+    "mixed_branch": "src/quantum_transport/initial_correlations.py",
+    "verifier": "scripts/verify_gate34_vertical_source_continuity_attachment.py",
+    "tests": "tests/test_continuity.py"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "assessment": "FINAL_REVIEW_PASS_BOUNDED_RESULT_READY_FOR_ANALYSIS",
+  "checks": {
+    "final_manifest_is_pass": true,
+    "full_regression_is_267_70": true,
+    "open_publication_gates_are_explicit": true,
+    "protection_remains_not_ready": true,
+    "rashba_control_is_present": true,
+    "symbolic_and_spin_gates_are_present": true,
+    "ten_gate_records_exist": true,
+    "ten_gate_records_have_both_runtimes": true,
+    "ten_gate_records_pass": true
+  },
+  "closed_in_this_block": [
+    "ordered symbolic KBE collision and continuity identities with formal charge/spin projections",
+    "complete 267/70 ASTRA/ASTRUM regression refresh",
+    "exact finite-contact noncommuting spin-torque and source-refinement audit",
+    "Rashba on/off Corbino torque and spin-balance control",
+    "final-round SHA-256 reproducibility manifest"
+  ],
+  "date": "2026-08-03",
+  "decision": "The final-round project is reproducible and technically substantial as a finite-grid transient EOM/Green/Keldysh charge-spin software and benchmark workflow. The symbolic continuity and torque controls strengthen the auditability of spin transport, but the evidence still does not establish broad method novelty, a conserving interacting continuum theorem, or topological protection. The correct next action is a joint analysis pause, not another automatic claim upgrade.",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate90_final_review.py"
+  },
+  "gate": "GATE_90_FINAL_REVIEW",
+  "next_action": "PAUSE_IMPLEMENTATION_AND_ANALYZE_PROJECT_STATE",
+  "open_publication_gates": [
+    "conserving interacting contour closure including the self-consistent vertical branch and KMS/continuum limit",
+    "larger Corbino width/lead/contact extrapolation with controlled recurrence and current normalization",
+    "specialist novelty confirmation for the narrow integrated workflow and exact current-discrepancy resolution",
+    "a topological-protection decision using an invariant/scattering diagnostic rather than edge-current robustness alone"
+  ],
+  "passed": true,
+  "publication_readiness": {
+    "bounded_software_benchmark_result": "READY_FOR_DRAFT_WITH_EXPLICIT_LIMITATIONS",
+    "broad_method_novelty": "REJECTED_BY_PRIOR_ART",
+    "conserving_interacting_continuum_claim": "NOT_READY",
+    "narrow_integrated_novelty_candidate": "UNCONFIRMED",
+    "strong_new_physics_claim": "NOT_READY",
+    "topological_protection_claim": "NOT_READY"
+  },
+  "regression": {
+    "astra_app": "70 passed",
+    "astra_engine": "267 passed",
+    "astrum_app": "70 passed",
+    "astrum_engine": "267 passed"
+  },
+  "runtime": "ASTRA+ASTRUM",
+  "schema_version": 1,
+  "scope": "ten-gate final-round review after Gates81--89 and token checkpoint",
+  "token_checkpoint": {
+    "goal_status": "active",
+    "remaining_tokens": null,
+    "tokens_used": 6338554
+  }
+}

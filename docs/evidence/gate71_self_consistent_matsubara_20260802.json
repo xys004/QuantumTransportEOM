@@ -1,0 +1,36 @@
+{
+  "assessment": "PASS_IMPLEMENTED_WITH_FINITE_GRID_KMS_DIAGNOSTIC",
+  "checks": {
+    "contour_attaches_matsubara_result": true,
+    "contour_self_consistent_branch_converges": true,
+    "contour_uses_nonzero_vertical_sigma": true,
+    "full_lesser_correction_is_finite": true,
+    "matsubara_fixed_point_converges": true,
+    "matsubara_green_kms_diagnostic_bounded": true,
+    "matsubara_interaction_is_nonzero": true,
+    "matsubara_sigma_kms_diagnostic_bounded": true,
+    "matsubara_u_squared_scaling": true,
+    "symbolic_sign_order_and_u_scaling": true,
+    "u_zero_returns_bare_matsubara": true
+  },
+  "claim_boundary": "The package now computes a self-consistent Matsubara Hartree plus second-Born self-energy and feeds it into the full three-term lesser contour branch. Finite-grid KMS residuals are reported explicitly; this gate does not claim a conserving continuum closure or topological protection.",
+  "contour_antihermiticity_error": 0.00030002010103883633,
+  "contour_correction_max": 0.0005813333452922657,
+  "contour_iterations": 23,
+  "contour_maximum_update": 7.088421979190349e-08,
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate71_self_consistent_matsubara.py"
+  },
+  "gate": "GATE_71_SELF_CONSISTENT_MATSUBARA",
+  "green_kms_error": 0.004216929516611678,
+  "interaction_self_energy_max": 0.001507083868445395,
+  "matsubara_iterations": 48,
+  "matsubara_maximum_update": 9.103991949199752e-09,
+  "passed": true,
+  "runtime": "ASTRA+ASTRUM",
+  "schema_version": 1,
+  "self_energy_kms_error": 1.030846805099607e-05,
+  "total_self_energy_max": 0.46067825595947365
+}

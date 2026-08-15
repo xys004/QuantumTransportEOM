@@ -1,0 +1,56 @@
+{
+  "assessment": "PASS_EXACT_FINITE_CONTACT_NONCOMMUTING_SPIN_TORQUE",
+  "checks": {
+    "charge_has_no_coherent_torque": true,
+    "exact_finite_contact_branch_is_finite": true,
+    "finite_contact_spectral_identity_is_resolved": true,
+    "noncommuting_spin_x_torque_is_resolved": true,
+    "noncommuting_spin_z_torque_is_resolved": true,
+    "spin_collision_channel_is_finite": true,
+    "vertical_source_refinement_decreases_residual": true
+  },
+  "claim_boundary": "The exact finite-lead oracle resolves nonzero coherent spin torque for noncommuting spin Hamiltonians, keeps the charge coherent projection zero, and shows decreasing source-corrected residual under time refinement. This validates the spin audit path; it is not a topological-protection or continuum-interacting claim.",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate87_noncommuting_spin_torque.py"
+  },
+  "gate": "GATE_87_NONCOMMUTING_SPIN_TORQUE",
+  "metrics": {
+    "resolutions": [
+      {
+        "charge_coherent_max": 0.0,
+        "n_time": 5.0,
+        "raw_residual_max": 0.021492033664595095,
+        "source_corrected_residual_max": 0.0015707226266401635,
+        "spectral_identity_error": 1.5545019582762888e-15,
+        "spin_x_collision_max": 0.014843946375057374,
+        "spin_x_torque_max": 0.0011740451168435694,
+        "spin_z_torque_max": 0.003522135350530708
+      },
+      {
+        "charge_coherent_max": 0.0,
+        "n_time": 7.0,
+        "raw_residual_max": 0.022016024355768944,
+        "source_corrected_residual_max": 0.0010467319354663142,
+        "spectral_identity_error": 1.5545019582762888e-15,
+        "spin_x_collision_max": 0.015203886273132171,
+        "spin_x_torque_max": 0.0011740451168435694,
+        "spin_z_torque_max": 0.003522135350530708
+      },
+      {
+        "charge_coherent_max": 0.0,
+        "n_time": 9.0,
+        "raw_residual_max": 0.02227536623034121,
+        "source_corrected_residual_max": 0.0007873900608940491,
+        "spectral_identity_error": 1.5545019582762888e-15,
+        "spin_x_collision_max": 0.015382016187412783,
+        "spin_x_torque_max": 0.0011740451168435694,
+        "spin_z_torque_max": 0.003522135350530708
+      }
+    ]
+  },
+  "passed": true,
+  "runtime": "ASTRA+ASTRUM",
+  "schema_version": 1
+}

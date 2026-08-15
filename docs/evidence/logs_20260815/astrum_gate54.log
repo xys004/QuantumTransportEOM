@@ -1,0 +1,29 @@
+CHECK symbolic_vertical_propagation_is_explicit: PASS
+CHECK lesser_vertical_result_is_exposed: PASS
+CHECK lesser_correction_is_antihermitian: PASS
+CHECK charge_spin_channels_are_finite: PASS
+CHECK closed_run_converges: PASS
+CHECK closure_changes_lesser_branch: PASS
+{
+  "assessment": "PASS_EXPLICIT_LESSER_VERTICAL_TERM_WITH_RESIDUAL_AUDIT",
+  "bare_residual_max": 0.07315298083492829,
+  "checks": {
+    "charge_spin_channels_are_finite": true,
+    "closed_run_converges": true,
+    "closure_changes_lesser_branch": true,
+    "lesser_correction_is_antihermitian": true,
+    "lesser_vertical_result_is_exposed": true,
+    "symbolic_vertical_propagation_is_explicit": true
+  },
+  "claim_boundary": "The real lesser update now accepts the propagated mixed-branch term G^R*(-i Sigma^rceil*G^lceil) plus its adjoint. The gate reports the continuity residual before and after the term; any remaining residual is an open closure error, not evidence of conservation or topological protection.",
+  "gate": "GATE_54_LESSER_VERTICAL_INITIAL_CORRELATION",
+  "lesser_correction_max": 0.048511227189491794,
+  "passed": true,
+  "required_source_error_max": 0.08836418887867757,
+  "residual_ratio": 1.0424422008706993,
+  "source_charge_max": 0.015760900368685268,
+  "source_kernel_max": 0.10094800862523681,
+  "source_spin_max": 0.008451968729321628,
+  "vertical_residual_max": 0.07625775434181473
+}
+VERDICT: PASS

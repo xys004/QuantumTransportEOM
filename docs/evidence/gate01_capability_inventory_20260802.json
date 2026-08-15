@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_01_CAPABILITY_INVENTORY",
+  "objective": "Verify the public EOM, symbolic Keldysh, two-time Green, and spin API before physics upgrades.",
+  "checks": [
+    "public_eom_keldysh_two_time_spin_api",
+    "symbolic_retarded_eom_oracle",
+    "symbolic_keldysh_dyson_oracle",
+    "finite_two_time_equal_time_oracle",
+    "numeric_spin_projector_surface"
+  ],
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 5,
+    "checks_ok": 5,
+    "comparisons": 6
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 5,
+    "checks_ok": 5,
+    "targeted_pytest": "1 passed"
+  },
+  "implementation_change": [
+    "Export retarded_green_from_eom from quantum_transport.",
+    "Export source_anticommutator_matrix from quantum_transport.",
+    "Add the gate verifier and dedicated test."
+  ],
+  "upgrade_targets": [
+    "higher-order interacting EOM closure",
+    "arbitrary-time lead self-energies and smooth memory kernels",
+    "generic transient spin-current and spin-torque balance",
+    "conserving interacting two-time approximations",
+    "open-system scattering invariant and novelty audit"
+  ],
+  "artifacts": {
+    "protocol": "docs/GATE_PROTOCOL_TRANSIENT_KELDYSH_SPIN.md",
+    "verifier": "scripts/verify_gate01_capability_inventory.py",
+    "test": "tests/test_gate01_capability_inventory.py"
+  }
+}

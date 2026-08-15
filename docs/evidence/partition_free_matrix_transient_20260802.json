@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "package": "quantum-transport-eom",
+  "package_version": "0.4.0.dev0",
+  "claim": "The quadratic partition-free wide-band matrix step-quench solver preserves the initially contacted equilibrium state, obeys terminal charge continuity, recovers the final stationary NEGF limit, reproduces the analytic resonant-level oracle, and returns consistent post-quench two-time Green functions within the explicit energy-cutoff error.",
+  "protocol": {
+    "initial_state": "device and leads contacted in common equilibrium for t < 0",
+    "quench": "simultaneous h_initial -> h_final and constant lead energy shifts Delta_alpha at t = 0",
+    "approximation": "noninteracting quadratic device, time-independent wide-band broadenings",
+    "numerics": "caller-supplied energy cutoff and trapezoid quadrature with memory-capped energy blocks"
+  },
+  "local_validation": {
+    "python_tests": "203 passed",
+    "validator_checks": "8/8 passed",
+    "verdict": "PASS",
+    "scalar_density_error": 1.6653345369377348e-16,
+    "scalar_current_error": 6.938893903907228e-17,
+    "continuity_errors_dt_004_002": [
+      1.1744882705638782e-05,
+      3.059369602431694e-06
+    ],
+    "continuity_convergence_ratio": 3.8389878412544656,
+    "initial_current_maximum": 5.551115123125783e-17,
+    "stationary_density_error_t25": 4.873674220973179e-06,
+    "stationary_current_error_t25": 5.968102890968607e-06,
+    "two_time_lesser_stationary_error": 1.6883057536160646e-16,
+    "two_time_greater_stationary_error": 4.440910901808188e-16,
+    "two_time_spectral_cutoff_error": 0.0019894373118383157
+  },
+  "astrum_validation": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "python": "3.14.4",
+    "test_subset": "27 passed",
+    "validator_checks": "8/8 passed",
+    "verdict": "PASS",
+    "scalar_density_error": 1.1102230246251565e-16,
+    "scalar_current_error": 6.938893903907228e-17,
+    "continuity_errors_dt_004_002": [
+      1.1744882711051119e-05,
+      3.0593696059288966e-06
+    ],
+    "continuity_convergence_ratio": 3.838987838635174,
+    "initial_current_maximum": 5.551115123125783e-17,
+    "stationary_density_error_t25": 4.873674220973179e-06,
+    "stationary_current_error_t25": 5.9681028909547296e-06,
+    "two_time_lesser_stationary_error": 1.6667795129466247e-16,
+    "two_time_greater_stationary_error": 4.440906047947345e-16,
+    "two_time_spectral_cutoff_error": 0.0019894373118379827
+  },
+  "astra_validation": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 8,
+    "checks_ok": 8,
+    "checks_fail": 0,
+    "comparisons": 15,
+    "scalar_density_error": 1.6653345369377348e-16,
+    "scalar_current_error": 6.938893903907228e-17,
+    "continuity_errors_dt_004_002": [
+      1.174488270577756e-05,
+      3.0593696059288966e-06
+    ],
+    "continuity_convergence_ratio": 3.8389878369114334,
+    "initial_current_maximum": 5.551115123125783e-17,
+    "stationary_density_error_t25": 4.873674220973179e-06,
+    "stationary_current_error_t25": 5.968102890968607e-06,
+    "two_time_lesser_stationary_error": 1.6883057536160646e-16,
+    "two_time_greater_stationary_error": 4.440910901808188e-16,
+    "two_time_spectral_cutoff_error": 0.0019894373118383157
+  },
+  "limits": [
+    "The full two-time spectral identity converges with the finite energy cutoff; the audited [-80, 80] window leaves a 1.99e-3 cutoff residual.",
+    "Post-quench Hamiltonians, lead shifts, and broadenings are constant in time.",
+    "No interacting self-energy or arbitrary smooth voltage protocol is included.",
+    "The Corbino application has not yet been switched from finite leads to this continuum solver."
+  ],
+  "reproducer": "tests/astra_validate_continuum_transient.py"
+}

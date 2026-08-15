@@ -1,0 +1,113 @@
+{
+  "assessment": "PASS_EXACT_ORACLE_LEDGER_SECOND_BORN_CLOSURE_ERROR_RETAINED",
+  "checks": {
+    "all_exact_oracles_conserve_charge": true,
+    "all_exact_oracles_conserve_spin": true,
+    "all_real_time_branches_converge": true,
+    "closure_residual_is_retained": true,
+    "finite_charge_and_spin_channels": true,
+    "finite_u_matsubara_self_energy_is_resolved": true,
+    "high_u_discrepancy_remains_finite": true,
+    "matsubara_convergence_boundary_is_resolved": true,
+    "weak_u_discrepancy_is_resolved": true
+  },
+  "claim_boundary": "The exact finite-contact oracle conserves charge and the selected spin component. The self-consistent Matsubara plus real-time second-Born branch converges at weak U but exposes a reproducible Matsubara convergence boundary, finite charge/spin discrepancies, and a growing lesser closure residual at stronger U. This is an accuracy ledger and a negative closure diagnostic, not evidence for a conserving continuum theorem or topological protection.",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "NOT_RUN",
+    "script": "scripts/verify_gate76_exact_interaction_accuracy_ledger.py"
+  },
+  "gate": "GATE_76_EXACT_INTERACTION_ACCURACY_LEDGER",
+  "interactions": [
+    0.0,
+    0.1,
+    0.3,
+    0.5,
+    0.8
+  ],
+  "passed": true,
+  "rows": [
+    {
+      "approx_charge_max": 0.005259916736183135,
+      "approx_converged": true,
+      "approx_spin_max": 0.0004889862523883218,
+      "charge_error_vs_exact_max": 0.013860166530976898,
+      "exact_charge_max": 0.019120083267160033,
+      "exact_charge_oracle_error": 1.734723475976807e-18,
+      "exact_spin_max": 0.007604946653827094,
+      "exact_spin_oracle_error": 8.673617379884035e-19,
+      "lesser_antihermiticity_error": 0.0001121209959592459,
+      "matsubara_converged": true,
+      "matsubara_iterations": 1,
+      "matsubara_sigma_max": 0.0,
+      "spin_error_vs_exact_max": 0.007115960401438772,
+      "u": 0.0
+    },
+    {
+      "approx_charge_max": 0.005815347586377587,
+      "approx_converged": true,
+      "approx_spin_max": 0.0006280278294192704,
+      "charge_error_vs_exact_max": 0.013372124832273093,
+      "exact_charge_max": 0.01918747241865068,
+      "exact_charge_oracle_error": 8.673617379884035e-19,
+      "exact_spin_max": 0.007837389709675886,
+      "exact_spin_oracle_error": 8.673617379884035e-19,
+      "lesser_antihermiticity_error": 0.09157936230990439,
+      "matsubara_converged": true,
+      "matsubara_iterations": 30,
+      "matsubara_sigma_max": 0.4557836502834517,
+      "spin_error_vs_exact_max": 0.007209361880256615,
+      "u": 0.1
+    },
+    {
+      "approx_charge_max": 0.007710997027238133,
+      "approx_converged": true,
+      "approx_spin_max": 0.000780121765513496,
+      "charge_error_vs_exact_max": 0.011155419289918943,
+      "exact_charge_max": 0.018866416317157075,
+      "exact_charge_oracle_error": 1.734723475976807e-18,
+      "exact_spin_max": 0.008072314348055394,
+      "exact_spin_oracle_error": 8.673617379884035e-19,
+      "lesser_antihermiticity_error": 0.2497940534704548,
+      "matsubara_converged": false,
+      "matsubara_iterations": 30,
+      "matsubara_sigma_max": 1.2408061561671162,
+      "spin_error_vs_exact_max": 0.007292192582541898,
+      "u": 0.3
+    },
+    {
+      "approx_charge_max": 0.010524517045637834,
+      "approx_converged": true,
+      "approx_spin_max": 0.0007991066145676608,
+      "charge_error_vs_exact_max": 0.007645550505266992,
+      "exact_charge_max": 0.018170067550904827,
+      "exact_charge_oracle_error": 1.734723475976807e-18,
+      "exact_spin_max": 0.008062436400585436,
+      "exact_spin_oracle_error": 4.336808689942018e-19,
+      "lesser_antihermiticity_error": 0.3847901699915809,
+      "matsubara_converged": false,
+      "matsubara_iterations": 30,
+      "matsubara_sigma_max": 1.9125009419639647,
+      "spin_error_vs_exact_max": 0.007263329786017775,
+      "u": 0.5
+    },
+    {
+      "approx_charge_max": 0.01646807332158907,
+      "approx_converged": true,
+      "approx_spin_max": 0.0006794749880640724,
+      "charge_error_vs_exact_max": 0.0028562650330567537,
+      "exact_charge_max": 0.016956672395127725,
+      "exact_charge_oracle_error": 8.673617379884035e-19,
+      "exact_spin_max": 0.00780832139969555,
+      "exact_spin_oracle_error": 1.3010426069826053e-18,
+      "lesser_antihermiticity_error": 0.5648382561909917,
+      "matsubara_converged": false,
+      "matsubara_iterations": 30,
+      "matsubara_sigma_max": 2.802460150213174,
+      "spin_error_vs_exact_max": 0.0071288464116314775,
+      "u": 0.8
+    }
+  ],
+  "runtime": "ASTRA",
+  "schema_version": 1
+}

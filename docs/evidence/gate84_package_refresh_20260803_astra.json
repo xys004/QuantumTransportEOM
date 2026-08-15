@@ -1,0 +1,131 @@
+{
+  "assessment": "PASS_REFRESHED_REPRODUCIBLE_PACKAGE_AFTER_CONTINUITY_AND_EXTRAPOLATION",
+  "checks": {
+    "all_new_sources_exist": true,
+    "all_records_exist": true,
+    "all_records_have_both_runtimes": true,
+    "all_records_pass": true,
+    "lead_extrapolation_gate_is_present": true,
+    "protection_boundary_survives_refresh": true,
+    "regression_refresh_is_265_70": true,
+    "same_self_energy_gate_is_present": true
+  },
+  "claim_boundary": "The refreshed manifest includes the Gate81 continuity decomposition, Gate82 lead-size extrapolation, Gate83 regression baseline, their source files, and the historical evidence block. It preserves the finite-grid/software claim boundary and does not promote interacting continuum conservation or topological protection.",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "NOT_RUN",
+    "script": "scripts/verify_gate84_package_refresh.py"
+  },
+  "gate": "GATE_84_PACKAGE_REFRESH",
+  "manifest": [
+    {
+      "name": "gate71",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate71_self_consistent_matsubara_20260802.json",
+      "sha256": "1a0e63d667d8f40b702ca52bc648410e51ad3a8ccb73ba5c95a3334e3b116b03"
+    },
+    {
+      "name": "gate72",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\docs\\evidence\\gate72_hubbard_corbino_size_scaling_20260802.json",
+      "sha256": "7f5397d06e0e719fbb6d012bd90139945602f6e84b5c54ada7b96605f6bec903"
+    },
+    {
+      "name": "gate73",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate73_time_dependent_matrix_embedding_20260802.json",
+      "sha256": "0314f7fc32193f278be8f07bf84a5ca76ad6a29386e6fd3253633f650bce5ba0"
+    },
+    {
+      "name": "gate74",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate74_specialist_novelty_audit_20260802.json",
+      "sha256": "5465077b7ffdabdd0f5e188abb691fd5ecd9f156a0c1ac044e2a54a112934ead"
+    },
+    {
+      "name": "gate75",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate75_publication_claim_matrix_20260802.json",
+      "sha256": "0ec0c6f5a881b6ac2d40d313e42005d359f5f7e7e8c281135b08dc0e84201af5"
+    },
+    {
+      "name": "gate76",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate76_exact_interaction_accuracy_ledger_20260802.json",
+      "sha256": "404854fb9363b0dff9167e969802dfb2fa3137a0a1e102a5eb336d614f878155"
+    },
+    {
+      "name": "gate77",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\docs\\evidence\\gate77_transient_flux_ramp_memory_20260802.json",
+      "sha256": "4f2116de80dfd99be50e333f754f0cdca43ae1d1f1e908d6a9f84e01613ebf20"
+    },
+    {
+      "name": "gate78",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\docs\\evidence\\gate78_spinful_flux_ramp_controls_20260802.json",
+      "sha256": "6215d3021a0eab3ae0d1abebecb56467c58db8256517f8f65c11a8e8d5cbc17e"
+    },
+    {
+      "name": "gate79",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate79_reproducible_package_20260802.json",
+      "sha256": "6b537f421b73053b3657af24e88c6b991e87e1a2b503c52c4e512c7d35da2f7d"
+    },
+    {
+      "name": "gate80",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate80_review_20260802.json",
+      "sha256": "70511a3e1473d761eb4a5b0de7a2030da8493ede9d0722eb6bdb8e25c6d87ac7"
+    },
+    {
+      "name": "gate81",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate81_same_self_energy_continuity_20260803.json",
+      "sha256": "d7127651fc8efe13a985f4960a3d9e37b5fb2d5eef9766635deb9c86056a04fa"
+    },
+    {
+      "name": "gate82",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\docs\\evidence\\gate82_lead_size_extrapolation_20260803.json",
+      "sha256": "86545b997c8081b290a663286a3a32d4a3ac609ae9af513acf5e6808be6e379d"
+    },
+    {
+      "name": "gate83",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate83_regression_refresh_20260803.json",
+      "sha256": "fb907239866589835254c426ccbf63b21701e6136695dc8d5fba29651b35c120"
+    },
+    {
+      "name": "continuity_module",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\src\\quantum_transport\\continuity.py",
+      "sha256": "e549ac4892bd5d5751958cff6863696e155799818ac223615560d1413e4c0bf1"
+    },
+    {
+      "name": "continuity_exports",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\src\\quantum_transport\\__init__.py",
+      "sha256": "06d8ba5892c619b2543b0a4746bf3f7c87f4b063dab2eed3eef88c723278a488"
+    },
+    {
+      "name": "continuity_test",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\tests\\test_continuity.py",
+      "sha256": "9011b0fd7d394186d1727e7881372dc585e9f90c7488438bc64141dee230f8b6"
+    },
+    {
+      "name": "gate81_script",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\scripts\\verify_gate81_same_self_energy_continuity.py",
+      "sha256": "2a0d8fe7365bbed4265b81d810aec82455c617838835d2b8c26a8521b5e997c5"
+    },
+    {
+      "name": "gate82_script",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\scripts\\verify_gate82_lead_size_extrapolation.py",
+      "sha256": "76abbf20d080b6b2b63c9ba41550367886cbfe6f716f3a6266c9e5f2acea78c1"
+    },
+    {
+      "name": "gate83_script",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\scripts\\verify_gate83_regression_refresh.py",
+      "sha256": "d831b4fdfc868ae490c457303c6cf978945970a0596790f62466ba32211f291c"
+    },
+    {
+      "name": "protocol",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\GATE_PROTOCOL_TRANSIENT_KELDYSH_SPIN.md",
+      "sha256": "48d7b6dba6e3731c9ea4403082b8173993ecdf8f2a03cfbb41bbf6f11fa0d69e"
+    }
+  ],
+  "passed": true,
+  "regression": {
+    "astra_app": "70 passed",
+    "astra_engine": "265 passed",
+    "astrum_app": "70 passed",
+    "astrum_engine": "265 passed"
+  },
+  "runtime": "ASTRA",
+  "schema_version": 1
+}

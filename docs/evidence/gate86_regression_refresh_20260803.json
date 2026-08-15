@@ -1,0 +1,32 @@
+{
+  "assessment": "PASS_FULL_REGRESSION_AFTER_SYMBOLIC_CONTINUITY_UPGRADE",
+  "checks": {
+    "astra_app_full_regression_passes": true,
+    "astra_engine_full_regression_passes": true,
+    "astrum_app_full_regression_passes": true,
+    "astrum_engine_full_regression_passes": true,
+    "symbolic_continuity_tests_are_included": true
+  },
+  "claim_boundary": "The complete ASTRA/ASTRUM engine and application suites pass after the Gate85 symbolic collision/continuity API. This is a software regression result; it does not close the interacting continuum physics or topological-protection gates.",
+  "commands": {
+    "application_astrum": "cd <astrum-application> && PYTHONPATH=.;src;<astrum-engine>/src sci-python -m pytest -q",
+    "application_local": "cd <application> && PYTHONPATH=.;src;<engine>/src python -m pytest -q",
+    "engine_astrum": "cd <astrum-engine> && PYTHONPATH=.;src sci-python -m pytest -q",
+    "engine_local": "cd <engine> && PYTHONPATH=.;src python -m pytest -q"
+  },
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate86_regression_refresh.py"
+  },
+  "gate": "GATE_86_REGRESSION_REFRESH",
+  "passed": true,
+  "regression": {
+    "astra_app": "70 passed",
+    "astra_engine": "267 passed",
+    "astrum_app": "70 passed",
+    "astrum_engine": "267 passed"
+  },
+  "runtime": "ASTRA+ASTRUM",
+  "schema_version": 1
+}

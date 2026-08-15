@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_64_EXACT_CONTACT_CHARGE_SPIN",
+  "scope": "finite contacted many-body charge/spin oracle with interacting EOM/Keldysh comparison",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate64_exact_contact_charge_spin.py"
+  },
+  "checks": {
+    "exact_charge_continuity_oracle": true,
+    "exact_spin_continuity_oracle": true,
+    "exact_spin_current_is_resolved": true,
+    "approximate_full_branch_converges": true,
+    "approximate_charge_spin_channels_are_finite": true,
+    "approximate_spin_channel_is_resolved": true
+  },
+  "metrics": {
+    "exact_charge_continuity_error": 1.734723475976807e-18,
+    "exact_spin_continuity_error": 8.673617379884035e-19,
+    "exact_net_charge_max": 0.02244755948916887,
+    "exact_net_spin_max": 0.00995325638975515,
+    "approximate_net_charge_max": 0.00773809271694139,
+    "approximate_net_spin_max": 0.000733021905338087,
+    "approximate_charge_error_vs_exact_max": 0.01470946677222748,
+    "approximate_spin_error_vs_exact_max": 0.00922023448441706,
+    "approximate_lesser_contour_antihermiticity_error": 0.00383767835803251
+  },
+  "passed": true,
+  "assessment": "PASS_EXACT_CHARGE_SPIN_ORACLE_APPROXIMATE_COMPARISON",
+  "claim_boundary": "The exact finite contacted many-body oracle conserves device charge and the selected spin component. The interacting EOM/Keldysh branch exposes finite charge and spin reservoir channels and its discrepancy is recorded; this is not a conserving-closure or topological-protection claim."
+}

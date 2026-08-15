@@ -1,0 +1,30 @@
+CHECK full_branch_converges: PASS
+CHECK legacy_branch_remains_available: PASS
+CHECK full_correction_is_attached: PASS
+CHECK all_three_terms_are_finite: PASS
+CHECK full_branch_resolves_vertical_terms: PASS
+CHECK full_and_legacy_lesser_differ: PASS
+{
+  "antihermiticity_error": 0.0037980463003832476,
+  "assessment": "PASS_OPTIONAL_FULL_CONTOUR_SOLVER_INTERFACE",
+  "checks": {
+    "all_three_terms_are_finite": true,
+    "full_and_legacy_lesser_differ": true,
+    "full_branch_converges": true,
+    "full_branch_resolves_vertical_terms": true,
+    "full_correction_is_attached": true,
+    "legacy_branch_remains_available": true
+  },
+  "claim_boundary": "The solver can select the explicit three-term lesser contour branch and retain the legacy branch. A zero supplied Matsubara interaction remains an approximation; no conserving closure or protection claim follows.",
+  "full_correction_max": 0.04584303722913855,
+  "full_iterations": 60,
+  "full_maximum_update": 9.889875729839603e-08,
+  "gate": "GATE_63_FULL_CONTOUR_SOLVER_OPTION",
+  "legacy_full_lesser_difference_max": 0.0044959128819001114,
+  "legacy_iterations": 60,
+  "matsubara_max": 0.0,
+  "mixed_advanced_max": 0.04704465870217518,
+  "passed": true,
+  "propagated_mixed_max": 0.04740384159293796
+}
+VERDICT: PASS

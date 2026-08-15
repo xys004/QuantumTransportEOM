@@ -236,6 +236,31 @@ class GreenFunctionView:
             truncation_params=params,
         )
 
+    def _advanced_expression(
+        self,
+        *,
+        omega: sp.Expr,
+        eta: sp.Expr,
+        method: str | None,
+        occupations: Mapping[str, Any] | None,
+        levels: int,
+    ) -> sp.Expr:
+        """Build ``G^a`` from the resolvent instead of substituting into ``G^r``.
+
+        ``G^r.subs(eta, -eta)`` rewrites *every* occurrence of that value, so a
+        Hamiltonian coefficient numerically equal to ``eta`` has its sign
+        flipped as well and the result is silently wrong.  Evaluating the same
+        resolvent at ``-eta`` touches only the regulator.
+        """
+
+        return self.retarded(
+            omega=omega,
+            eta=-eta,
+            method=method,
+            occupations=occupations,
+            levels=levels,
+        )
+
     def advanced(
         self,
         *,
@@ -245,14 +270,15 @@ class GreenFunctionView:
         occupations: Mapping[str, Any] | None = None,
         levels: int = 0,
     ) -> sp.Expr:
-        g_ret = self.retarded(
-            omega=omega,
-            eta=eta,
-            method=method,
-            occupations=occupations,
-            levels=levels,
+        return sp.simplify(
+            self._advanced_expression(
+                omega=omega,
+                eta=eta,
+                method=method,
+                occupations=occupations,
+                levels=levels,
+            )
         )
-        return sp.simplify(g_ret.subs(eta, -eta))
 
     def lesser(
         self,
@@ -273,7 +299,15 @@ class GreenFunctionView:
             occupations=occupations,
             levels=levels,
         )
-        g_adv = sp.simplify(g_ret.subs(eta, -eta))
+        g_adv = sp.simplify(
+            self._advanced_expression(
+                omega=omega,
+                eta=eta,
+                method=method,
+                occupations=occupations,
+                levels=levels,
+            )
+        )
         dist = _distribution_symbolic(self._statistics(), omega, distribution=distribution, mu=mu, temperature=temperature)
         return sp.simplify(dist * (g_adv - g_ret))
 
@@ -296,7 +330,15 @@ class GreenFunctionView:
             occupations=occupations,
             levels=levels,
         )
-        g_adv = sp.simplify(g_ret.subs(eta, -eta))
+        g_adv = sp.simplify(
+            self._advanced_expression(
+                omega=omega,
+                eta=eta,
+                method=method,
+                occupations=occupations,
+                levels=levels,
+            )
+        )
         dist = _distribution_symbolic(self._statistics(), omega, distribution=distribution, mu=mu, temperature=temperature)
         factor = dist - 1 if self._statistics() == "fermion" else dist + 1
         return sp.simplify(factor * (g_adv - g_ret))
@@ -317,7 +359,15 @@ class GreenFunctionView:
             occupations=occupations,
             levels=levels,
         )
-        g_adv = sp.simplify(g_ret.subs(eta, -eta))
+        g_adv = sp.simplify(
+            self._advanced_expression(
+                omega=omega,
+                eta=eta,
+                method=method,
+                occupations=occupations,
+                levels=levels,
+            )
+        )
         return sp.simplify(sp.I * (g_ret - g_adv))
 
     def spectral_density(

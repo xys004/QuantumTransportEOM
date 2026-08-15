@@ -1,0 +1,49 @@
+{
+  "allowed_claim": "A targeted search did not find an exact primary-source match for the integrated finite-Xene-Corbino transient protocol; the integrated novelty candidate remains unconfirmed until specialist database searches and stronger controls are complete.",
+  "artifact": "TARGETED_TRANSIENT_CORBINO_XENE_NOVELTY_AUDIT",
+  "categories": [
+    "dynamic_kane_mele",
+    "dynamic_xene_pumping",
+    "stationary_xene_corbino",
+    "stationary_xene_qsh_interferometry",
+    "stationary_xene_ring",
+    "transient_ab_generic",
+    "transient_ab_spin_soi",
+    "transient_graphene_transport",
+    "transient_qsh_spin",
+    "two_time_keldysh_method",
+    "two_time_transient_method"
+  ],
+  "checks": {
+    "all_sources_have_direct_urls": true,
+    "broad_method_claim_rejected": true,
+    "exact_match_not_found_is_explicit": true,
+    "integrated_candidate_is_unconfirmed": true,
+    "matrix_exists": true,
+    "specialist_followup_required": true,
+    "stationary_corbino_prior_art_present": true,
+    "topology_is_secondary": true,
+    "transient_ab_prior_art_present": true,
+    "transient_qsh_prior_art_present": true,
+    "transient_spin_soi_prior_art_present": true,
+    "two_time_method_prior_art_present": true
+  },
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_transient_novelty_audit.py"
+  },
+  "matrix": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\transient_novelty_matrix_20260803.json",
+  "passed": true,
+  "rejected_claims": [
+    "Keldysh/EOM transient transport is new.",
+    "Persistent spin/charge currents in AB/Xene rings are new.",
+    "Rashba-induced transient spin current is new.",
+    "Robustness or Z2=1 alone proves topological protection.",
+    "No prior work exists."
+  ],
+  "runtime": "ASTRA+ASTRUM",
+  "schema_version": 1,
+  "source_count": 12,
+  "verdict": "NARROW_INTEGRATED_TRANSIENT_CORBINO_XENE_CANDIDATE_UNCONFIRMED"
+}

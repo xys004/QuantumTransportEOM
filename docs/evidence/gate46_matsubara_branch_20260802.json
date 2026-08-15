@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_46_MATSUBARA_BRANCH",
+  "scope": "explicit equilibrium G^M and embedding Sigma^M branches on the vertical grid",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "8 passed",
+    "engine_full_pytest": "250 passed",
+    "app_full_pytest": "69 passed",
+    "green_kms_error": 1.1102230246251565e-16,
+    "self_energy_kms_error": 1.3877787807814457e-17,
+    "green_equal_time_error": 6.106226635438361e-16
+  },
+  "astra": {"oracle": "local", "verdict": "PASS", "checks_total": 6, "checks_ok": 6, "targeted_pytest": "8 passed"},
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "8 passed",
+    "engine_full_pytest": "250 passed",
+    "app_full_pytest": "69 passed",
+    "green_kms_error": 2.220446049250313e-16,
+    "self_energy_kms_error": 1.3877787807814457e-17,
+    "green_equal_time_error": 5.551115123125783e-17
+  },
+  "assessment": "PASS_EXPLICIT_MATSUBARA_AND_EMBEDDING_BRANCH",
+  "claim_boundary": "The finite quadratic oracle now exposes G^M and Sigma^M on the same vertical grid. KMS endpoint and equal-time controls pass; this is an input branch for a joint contour solver, not a claim of interacting self-consistency.",
+  "artifacts": {"verifier": "scripts/verify_gate46_matsubara_branch.py", "api": "equilibrium_matsubara_green"}
+}

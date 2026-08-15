@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_13_KADANOFF_BAYM_NUMERIC_SCBA",
+  "scope": "finite-grid numerical two-time Dyson/KBE and self-consistent electron–boson Fock/SCBA control",
+  "checks": [
+    "nonuniform_two_time_convolution",
+    "zero_self_energy_dyson_control",
+    "scba_keldysh_identity_and_adjoint",
+    "scba_particle_number_refinement"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "targeted_pytest": "3 passed",
+    "maximum_convolution_error": 8.881784197001252e-16,
+    "scba_identity_residuals": [
+      1.7114499782779498e-13,
+      1.857443749547491e-13,
+      1.932776058813673e-13
+    ],
+    "particle_number_drift_by_grid": [
+      2.086551449953511e-07,
+      5.2164738612026085e-08,
+      1.3041482532782922e-08
+    ]
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 4,
+    "checks_ok": 4,
+    "comparisons": 6
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "targeted_pytest": "3 passed",
+    "checks_total": 4,
+    "checks_ok": 4
+  },
+  "implementation_change": [
+    "Add explicit nonuniform-grid two-time convolution with matrix-order-preserving einsum.",
+    "Add numerical retarded/lesser Kadanoff–Baym Dyson fixed-point solver with initial lesser correlation term.",
+    "Add self-consistent Einstein electron–boson Fock/SCBA time-domain self-energy and Keldysh-consistent greater reconstruction."
+  ],
+  "claim_boundary": [
+    "The solver is a finite-grid transparent fixed point, not yet a production-scale contour implementation.",
+    "Particle-number drift is reported and decreases by approximately four under time-grid refinement; no exact continuum conservation claim is made.",
+    "Continuum reservoir memory and interacting Kane–Mele/Corbino currents remain open gates."
+  ],
+  "artifacts": {
+    "module": "src/quantum_transport/kadanoff_baym.py",
+    "verifier": "scripts/verify_gate13_kadanoff_baym_numeric.py",
+    "test": "tests/test_kadanoff_baym.py"
+  }
+}

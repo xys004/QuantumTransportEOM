@@ -1,0 +1,35 @@
+{
+  "assessment": "PASS_ARBITRARY_TIME_DEPENDENT_MATRIX_EMBEDDING_INTERFACE",
+  "checks": {
+    "advanced_is_exact_adjoint": true,
+    "dyson_branch_converges": true,
+    "embedding_keldysh_identity_closes": true,
+    "green_keldysh_identity_closes": true,
+    "lesser_is_antihermitian": true,
+    "matrix_embedding_is_time_dependent": true,
+    "noncommuting_matrix_response_is_nonzero": true,
+    "nonstationary_device_drive_is_resolved": true,
+    "retarded_kernel_is_causal": true
+  },
+  "claim_boundary": "The engine accepts arbitrary finite-grid matrix-valued Sigma^r(t,t') and Sigma^<(t,t') kernels, including nonstationary phases and noncommuting device drives, and solves the KBE Dyson branch with causal/Keldysh diagnostics. This is a software interface and finite-grid benchmark; it does not by itself derive a microscopic interacting lead or prove conserving continuum transport.",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate73_time_dependent_matrix_embedding.py"
+  },
+  "gate": "GATE_73_TIME_DEPENDENT_MATRIX_EMBEDDING",
+  "metrics": {
+    "advanced_adjoint_error": 0.0,
+    "embedding_keldysh_spectral_error": 0.0,
+    "green_keldysh_spectral_error": 1.1102230246251565e-16,
+    "iterations": 33,
+    "lesser_antihermiticity_error": 1.788112030672749e-18,
+    "maximum_update": 8.810821663867079e-10,
+    "noncommuting_response_max": 0.4990893899211096,
+    "retarded_causality_error": 0.0,
+    "time_dependent_sigma_max": 0.0006264807104710328
+  },
+  "passed": true,
+  "runtime": "ASTRA+ASTRUM",
+  "schema_version": 1
+}

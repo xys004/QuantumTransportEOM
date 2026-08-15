@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_49_INTERACTING_TWO_TIME_BLOCK_AUDIT",
+  "scope": "integrated ASTRA/ASTRUM audit of Gates 44--48",
+  "local": {"verdict": "PASS", "checks_total": 12, "checks_ok": 12, "engine_full_pytest": "252 passed", "app_full_pytest": "69 passed"},
+  "astra": {"oracle": "local", "verdict": "PASS", "checks_total": 12, "checks_ok": 12},
+  "astrum": {"host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE", "verdict": "PASS", "checks_total": 12, "checks_ok": 12, "engine_full_pytest": "252 passed, 1 warning", "app_full_pytest": "69 passed"},
+  "audited_gates": [44, 45, 46, 47, 48],
+  "assessment": "PASS_INTEGRATED_GATES44_48_ASTRA_ASTRUM_AUDIT",
+  "claim_boundary": "Gates 44--48 form a coherent implementation and diagnostic block: weak-U source error, symbolic mixed equations, Matsubara inputs, numerical residuals, and charge/spin projections are all recorded on ASTRA and ASTRUM. The audit releases no topological-protection or interacting-conservation claim.",
+  "artifacts": {"verifier": "scripts/verify_gate49_interacting_two_time_block.py"}
+}

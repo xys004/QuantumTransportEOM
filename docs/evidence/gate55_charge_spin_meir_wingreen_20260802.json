@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_55_CHARGE_SPIN_MEIR_WINGREEN",
+  "scope": "named charge and spin observable contractions over common two-time Keldysh kernels",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 5,
+    "checks_ok": 5,
+    "targeted_pytest": "8 passed",
+    "engine_full_pytest": "257 passed",
+    "app_full_pytest": "69 passed",
+    "channel_maxima": {"charge": 0.04764179979303965, "sx": 0.012008425156636839, "sy": 0.0007030426866977085, "sz": 0.007050906592917908}
+  },
+  "astra": {"oracle": "local", "verdict": "PASS", "checks_total": 5, "checks_ok": 5, "targeted_pytest": "8 passed"},
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 5,
+    "checks_ok": 5,
+    "targeted_pytest": "8 passed",
+    "engine_full_pytest": "257 passed, 3 warnings",
+    "app_full_pytest": "69 passed",
+    "channel_maxima": {"charge": 0.04764179979303964, "sx": 0.012008425156636835, "sy": 0.0007030426866977077, "sz": 0.0070509065929179136}
+  },
+  "assessment": "PASS_SHARED_TWO_TIME_CHARGE_SPIN_CURRENT_CONTRACT",
+  "claim_boundary": "Charge and named spin observables use the same two-time Keldysh contraction. Spin torque, reservoir partitioning, and any topological interpretation remain separate diagnostics.",
+  "artifacts": {"api": "two_time_meir_wingreen_charge_spin_currents", "verifier": "scripts/verify_gate55_charge_spin_meir_wingreen.py"}
+}

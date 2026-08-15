@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_03_SYMBOLIC_ANALYTIC",
+  "scope": "symbolic stationary Keldysh and exact noninteracting transient oracles",
+  "checks": [
+    "single_langreth_rules",
+    "double_langreth_rules",
+    "hubbard_i_symbolic_oracle",
+    "stationary_lesser_dyson_oracle",
+    "keldysh_latex_oracle",
+    "resonant_level_short_time_oracle"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "targeted_pytest": "1 passed",
+    "short_time_derivative_error": 1.1271931937140355e-07
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 6,
+    "checks_ok": 6,
+    "comparisons": 9
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "targeted_pytest": "1 passed",
+    "short_time_derivative_error": 1.1271931937140355e-07
+  },
+  "implementation_change": [
+    "Export anderson_hubbard_i_green_function from quantum_transport."
+  ],
+  "upgrade_targets": [
+    "automatic symbolic lesser/greater solutions for arbitrary interacting EOM closures",
+    "time-convolution self-energy algebra for arbitrary smooth protocols"
+  ],
+  "artifacts": {
+    "verifier": "scripts/verify_gate03_symbolic_analytic.py",
+    "test": "tests/test_gate03_symbolic_analytic.py"
+  }
+}

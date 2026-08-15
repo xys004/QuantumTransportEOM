@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_69_INTEGRATED_CLOSED_BRANCH_AUDIT",
+  "scope": "integrated ASTRA/ASTRUM evidence and full regression for Gates61--68",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate69_integrated_closed_branch_audit.py"
+  },
+  "regression": {
+    "astra_engine": "259 passed",
+    "astrum_engine": "259 passed",
+    "astra_app": "70 passed",
+    "astrum_app": "70 passed",
+    "git_diff_check_engine": "PASS",
+    "git_diff_check_app": "PASS"
+  },
+  "checks": {
+    "all_gate_evidence_files_exist": true,
+    "all_gate_evidence_passed": true,
+    "astra_and_astrum_are_recorded": true,
+    "claim_boundaries_are_present": true,
+    "protection_verdict_is_explicitly_bounded": true,
+    "engine_full_contour_api_is_importable": true,
+    "app_closed_corbino_api_is_importable": true
+  },
+  "evidence_count": 8,
+  "passed": true,
+  "assessment": "PASS_INTEGRATED_GATES61_68_ASTRA_ASTRUM_BOUNDARY_AUDIT",
+  "claim_boundary": "Gates61--68 form a reproducible ASTRA/ASTRUM block for total-self-energy accounting, three-term lesser reconstruction, exact charge/spin validation, grid/lead controls, closed Corbino channels, persistent separation, and explicit topology criteria. The block still carries an open interacting continuity criterion and does not claim topological protection."
+}

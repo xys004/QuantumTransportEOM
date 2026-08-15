@@ -1,0 +1,38 @@
+{
+  "assessment": "PASS_SAME_SELF_ENERGY_DECOMPOSITION_WITH_NEGATIVE_CLOSURE_DIAGNOSTIC",
+  "checks": {
+    "charge_interaction_collision_is_resolved": true,
+    "direct_total_balance_matches_component_total": true,
+    "embedding_collision_channel_is_finite": true,
+    "raw_total_residual_is_retained": true,
+    "real_time_branch_converges": true,
+    "same_self_energy_component_sum_is_additive": true,
+    "source_density_hermiticity_diagnostic_is_reported": true,
+    "spin_interaction_collision_is_finite": true,
+    "vertical_source_is_reported": true
+  },
+  "claim_boundary": "The package now decomposes one and the same embedding-plus-interaction self-energy used by the Green-function branch into charge and spin continuity channels, and verifies algebraic additivity against a direct total balance. The nonzero residual and vertical-source diagnostics remain visible; this is a conservation audit and API upgrade, not a conserving-continuum theorem.",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "NOT_RUN",
+    "script": "scripts/verify_gate81_same_self_energy_continuity.py"
+  },
+  "gate": "GATE_81_SAME_SELF_ENERGY_CONTINUITY",
+  "metrics": {
+    "charge_collision_max": 0.001221372538123093,
+    "collision_additivity_error": 4.080289400222271e-17,
+    "direct_total_balance_match_error": 0.0,
+    "embedding_charge_collision_max": 0.006575511926543272,
+    "interaction_u": 0.3,
+    "iterations": 33,
+    "lesser_correction_antihermiticity_error": 0.2497940534704548,
+    "matsubara_converged": false,
+    "maximum_update": 1.8415386313368194e-06,
+    "source_density_hermiticity_error": 0.29877569567182405,
+    "spin_collision_max": 7.510518374963943e-05,
+    "total_residual_max": 0.01958871934260656
+  },
+  "passed": true,
+  "runtime": "ASTRA",
+  "schema_version": 1
+}

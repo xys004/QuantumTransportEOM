@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_33_HARTREE_COLLOCATION_VERTICAL_SOURCE_BOUNDARY",
+  "scope": "instantaneous Hubbard Hartree collocation plus second-Born KBE on the contacted finite-lead benchmark",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 7,
+    "checks_ok": 7,
+    "targeted_pytest": "5 passed",
+    "engine_full_pytest": "245 passed",
+    "app_full_pytest": "69 passed",
+    "static_hartree_refinement_errors": [0.00509445018851548, 0.0025470845192135153, 0.0012735026784595563],
+    "iterations": 58,
+    "maximum_update": 8.728407950954e-08,
+    "green_spectral_identity_error": 1.3877787807814457e-17,
+    "self_energy_spectral_identity_error": 2.3941860538390676e-09,
+    "hartree_retarded_max": 10.695730839473441,
+    "density_eigenvalue_range": [0.6164115477891247, 0.668483177442432],
+    "hartree_second_born_exact_density_max_gap": 0.1779731433657994,
+    "raw_kbe_continuity_residual_charge_max": 0.05428303975194409,
+    "raw_kbe_continuity_residual_spin_max": 0.006837906809902816,
+    "raw_kbe_continuity_residual_matrix_max": 0.030560473280923452
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 7,
+    "checks_ok": 7,
+    "targeted_pytest": "5 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 7,
+    "checks_ok": 7,
+    "targeted_pytest": "5 passed",
+    "engine_full_pytest": "245 passed",
+    "app_full_pytest": "69 passed",
+    "static_hartree_refinement_errors": [0.0050944501885153565, 0.002547084519213621, 0.0012735026784594513],
+    "iterations": 58,
+    "maximum_update": 8.728407948227114e-08,
+    "green_spectral_identity_error": 6.938893903907228e-18,
+    "self_energy_spectral_identity_error": 2.3941860556782623e-09,
+    "hartree_second_born_exact_density_max_gap": 0.17797314336579872,
+    "raw_kbe_continuity_residual_charge_max": 0.054283039751944095,
+    "raw_kbe_continuity_residual_spin_max": 0.006837906809906355
+  },
+  "assessment": "PASS_HARTREE_LAYER_REFINED_SOURCE_CLOSURE_OPEN",
+  "claim_boundary": "The instantaneous Hartree contribution is explicit, symbolically defined, and converges under time refinement in a static control. It does not close the interacting contacted continuity equation: the vertical-branch source, endpoint delta treatment, and a production conserving contour solver remain open. The exact-U density gap is reported and is not a novelty claim.",
+  "artifacts": {
+    "symbolic": "src/quantum_transport/kadanoff_baym_symbolic.py",
+    "numeric": "src/quantum_transport/kadanoff_baym.py",
+    "verifier": "scripts/verify_gate33_hartree_vertical_source_layer.py",
+    "tests": "tests/test_kadanoff_baym.py"
+  }
+}

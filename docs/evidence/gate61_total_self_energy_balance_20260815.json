@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-15",
+  "gate": "GATE_61_TOTAL_SELF_ENERGY_BALANCE",
+  "scope": "continuity audit with embedding plus interacting Hubbard second-Born self-energies",
+  "supersedes": "gate61_total_self_energy_balance_20260802.json",
+  "regeneration_reason": "Regenerated after the causal-quadrature correction in initial_correlations._prefix_trapezoid_weights. Retarded and advanced kernels are stored with the theta(0)=1/2 convention, so applying the plain trapezoid endpoint weight on top halved the equal-time contribution twice and degraded every causal convolution from second to first order. The superseded record remains valid as the output of the pre-correction code.",
+  "targeted_pytest_command": "python -m pytest tests/test_continuity.py -q",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate61_total_self_energy_balance.py",
+    "targeted_tests": "5 passed on ASTRA and ASTRUM",
+    "engine_full_pytest": "302 passed on ASTRA and ASTRUM",
+    "app_full_pytest": "82 passed on ASTRUM"
+  },
+  "checks": {
+    "closed_branch_converges": true,
+    "interacting_self_energy_is_nonzero": true,
+    "total_and_embedding_audits_differ": true,
+    "total_balance_is_finite": true,
+    "vertical_term_changes_total_balance": true
+  },
+  "metrics": {
+    "interaction_sigma_max": 10.695215084621607,
+    "lead_only_bare_residual_max": 0.07315298083492829,
+    "lead_only_closed_residual_max": 0.07625775434181473,
+    "total_bare_residual_max": 0.0731529785223772,
+    "total_closed_residual_max": 0.07619240535251148,
+    "total_vertical_ratio": 1.0415489142277992
+  },
+  "passed": true,
+  "astra_astrum_max_metric_difference": 7.37188088351104e-14,
+  "assessment": "PASS_TOTAL_SELF_ENERGY_ACCOUNTING_AUDIT",
+  "claim_boundary": "The continuity audit distinguishes embedding-only from total embedding-plus-interaction collision terms. This fixes bookkeeping ambiguity but does not establish a conserving contour closure."
+}

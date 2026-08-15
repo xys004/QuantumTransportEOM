@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_32_HUBBARD_SECOND_BORN_TWO_TIME_KBE",
+  "scope": "self-consistent correlation-only Hubbard second-Born closure on a contacted two-spin-orbital finite-lead benchmark",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 9,
+    "checks_ok": 9,
+    "targeted_pytest": "4 passed",
+    "engine_full_pytest": "244 passed",
+    "app_full_pytest": "69 passed",
+    "scba_iterations": 44,
+    "scba_maximum_update": 8.386320140738004e-08,
+    "green_spectral_identity_error": 1.734723475976807e-18,
+    "self_energy_spectral_identity_error": 2.8119004024246505e-11,
+    "advanced_adjoint_error": 0.0,
+    "retarded_causality_error": 0.0,
+    "density_hermiticity_error": 0.0,
+    "density_eigenvalue_range": [0.6211160040641729, 0.6684990078114874],
+    "second_born_self_energy_max": 0.03925251225168886,
+    "exact_oracle_spectral_identity_error": 4.449557262054371e-16,
+    "scba_exact_density_max_gap": 0.17799013220597382,
+    "raw_kbe_continuity_residual_charge_max": 0.02230269449277196,
+    "raw_kbe_continuity_residual_spin_max": 0.009293172633559492,
+    "raw_kbe_continuity_residual_matrix_max": 0.015797933563165726
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 9,
+    "checks_ok": 9,
+    "targeted_pytest": "4 passed",
+    "engine_full_pytest": "244 passed",
+    "app_full_pytest": "69 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 9,
+    "checks_ok": 9,
+    "targeted_pytest": "4 passed",
+    "engine_full_pytest": "244 passed",
+    "app_full_pytest": "69 passed",
+    "scba_iterations": 44,
+    "scba_maximum_update": 8.386320140738004e-08,
+    "green_spectral_identity_error": 1.734723475976807e-18,
+    "self_energy_spectral_identity_error": 2.8118991333558183e-11,
+    "scba_exact_density_max_gap": 0.17799013220597293,
+    "raw_kbe_continuity_residual_charge_max": 0.022302694492773736,
+    "raw_kbe_continuity_residual_spin_max": 0.00929317263355417
+  },
+  "assessment": "PASS_SECOND_BORN_CONVERGES_EXACT_GAP_AND_OPEN_SOURCE_REPORTED",
+  "claim_boundary": "The correlation-only Hubbard second-Born self-energy is a reproducible symbolic/numeric two-time KBE layer and converges on a contacted finite-lead benchmark. The exact finite-U density gap is reported as an approximation error. The raw continuity residual is not claimed to be a conservation failure: instantaneous Hartree and the full interacting vertical-branch initial source remain open.",
+  "artifacts": {
+    "symbolic": "src/quantum_transport/kadanoff_baym_symbolic.py",
+    "numeric": "src/quantum_transport/kadanoff_baym.py",
+    "verifier": "scripts/verify_gate32_hubbard_second_born_two_time.py",
+    "tests": "tests/test_kadanoff_baym.py"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_09_SIZE_CONTACT_SCATTERING",
+  "scope": "wide-band Fisher–Lee scattering API",
+  "local": {
+    "verdict": "PASS",
+    "targeted_pytest": "2 passed",
+    "full_pytest_latest": "212 passed",
+    "maximum_unitarity_error": 2.5438405243138006e-16
+  },
+  "astra": {
+    "verdict": "PASS",
+    "checks_total": 2,
+    "checks_ok": 2
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "targeted_pytest": "2 passed",
+    "stage_pytest_latest": "14 passed"
+  },
+  "implementation_change": [
+    "Add wide_band_scattering_matrix(energy, hamiltonian, broadening).",
+    "Add scattering_unitarity_error(scattering)."
+  ],
+  "claim_boundary": [
+    "This API establishes a unitary WBL scattering object, not a quantized topological index by itself."
+  ],
+  "artifacts": {
+    "module": "src/quantum_transport/scattering.py",
+    "test": "tests/test_scattering.py"
+  }
+}

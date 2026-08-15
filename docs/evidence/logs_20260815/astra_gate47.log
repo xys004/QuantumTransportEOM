@@ -1,0 +1,25 @@
+CHECK free_rceil_residual_closes: PASS
+CHECK free_lceil_residual_closes: PASS
+CHECK exact_rceil_residual_is_finite: PASS
+CHECK exact_lceil_residual_is_finite: PASS
+CHECK residual_grid_is_preserved: PASS
+CHECK residual_has_both_branches: PASS
+{
+  "assessment": "PASS_NUMERICAL_MIXED_KBE_RESIDUAL_DIAGNOSTIC",
+  "checks": {
+    "exact_lceil_residual_is_finite": true,
+    "exact_rceil_residual_is_finite": true,
+    "free_lceil_residual_closes": true,
+    "free_rceil_residual_closes": true,
+    "residual_grid_is_preserved": true,
+    "residual_has_both_branches": true
+  },
+  "claim_boundary": "The package now evaluates both mixed KBE residual branches with causal and vertical quadrature. The free control closes at finite difference accuracy; the exact finite benchmark is reported as a diagnostic, not relabeled as an interacting self-consistent solver.",
+  "exact_lceil_residual_max": 0.08533779307320476,
+  "exact_rceil_residual_max": 0.1213095874105857,
+  "free_lceil_residual_max": 0.00031499992125075987,
+  "free_rceil_residual_max": 0.00031499992125075987,
+  "gate": "GATE_47_MIXED_KBE_RESIDUAL",
+  "passed": true
+}
+VERDICT: PASS

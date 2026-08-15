@@ -1,0 +1,84 @@
+{
+  "checks": {
+    "all_sources_have_direct_urls": true,
+    "broad_method_novelty_is_rejected": true,
+    "candidate_is_narrow_integrated_workflow": true,
+    "conserving_continuity_boundary_is_explicit": true,
+    "interacting_qsh_invariant_is_prior_art": true,
+    "non_topological_edge_robustness_warning_is_prior_art": true,
+    "novelty_requires_specialist_followup": true,
+    "persistent_spin_ring_is_prior_art": true,
+    "primary_source_matrix_is_complete": true,
+    "strong_topological_claim_is_not_forced": true,
+    "transient_kbe_method_is_prior_art": true
+  },
+  "claim_boundary": "The audit rejects broad novelty claims for transient EOM/KBE/Keldysh transport, persistent spin-ring currents, interacting QSH invariants, and robustness-as-protection. A possible contribution is the reproducible ASTRA/ASTRUM integration of a flux-ramped spinful Corbino benchmark with two-time memory, persistent/reservoir separation, spin-resolved continuity diagnostics, and finite-size controls. This candidate remains unconfirmed until specialist database searches and a closed interacting continuum calculation are completed.",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "NOT_RUN",
+    "script": "scripts/verify_gate74_specialist_novelty_audit.py"
+  },
+  "gate": "GATE_74_SPECIALIST_NOVELTY_AUDIT",
+  "passed": true,
+  "required_followup": [
+    "Repeat the exact-combination search in INSPIRE, Web of Science, Scopus, and specialist arXiv categories.",
+    "Close interacting charge/spin continuity with the same Matsubara and real-time self-energy.",
+    "Compare the integrated benchmark against trivial, Rashba, disorder, width, contact, and flux-ramp controls."
+  ],
+  "runtime": "ASTRA",
+  "schema_version": 1,
+  "search_date": "2026-08-02",
+  "sources": [
+    {
+      "implication": "broad EOM/KBE/Keldysh transient-method novelty is prior art",
+      "key": "myohanen_2009",
+      "scope": "two-time interacting transient transport, conserving approximations, initial correlations, time-domain Meir–Wingreen",
+      "title": "Kadanoff–Baym approach to quantum transport through interacting nanoscale systems",
+      "url": "https://arxiv.org/abs/0906.2136"
+    },
+    {
+      "implication": "time-dependent fields and lead embedding are not new by themselves",
+      "key": "myohanen_2010",
+      "scope": "embedded KBE with arbitrary time-dependent external driving",
+      "title": "Kadanoff–Baym approach to quantum transport in AC/DC fields",
+      "url": "https://arxiv.org/abs/1006.2912"
+    },
+    {
+      "implication": "persistent charge/spin ring observables are prior art",
+      "key": "maiti_2014",
+      "scope": "persistent charge/spin currents in an Aharonov–Bohm ring with spin–orbit coupling",
+      "title": "Persistent charge and spin currents in a quantum ring using Green's function technique",
+      "url": "https://arxiv.org/abs/1401.0262"
+    },
+    {
+      "implication": "flux-sensitive QSH-ring persistent response is prior art",
+      "key": "crepin_2015",
+      "scope": "flux-dependent many-body persistent currents in quantum-spin-Hall rings",
+      "title": "Flux sensitivity of quantum spin Hall rings",
+      "url": "https://arxiv.org/abs/1507.03898"
+    },
+    {
+      "implication": "an interacting QSH invariant or phase claim needs a stronger distinction",
+      "key": "grandi_2015",
+      "scope": "interacting Kane–Mele-type QSH invariants with Hubbard interactions",
+      "title": "Topological invariants in interacting quantum spin Hall systems",
+      "url": "https://doi.org/10.1088/1367-2630/17/2/023004"
+    },
+    {
+      "implication": "robustness alone cannot be labelled topological protection",
+      "key": "mitchison_2022",
+      "scope": "nonequilibrium edge-current robustness in topological and non-topological systems",
+      "title": "Robust Nonequilibrium Edge Currents with and without Band Topology",
+      "url": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.128.120403"
+    },
+    {
+      "implication": "continuity closure is a required diagnostic, not a new theorem here",
+      "key": "baym_kadanoff_1961",
+      "scope": "conserving approximations and Ward-identity/conservation-law framework",
+      "title": "Conservation Laws and Correlation Functions",
+      "url": "https://doi.org/10.1103/PhysRev.124.287"
+    }
+  ],
+  "strong_new_physics_novelty": "NOT_SUPPORTED_BY_THIS_AUDIT",
+  "verdict": "NARROW_METHOD_BENCHMARK_CANDIDATE_UNCONFIRMED"
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_28_CONTINUUM_WBL_INITIAL_SOURCE_BOUNDARY",
+  "scope": "analytic partition-free WBL reference versus finite midpoint star quadratures with stable mixed KMS products",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 5,
+    "checks_ok": 5,
+    "engine_full_pytest": "239 passed",
+    "app_full_pytest": "69 passed",
+    "density_errors_vs_wbl": [0.003979489957808835, 0.0026513590039962676, 0.0019873063226750753],
+    "mixed_source_maxima": [0.010074267532124124, 0.014265206240350842, 0.016569952173114594],
+    "wbl_continuity_error_max": 1.3863326461360792e-05
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 5,
+    "checks_ok": 5,
+    "density_errors_vs_wbl": [0.003979489957808835, 0.0026513590039962676, 0.0019873063226750753],
+    "mixed_source_hermiticity_max": 0.0,
+    "finite_spectral_identity_max": 3.330670090314851e-15,
+    "uv_cutoff_error_remains_explicit": true
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 5,
+    "checks_ok": 5,
+    "engine_full_pytest": "239 passed",
+    "app_full_pytest": "69 passed",
+    "density_errors_vs_wbl": [0.003979489957809501, 0.0026513590039946022, 0.001987306322678961],
+    "mixed_source_hermiticity_max": 0.0,
+    "finite_spectral_identity_max": 2.33151497839359e-15,
+    "uv_cutoff_error_remains_explicit": true
+  },
+  "assessment": "PASS_WBL_REFERENCE_AND_STABLE_MIXED_SOURCE_UV_LIMIT_OPEN",
+  "claim_boundary": "The analytic partition-free WBL reference is continuous on the resolved grid, and the microscopic finite-star mixed source is stable after spectral KMS evaluation. The star/WBL discrepancy decreases with bandwidth but remains finite, so the continuum initial-correlation limit is explicitly open.",
+  "artifacts": {
+    "quadrature_module": "src/quantum_transport/continuum_quadrature.py",
+    "stability_upgrade": "src/quantum_transport/finite_lead.py",
+    "verifier": "scripts/verify_gate28_continuum_wbl_initial_source.py",
+    "tests": "tests/test_continuum_quadrature.py"
+  }
+}

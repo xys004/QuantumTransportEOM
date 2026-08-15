@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_24_PUBLICABILITY_REAUDIT",
+  "scope": "publication-boundary re-audit after the same-Hubbard-U, continuity, and production-resolution gates",
+  "checks": [
+    "twelve_gate_records",
+    "all_astra_pass",
+    "all_astrum_pass",
+    "full_test_records_current",
+    "same_hubbard_u_closed_atomic",
+    "continuity_boundary_explicit",
+    "production_boundary_explicit",
+    "novelty_audit_documented",
+    "targeted_search_logged",
+    "no_protection_overclaim"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 10,
+    "checks_ok": 10,
+    "engine_full_pytest": "231 passed",
+    "app_full_pytest": "69 passed"
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 10,
+    "checks_ok": 10,
+    "comparisons": 13
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 10,
+    "checks_ok": 10
+  },
+  "assessment": "AUDIT_PASS_WITH_LEAD_COUPLED_CONTINUITY_AND_NOVELTY_GATES_OPEN",
+  "closed_since_gate20": [
+    "same-Hubbard-U atomic exact benchmark",
+    "finite-grid KBE collision and charge/spin bookkeeping",
+    "compact Corbino production energy convergence"
+  ],
+  "next_required": [
+    "lead-coupled interacting continuity with reservoir injection and Rashba torque",
+    "width/contact/disorder production atlas for interacting runs",
+    "specialist literature/database novelty search",
+    "falsifiable persistent/reservoir charge-spin observable surviving controls"
+  ],
+  "not_yet_claimed": [
+    "publication-grade novelty",
+    "exact continuum conservation in the interacting Corbino adapter",
+    "interacting topological protection"
+  ],
+  "artifacts": {
+    "verifier": "scripts/verify_gate24_publicability_reaudit.py",
+    "novelty_audit": "docs/NOVELTY_AUDIT_TRANSIENT_INTERACTING_SPIN.md"
+  }
+}

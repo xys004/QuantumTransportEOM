@@ -1,0 +1,23 @@
+CHECK free_volterra_control_closes: PASS
+CHECK propagated_branch_is_finite: PASS
+CHECK propagated_shape_is_explicit: PASS
+CHECK contacted_residual_is_finite: PASS
+CHECK initial_slice_is_preserved: PASS
+CHECK causal_time_grid_is_monotonic: PASS
+{
+  "assessment": "PASS_CAUSAL_MIXED_KBE_VOLTERRA_STEPPER",
+  "checks": {
+    "causal_time_grid_is_monotonic": true,
+    "contacted_residual_is_finite": true,
+    "free_volterra_control_closes": true,
+    "initial_slice_is_preserved": true,
+    "propagated_branch_is_finite": true,
+    "propagated_shape_is_explicit": true
+  },
+  "claim_boundary": "A finite-grid causal Volterra stepper now propagates G^rceil from an explicit initial slice, retarded memory, and vertical source. The free control closes at first-order discretization accuracy; this is a building block, not yet a self-consistent interacting contour solver.",
+  "contacted_residual_max": 0.008835607326736869,
+  "free_control_error": 0.0002520447351291669,
+  "gate": "GATE_51_MIXED_VOLTERRA_STEPPER",
+  "passed": true
+}
+VERDICT: PASS

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_61_TOTAL_SELF_ENERGY_BALANCE",
+  "scope": "continuity audit with embedding plus interacting Hubbard second-Born self-energies",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate61_total_self_energy_balance.py"
+  },
+  "checks": {
+    "interacting_self_energy_is_nonzero": true,
+    "total_balance_is_finite": true,
+    "total_and_embedding_audits_differ": true,
+    "vertical_term_changes_total_balance": true,
+    "closed_branch_converges": true
+  },
+  "metrics": {
+    "lead_only_bare_residual_max": 0.02648697785531719,
+    "total_bare_residual_max": 0.02648697436692222,
+    "lead_only_closed_residual_max": 0.03589451337534731,
+    "total_closed_residual_max": 0.03582330450460811,
+    "total_vertical_ratio": 1.3524876042220,
+    "interaction_sigma_max": 10.69575032307528
+  },
+  "passed": true,
+  "assessment": "PASS_TOTAL_SELF_ENERGY_ACCOUNTING_AUDIT",
+  "claim_boundary": "The continuity audit distinguishes embedding-only from total embedding-plus-interaction collision terms. This fixes bookkeeping ambiguity but does not establish a conserving contour closure."
+}

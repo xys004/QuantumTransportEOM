@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_52_JOINT_HUBBARD_CONTOUR_ITERATION",
+  "scope": "self-consistent Hubbard second-Born iteration of real and mixed branches on one finite contour grid",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "7 passed",
+    "engine_full_pytest": "254 passed",
+    "app_full_pytest": "69 passed",
+    "u0_iterations": 52,
+    "u0_max_update": 9.217747216291017e-08,
+    "finite_u_iterations": 60,
+    "finite_u_max_update": 9.926564149063197e-08,
+    "u0_mixed_source_max": 0.0,
+    "finite_u_mixed_source_max": 0.06959712355996017,
+    "mixed_branch_change_max": 0.022274242579356437,
+    "bare_to_u0_mixed_change_max": 0.040364678230259216
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "7 passed",
+    "engine_full_pytest": "254 passed",
+    "app_full_pytest": "69 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "7 passed",
+    "engine_full_pytest": "254 passed, 1 warning",
+    "app_full_pytest": "69 passed",
+    "u0_iterations": 52,
+    "finite_u_iterations": 60,
+    "u0_mixed_source_max": 0.0,
+    "finite_u_mixed_source_max": 0.06959712355996006,
+    "mixed_branch_change_max": 0.022274242579356352,
+    "bare_to_u0_mixed_change_max": 0.0403646782302592
+  },
+  "assessment": "PASS_JOINT_CONTOUR_ITERATION_WITH_OPEN_LESSER_CLOSURE",
+  "claim_boundary": "A single self-consistent finite-grid iteration now resolves the Hubbard second-Born real and mixed branches together. The real lesser branch still retains its supplied bare lesser input, so this is a joint-contour research layer and not yet a conserving interacting contour solver.",
+  "artifacts": {
+    "verifier": "scripts/verify_gate52_joint_hubbard_contour_iteration.py",
+    "api": "self_consistent_hubbard_second_born_contour_two_time"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_54_LESSER_VERTICAL_INITIAL_CORRELATION",
+  "scope": "propagated mixed Keldysh source in the real lesser Dyson/KBE update",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "20 passed",
+    "engine_full_pytest": "256 passed",
+    "app_full_pytest": "69 passed",
+    "bare_residual_max": 0.026486977855316285,
+    "vertical_residual_max": 0.03589451337534811,
+    "residual_ratio": 1.3551758744021303,
+    "lesser_correction_max": 0.047238240510923346,
+    "source_kernel_max": 0.1009480086252369,
+    "source_charge_max": 0.015761389671666456,
+    "source_spin_max": 0.008451731681289484,
+    "required_source_error_max": 0.04800107126800374
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "20 passed",
+    "engine_full_pytest": "256 passed",
+    "app_full_pytest": "69 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "20 passed",
+    "engine_full_pytest": "256 passed, 3 warnings",
+    "app_full_pytest": "69 passed",
+    "bare_residual_max": 0.026486977855318092,
+    "vertical_residual_max": 0.03589451337534635,
+    "residual_ratio": 1.3551758744019713,
+    "lesser_correction_max": 0.04723824051092331,
+    "source_kernel_max": 0.10094800862523681,
+    "source_charge_max": 0.015761389671666445,
+    "source_spin_max": 0.008451731681289477,
+    "required_source_error_max": 0.04800107126800196
+  },
+  "assessment": "PASS_EXPLICIT_LESSER_VERTICAL_TERM_WITH_RESIDUAL_AUDIT",
+  "claim_boundary": "The real lesser update now accepts the causal propagated term G^R*(-i Sigma^rceil*G^lceil) plus its right-acting adjoint. In the contacted finite-U benchmark this changes the lesser branch but increases the continuity residual (ratio 1.355); the term is therefore implemented and falsified, not claimed to close conservation or topology.",
+  "artifacts": {
+    "verifier": "scripts/verify_gate54_lesser_vertical_closure.py",
+    "symbolic_api": "kadanoff_baym_lesser_initial_correlation_symbolic",
+    "numeric_api": "kbe_lesser_initial_correlation",
+    "dyson_flag": "initial_correlation_lesser",
+    "contour_flag": "include_vertical_lesser"
+  }
+}

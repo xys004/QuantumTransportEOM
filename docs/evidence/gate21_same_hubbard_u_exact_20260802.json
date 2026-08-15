@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_21_SAME_HUBBARD_U_EXACT",
+  "scope": "exact atomic Hubbard-U diagonal ensemble versus EOM/Hubbard-I with identical epsilon and U",
+  "checks": [
+    "probability_normalization",
+    "same_hubbard_u_eom_basis_closed",
+    "same_hubbard_u_hubbard_i_matches_exact_frequency",
+    "two_time_spectral_identity",
+    "two_time_advanced_adjoint",
+    "two_time_lesser_antihermitian",
+    "two_time_equal_time_occupation"
+  ],
+  "parameters": {
+    "epsilon_up": -0.35,
+    "epsilon_down": 0.18,
+    "interaction_u": 1.05,
+    "chemical_potential": 0.07,
+    "temperature": 0.23,
+    "eta": 0.02
+  },
+  "local": {
+    "verdict": "PASS",
+    "engine_full_pytest": "228 passed",
+    "targeted_pytest": "3 passed",
+    "checks_total": 7,
+    "checks_ok": 7,
+    "frequency_max_residual": 7.32410687763558e-15,
+    "two_time_spectral_identity_error": 2.237726045655905e-16,
+    "two_time_advanced_adjoint_error": 0.0,
+    "two_time_lesser_antihermiticity_error": 0.0,
+    "two_time_equal_time_occupation_error": 0.0
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 7,
+    "checks_ok": 7,
+    "comparisons": 7
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "targeted_pytest": "3 passed",
+    "checks_total": 7,
+    "checks_ok": 7,
+    "frequency_max_residual": 7.32410687763558e-15,
+    "two_time_spectral_identity_error": 2.220446049250313e-16
+  },
+  "implementation_change": [
+    "Add exact atomic Hubbard-U probabilities for the four many-body sectors.",
+    "Add exact retarded frequency and explicit two-time charge/spin-channel Green functions.",
+    "Add Gate21 verifier and regression tests for the same-Hamiltonian EOM/Hubbard-I comparison."
+  ],
+  "claim_boundary": [
+    "The equality is exact only for the atomic diagonal Hubbard-U Hamiltonian.",
+    "It does not certify Hubbard-I for hopping, leads, arbitrary interaction memory, or topological protection."
+  ],
+  "artifacts": {
+    "module": "src/quantum_transport/hubbard_atomic.py",
+    "verifier": "scripts/verify_gate21_same_hubbard_u_exact.py",
+    "test": "tests/test_hubbard_atomic.py"
+  }
+}

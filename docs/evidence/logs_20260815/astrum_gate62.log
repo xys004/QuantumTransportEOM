@@ -1,0 +1,26 @@
+CHECK symbolic_has_three_vertical_terms: PASS
+CHECK mixed_advanced_term_is_resolved: PASS
+CHECK propagated_mixed_term_is_resolved: PASS
+CHECK matsubara_term_is_finite: PASS
+CHECK full_correction_is_finite: PASS
+CHECK fixed_point_converges: PASS
+{
+  "antihermiticity_error": 0.0038059818634619625,
+  "assessment": "PASS_THREE_TERM_CONTOUR_LESSER_RECONSTRUCTION",
+  "checks": {
+    "fixed_point_converges": true,
+    "full_correction_is_finite": true,
+    "matsubara_term_is_finite": true,
+    "mixed_advanced_term_is_resolved": true,
+    "propagated_mixed_term_is_resolved": true,
+    "symbolic_has_three_vertical_terms": true
+  },
+  "claim_boundary": "The three vertical Langreth terms are explicit and finite on the interacting finite-lead benchmark. Their inclusion is a reconstruction identity; conservation still requires a self-consistent Matsubara and real/mixed fixed point.",
+  "full_correction_max": 0.04584224637334991,
+  "gate": "GATE_62_FULL_CONTOUR_LESSER_RECONSTRUCTION",
+  "matsubara_max": 0.0,
+  "mixed_advanced_max": 0.04704335344175364,
+  "passed": true,
+  "propagated_mixed_max": 0.04740305063989902
+}
+VERDICT: PASS

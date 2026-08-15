@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_65_MIXED_GRID_LEAD_SIZE_CONVERGENCE",
+  "scope": "imaginary-grid refinement of full contour correction and finite-lead convergence of mixed source",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate65_mixed_grid_lead_size_convergence.py"
+  },
+  "checks": {
+    "all_full_contour_grid_runs_converge": true,
+    "mixed_grid_refinement_reduces_difference": true,
+    "mixed_correction_is_resolved": true,
+    "all_finite_lead_sources_are_hermitian": true,
+    "all_finite_lead_oracles_are_spectral": true,
+    "size4_source_converges_to_size6": true,
+    "finite_lead_source_is_resolved": true
+  },
+  "metrics": {
+    "grid_differences_11_to_21": 0.000104533890176965,
+    "grid_differences_21_to_41": 0.0000307848054192654,
+    "correction_max_at_11": 0.0200028115450837,
+    "correction_max_at_21": 0.0198982936743945,
+    "correction_max_at_41": 0.0198684444207626,
+    "lead_source_size2_vs_size6": 1.59289010413267e-06,
+    "lead_source_size3_vs_size6": 6.45456111261896e-08,
+    "lead_source_size4_vs_size6": 2.57475546319805e-09,
+    "lead_source_max": 0.00154245629684790
+  },
+  "passed": true,
+  "assessment": "PASS_MIXED_GRID_AND_FINITE_LEAD_SIZE_CONTROLS",
+  "claim_boundary": "The explicit full-contour correction refines on the imaginary grid and the seeded mixed source converges with finite lead size. These are numerical controls before a continuum extrapolation; they do not establish arbitrary-lead conservation or a topological invariant."
+}

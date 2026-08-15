@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-15",
+  "gate": "GATE_63_FULL_CONTOUR_SOLVER_OPTION",
+  "scope": "optional solver branch selecting the complete three-term lesser contour correction",
+  "supersedes": "gate63_full_contour_solver_option_20260802.json",
+  "regeneration_reason": "Regenerated after the causal-quadrature correction in initial_correlations._prefix_trapezoid_weights. Retarded and advanced kernels are stored with the theta(0)=1/2 convention, so applying the plain trapezoid endpoint weight on top halved the equal-time contribution twice and degraded every causal convolution from second to first order. The superseded record remains valid as the output of the pre-correction code.",
+  "targeted_pytest_command": "python -m pytest tests/test_kadanoff_baym.py -q",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate63_full_contour_solver_option.py",
+    "targeted_tests": "17 passed on ASTRA and ASTRUM",
+    "engine_full_pytest": "302 passed on ASTRA and ASTRUM",
+    "app_full_pytest": "82 passed on ASTRUM"
+  },
+  "checks": {
+    "all_three_terms_are_finite": true,
+    "full_and_legacy_lesser_differ": true,
+    "full_branch_converges": true,
+    "full_branch_resolves_vertical_terms": true,
+    "full_correction_is_attached": true,
+    "legacy_branch_remains_available": true
+  },
+  "metrics": {
+    "antihermiticity_error": 0.0037980463003832476,
+    "full_correction_max": 0.04584303722913855,
+    "full_iterations": 60,
+    "full_maximum_update": 9.889875729839603e-08,
+    "legacy_full_lesser_difference_max": 0.0044959128819001114,
+    "legacy_iterations": 60,
+    "matsubara_max": 0.0,
+    "mixed_advanced_max": 0.04704465870217518,
+    "propagated_mixed_max": 0.04740384159293796
+  },
+  "passed": true,
+  "astra_astrum_max_metric_difference": 8.673617379884035e-17,
+  "assessment": "PASS_OPTIONAL_FULL_CONTOUR_SOLVER_INTERFACE",
+  "claim_boundary": "The solver can select the explicit three-term lesser contour branch and retain the legacy branch. A zero supplied Matsubara interaction remains an approximation; no conserving closure or protection claim follows."
+}

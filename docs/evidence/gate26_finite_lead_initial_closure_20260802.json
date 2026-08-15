@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_26_FINITE_LEAD_INITIAL_CORRELATION_CLOSURE",
+  "scope": "exact finite quadratic contacted device-plus-leads benchmark with microscopic vertical Keldysh source",
+  "checks": [
+    "contacted_initial_state_has_device_lead_coherence",
+    "device_spectral_identity",
+    "microscopic_source_is_hermitian",
+    "charge_continuity_closes_after_microscopic_source",
+    "spin_continuity_closes_after_microscopic_source",
+    "initial_source_is_nonzero_and_not_markovian_zero"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "engine_full_pytest": "237 passed",
+    "app_full_pytest": "69 passed",
+    "corrected_charge_interior_max": 1.743687996474258e-07,
+    "corrected_spin_interior_max": 1.6679970395692967e-07
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "comparisons": 6,
+    "corrected_charge_interior_max": 1.743687996543647e-07,
+    "corrected_spin_interior_max": 1.6679971817125383e-07,
+    "initial_device_lead_coherence": 0.052750082963397296,
+    "spectral_identity_error": 2.331468361796554e-15
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "corrected_charge_interior_max": 1.7436880678060873e-07,
+    "corrected_spin_interior_max": 1.6679968271350598e-07,
+    "initial_device_lead_coherence": 0.05275008296339703,
+    "spectral_identity_error": 9.995861419348e-16,
+    "engine_full_pytest": "237 passed",
+    "app_full_pytest": "69 passed"
+  },
+  "assessment": "PASS_MICROSCOPIC_FINITE_LEAD_CLOSURE_CONTINUUM_LIMIT_OPEN",
+  "claim_boundary": "The mixed vertical-branch source closes charge and spin continuity for an exact finite quadratic contacted benchmark. It does not yet establish the continuum/WBL interacting Corbino limit; lead-size, recurrence, and interaction convergence remain open.",
+  "artifacts": {
+    "numeric_module": "src/quantum_transport/finite_lead.py",
+    "verifier": "scripts/verify_gate26_finite_lead_initial_closure.py",
+    "tests": "tests/test_finite_lead.py"
+  }
+}

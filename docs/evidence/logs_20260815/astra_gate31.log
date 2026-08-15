@@ -1,0 +1,55 @@
+CHECK exact_two_time_spectral_identity: PASS
+CHECK exact_density_is_hermitian: PASS
+CHECK exact_charge_continuity_with_two_leads: PASS
+CHECK exact_spin_continuity_without_spin_torque: PASS
+CHECK contacted_many_body_state_has_device_lead_coherence: PASS
+CHECK exact_density_eigenvalues_are_physical: PASS
+CHECK charge_currents_are_nonzero: PASS
+CHECK spin_currents_are_nonzero: PASS
+CHECK lead_coupled_hubbard_i_has_noninteracting_control: PASS
+CHECK finite_u_eom_difference_is_measured: PASS
+{
+  "assessment": "PASS_EXACT_LEAD_COUPLED_INTERACTING_ORACLE_EOM_ERROR_QUANTIFIED",
+  "checks": {
+    "charge_currents_are_nonzero": true,
+    "contacted_many_body_state_has_device_lead_coherence": true,
+    "exact_charge_continuity_with_two_leads": true,
+    "exact_density_eigenvalues_are_physical": true,
+    "exact_density_is_hermitian": true,
+    "exact_spin_continuity_without_spin_torque": true,
+    "exact_two_time_spectral_identity": true,
+    "finite_u_eom_difference_is_measured": true,
+    "lead_coupled_hubbard_i_has_noninteracting_control": true,
+    "spin_currents_are_nonzero": true
+  },
+  "claim_boundary": "The exact finite many-body contacted oracle closes charge and spin continuity and provides a lead-coupled reference for Hubbard-I. The finite-U Hubbard-I mismatch is measured, not presented as a new effect; an interacting continuum contour closure remains open.",
+  "gate": "GATE_31_EXACT_INTERACTING_LEAD_COUPLED_KELDYSH_ORACLE",
+  "metrics": {
+    "charge_balance_max": 1.734723475976807e-18,
+    "charge_current_max": 0.011127959343239995,
+    "density_eigenvalue_max": 0.9448478872126369,
+    "density_eigenvalue_min": 0.09899359581812432,
+    "density_hermiticity_error": 0.0,
+    "hubbard_i_finite_u_error": 8.073597014521798,
+    "hubbard_i_finite_u_error_two_pole": 6.498902036178284,
+    "hubbard_i_finite_u_offdiagonal_control": 2.595199906268708e-14,
+    "hubbard_i_noninteracting_error": 4.1413503489310173e-13,
+    "initial_device_lead_coherence": 0.13536639110190762,
+    "spectral_identity_error": 6.667118051786499e-16,
+    "spin_balance_max": 8.673617379884035e-19,
+    "spin_current_max": 0.006419446045417649
+  },
+  "model": {
+    "device_spin_orbitals": 2,
+    "interaction_u": 0.8,
+    "lead_spin_orbitals": [
+      2,
+      2
+    ],
+    "one_body_modes": 6,
+    "temperature": 0.3,
+    "time_points": 13
+  },
+  "passed": true
+}
+VERDICT: PASS

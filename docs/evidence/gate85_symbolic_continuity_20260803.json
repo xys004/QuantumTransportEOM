@@ -1,0 +1,29 @@
+{
+  "assessment": "PASS_SYMBOLIC_CONTINUITY_PROJECTION",
+  "checks": {
+    "charge_projection_is_symbolic": true,
+    "coherent_spin_torque_is_retained": true,
+    "collision_recombines_exactly": true,
+    "equal_time_collision_is_explicit": true,
+    "four_ordered_collision_terms_are_exposed": true,
+    "matrix_order_is_retained": true,
+    "spin_projection_is_symbolic": true,
+    "vertical_source_is_not_hidden": true
+  },
+  "claim_boundary": "The symbolic layer now emits the ordered four-term KBE collision integral and equal-time continuity identities with explicit charge/spin projections and vertical source terms. This is an analytic identity and audit surface; it does not assert that a chosen finite-grid or second-Born approximation is conserving or topologically protected.",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate85_symbolic_continuity.py"
+  },
+  "gate": "GATE_85_SYMBOLIC_CONTINUITY",
+  "metrics": {
+    "charge_projection_length": 336,
+    "collision_expression_length": 255,
+    "collision_term_count": 4,
+    "spin_projection_length": 349
+  },
+  "passed": true,
+  "runtime": "ASTRA+ASTRUM",
+  "schema_version": 1
+}

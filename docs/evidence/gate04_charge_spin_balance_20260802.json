@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_04_CHARGE_SPIN_BALANCE",
+  "scope": "finite quadratic transient one-body charge/spin continuity",
+  "checks": [
+    "conserving_charge_spin_continuity",
+    "rashba_spin_torque_balance"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "targeted_pytest": "3 passed",
+    "full_pytest": "210 passed"
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 2,
+    "checks_ok": 2,
+    "comparisons": 9
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "targeted_pytest": "3 passed",
+    "spin_current_conserving": 0.098,
+    "rashba_spin_torque": -0.004199999999999995,
+    "rashba_raw_symmetrization_shift": 0.004199999999999995
+  },
+  "implementation_change": [
+    "Add one_body_spin_bond_current for equal-size orbital blocks with a Hermitian spin operator.",
+    "Audit spin continuity in the conserving limit and expose local torque when Rashba hopping does not commute with spin."
+  ],
+  "claim_boundary": [
+    "The gate validates finite quadratic one-body continuity only.",
+    "Interacting spin self-energies and topological protection remain unclaimed."
+  ],
+  "artifacts": {
+    "verifier": "scripts/verify_gate04_charge_spin_balance.py",
+    "test": "tests/test_gate04_charge_spin_balance.py",
+    "api_test": "tests/test_spin_transient.py"
+  }
+}

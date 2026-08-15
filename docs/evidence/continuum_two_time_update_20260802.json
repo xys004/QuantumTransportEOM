@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "package": "quantum-transport-eom",
+  "package_version": "0.4.0.dev0",
+  "claim": "The stationary continuum two-time matrix NEGF transform preserves the fermionic Keldysh identities, reproduces the equal-time frequency integral, produces a physical density matrix in the audited case, and approaches the exact scalar wide-band retarded kernel away from its jump.",
+  "scope": {
+    "included": [
+      "stationary matrix-valued LeadSelfEnergy kernels",
+      "stationary matrix-valued open-device Green functions",
+      "nonuniform energy-grid trapezoid quadrature",
+      "explicit band-limited (t,t') arrays",
+      "memory-capped phase blocking and result allocation guard"
+    ],
+    "excluded": [
+      "general nonstationary matrix-valued voltage or flux quenches",
+      "Kadanoff-Baym propagation with time-dependent continuum self-energies",
+      "interacting memory kernels"
+    ]
+  },
+  "local_validation": {
+    "python_tests": "198 passed",
+    "new_tests": "8 passed",
+    "demo_verdict": "PASS",
+    "green_keldysh_max_residual": 1.1188630228279524e-15,
+    "self_energy_keldysh_max_residual": 1.7763568394002505e-15
+  },
+  "astrum_validation": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "python": "3.14.4",
+    "test_subset": "21 passed",
+    "validator_checks": "8/8 passed",
+    "verdict": "PASS",
+    "green_consistency_maximum": 6.866350197783356e-16,
+    "self_energy_consistency_maximum": 1.4210854715202004e-14,
+    "equal_time_density_frequency_error": 6.661338147750939e-16,
+    "equal_time_density_drift": 0.0,
+    "density_eigenvalue_interval": [
+      0.3869787945098484,
+      0.6340651692186778
+    ],
+    "scalar_retarded_oracle_error": 0.005142218607017988,
+    "scalar_acausal_cutoff_tail": 0.005080473971600094
+  },
+  "astra_validation": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 8,
+    "checks_ok": 8,
+    "checks_fail": 0,
+    "comparisons": 13,
+    "green_consistency_maximum": 7.772800161809615e-16,
+    "self_energy_consistency_maximum": 8.881784197001252e-16,
+    "equal_time_density_frequency_error": 6.661338147750939e-16,
+    "equal_time_density_drift": 0.0,
+    "density_eigenvalue_interval": [
+      0.38697879450984835,
+      0.6340651692186776
+    ],
+    "scalar_retarded_oracle_error": 0.0051422186070179884,
+    "scalar_acausal_cutoff_tail": 0.005080473971600072,
+    "environment_note": "ASTRA local uses an older NumPy than the package minimum; only the external validator uses a trapezoid/trapz compatibility alias. Package code and supported tests ran with NumPy >= 2 on the local development environment and ASTRUM."
+  },
+  "reproducer": "tests/astra_validate_continuum_two_time.py"
+}

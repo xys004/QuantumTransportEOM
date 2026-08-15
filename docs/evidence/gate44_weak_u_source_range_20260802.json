@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_44_WEAK_U_SOURCE_ERROR_RANGE",
+  "scope": "weak-to-intermediate-U exact finite-Fock oracle versus mixed second-Born source in charge and spin",
+  "interactions": [0.0, 0.1, 0.2, 0.3, 0.5, 0.8],
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "5 passed",
+    "engine_full_pytest": "248 passed (Gate41 regression)",
+    "app_full_pytest": "69 passed",
+    "rows": [
+      {"u": 0.0, "required_charge_max": 0.017101174734982506, "required_spin_max": 0.008702132097235835, "source_charge_max": 0.0, "source_spin_max": 0.0, "source_hermiticity_error": 0.0, "spectral_identity_error": 3.330849769336005e-16},
+      {"u": 0.1, "required_charge_max": 0.02487985932890374, "required_spin_max": 0.008469557851522678, "source_charge_max": 0.0010770909317708887, "source_spin_max": 2.168404344971009e-19, "source_hermiticity_error": 0.0, "spectral_identity_error": 3.3343262483639976e-16, "charge_error_after_baseline": 0.006701593662150344, "spin_error_after_baseline": 0.00023257424571315765},
+      {"u": 0.2, "required_charge_max": 0.031766369514845155, "required_spin_max": 0.008173564644588984, "source_charge_max": 0.006897268795800817, "source_spin_max": 4.336808689942018e-19, "source_hermiticity_error": 0.0, "spectral_identity_error": 2.237726045655905e-16, "charge_error_after_baseline": 0.007767925984061832, "spin_error_after_baseline": 0.0005285674526468516},
+      {"u": 0.3, "required_charge_max": 0.03760094735326612, "required_spin_max": 0.007837088907575798, "source_charge_max": 0.019878634845188644, "source_spin_max": 8.673617379884035e-19, "source_hermiticity_error": 0.0, "spectral_identity_error": 2.2247786310271853e-16, "charge_error_after_baseline": 0.0006211377730949708, "spin_error_after_baseline": 0.0008650431896600379},
+      {"u": 0.5, "required_charge_max": 0.04605228042848699, "required_spin_max": 0.0071268400853357824, "source_charge_max": 0.06922682773695024, "source_spin_max": 6.938893903907228e-18, "source_hermiticity_error": 0.0, "spectral_identity_error": 4.449557262054371e-16, "charge_error_after_baseline": 0.04027572204344576, "spin_error_after_baseline": 0.0015752920119000598},
+      {"u": 0.8, "required_charge_max": 0.052209124108600555, "required_spin_max": 0.006170731824049362, "source_charge_max": 0.18422512835678823, "source_spin_max": 1.734723475976807e-17, "source_hermiticity_error": 0.0, "spectral_identity_error": 3.331391796911832e-16, "charge_error_after_baseline": 0.14911717898317017, "spin_error_after_baseline": 0.0025314002731864904}
+    ]
+  },
+  "astra": {"oracle": "local", "verdict": "PASS", "checks_total": 6, "checks_ok": 6, "targeted_pytest": "5 passed"},
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "5 passed",
+    "engine_full_pytest": "248 passed (Gate41 regression)",
+    "app_full_pytest": "69 passed",
+    "u0_spectral_identity_error": 3.3306690738754696e-16,
+    "u01_charge_error_after_baseline": 0.006701593662157528,
+    "u01_spin_error_after_baseline": 0.000232574245704248,
+    "u08_charge_error_after_baseline": 0.1491171789831648,
+    "u08_spin_error_after_baseline": 0.0025314002731803564,
+    "u08_source_charge_max": 0.1842251283567874,
+    "u08_source_spin_max": 5.551115123125783e-17
+  },
+  "assessment": "PASS_WEAK_U_RANGE_AUDIT_SECOND_BORN_ERROR_NOT_CLOSED",
+  "claim_boundary": "The exact finite-U source audit resolves a nonzero second-Born source at weak coupling, but its charge/spin error remains measurable and grows into intermediate U. No controlled accuracy window is claimed beyond this finite benchmark.",
+  "artifacts": {"verifier": "scripts/verify_gate44_weak_u_source_range.py"}
+}

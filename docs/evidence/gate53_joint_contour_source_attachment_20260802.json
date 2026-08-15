@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_53_JOINT_CONTOUR_SOURCE_ATTACHMENT",
+  "scope": "microscopic mixed-source attachment and charge/spin continuity diagnostic for the joint contour result",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "7 passed",
+    "engine_full_pytest": "254 passed",
+    "app_full_pytest": "69 passed",
+    "mixed_self_energy_max": 0.06959712355996017,
+    "source_density_max": 1.027892459565225e-08,
+    "source_charge_max": 1.557356836585803e-08,
+    "source_spin_max": 5.696907698729027e-09,
+    "raw_continuity_residual_max": 0.026486977855316285,
+    "source_corrected_residual_max": 0.02648697610022511,
+    "required_source_error_max": 0.02648697961040746
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "7 passed",
+    "engine_full_pytest": "254 passed",
+    "app_full_pytest": "69 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "7 passed",
+    "engine_full_pytest": "254 passed, 1 warning",
+    "app_full_pytest": "69 passed",
+    "mixed_self_energy_max": 0.06959712355996006,
+    "source_density_max": 1.0278924595600453e-08,
+    "source_charge_max": 1.557356836572781e-08,
+    "source_spin_max": 5.696907698348679e-09,
+    "raw_continuity_residual_max": 0.026486977855318092,
+    "source_corrected_residual_max": 0.026486976100226916,
+    "required_source_error_max": 0.02648697961040927
+  },
+  "assessment": "PASS_JOINT_SOURCE_ATTACHED_NEGATIVE_CLOSURE_DIAGNOSTIC",
+  "claim_boundary": "The joint contour result carries its microscopic mixed source and finite charge/spin projections, while the required lesser source remains different. The real lesser initial-correlation equation is therefore not closed; this is a reproducible negative diagnostic, not an interacting-conservation or topological-protection claim.",
+  "artifacts": {
+    "verifier": "scripts/verify_gate53_joint_contour_source_attachment.py",
+    "api": "HubbardSecondBornResult.initial_correlation"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_37_MIXED_SOURCE_LEAD_SIZE_CONVERGENCE",
+  "scope": "finite-lead-size convergence of the seeded mixed second-Born source on a pre-recurrence window",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 4,
+    "checks_ok": 4,
+    "targeted_pytest": "13 passed",
+    "engine_full_pytest": "247 passed (Gate35 regression; no source changes in Gate37)",
+    "app_full_pytest": "69 passed",
+    "lead_sizes": [2, 3, 4, 6],
+    "source_max": [0.0022707900238126623, 0.0022698009235958974, 0.0022698473353303574, 0.002269845319798539],
+    "source_vs_size6_max": [2.7216641161162836e-06, 1.1031942449141185e-07, 4.4039563215809985e-09]
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 4,
+    "checks_ok": 4,
+    "targeted_pytest": "13 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 4,
+    "checks_ok": 4,
+    "targeted_pytest": "13 passed",
+    "engine_full_pytest": "247 passed (Gate35 regression)",
+    "app_full_pytest": "69 passed",
+    "source_max": [0.0022707900238126636, 0.0022698009235958944, 0.00226984733533036, 0.002269845319798536],
+    "source_vs_size6_max": [2.721664116136016e-06, 1.1031942450810857e-07, 4.403956325917807e-09]
+  },
+  "assessment": "PASS_MIXED_SOURCE_FINITE_LEAD_SIZE_CONTROL",
+  "claim_boundary": "The seeded mixed second-Born source converges with finite lead size on the pre-recurrence window. This controls a quadratic/reference branch; the interacting continuum limit and topological invariant remain open.",
+  "artifacts": {"verifier": "scripts/verify_gate37_mixed_source_lead_size.py"}
+}

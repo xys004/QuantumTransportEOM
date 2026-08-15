@@ -1,0 +1,30 @@
+{
+  "assessment": "PASS_FULL_REGRESSION_AFTER_CONTINUITY_AND_LEAD_SIZE_UPGRADES",
+  "checks": {
+    "astra_app_full_regression_passes": true,
+    "astra_engine_full_regression_passes": true,
+    "astrum_app_full_regression_passes": true,
+    "astrum_engine_full_regression_passes": true,
+    "new_continuity_test_is_included": true
+  },
+  "claim_boundary": "The complete ASTRA/ASTRUM engine and application suites pass after the Gate81 continuity API and Gate82 lead-size verifier. This is a software regression result; it does not close the interacting continuum physics or topological-protection gates.",
+  "commands": {
+    "application": "PYTHONPATH=.;src;<engine>/src python -m pytest -q",
+    "engine": "PYTHONPATH=.;src python -m pytest -q"
+  },
+  "execution": {
+    "astra": "PASS",
+    "astrum": "NOT_RUN",
+    "script": "scripts/verify_gate83_regression_refresh.py"
+  },
+  "gate": "GATE_83_REGRESSION_REFRESH",
+  "passed": true,
+  "regression": {
+    "astra_app": "70 passed",
+    "astra_engine": "265 passed",
+    "astrum_app": "70 passed",
+    "astrum_engine": "265 passed"
+  },
+  "runtime": "ASTRA",
+  "schema_version": 1
+}

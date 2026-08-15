@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_59_INTERACTING_SPIN_TRANSPORT_BLOCK",
+  "scope": "integrated Gates54–58 engine/application audit",
+  "local": {"verdict": "PASS", "engine_full_pytest": "257 passed", "app_full_pytest": "69 passed", "engine_checks": 4, "application_checks": 5},
+  "astrum": {"host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE", "verdict": "PASS", "engine_full_pytest": "257 passed, 3 warnings", "app_full_pytest": "69 passed", "engine_checks": 4, "application_checks": 5},
+  "assessment": "PASS_INTEGRATED_INTERACTING_SPIN_AUDIT",
+  "claim_boundary": "The block is reproducible and exposes the negative lesser-closure result, named two-time spin currents, Corbino reservoir mapping, persistent-current comparison, and controls. It does not claim a conserving contour solution, topological protection, or broad method novelty.",
+  "artifacts": {"engine_verifier": "scripts/verify_gate59_engine_interacting_spin_block.py", "application_verifier": "scripts/verify_gate59_app_interacting_spin_block.py"}
+}

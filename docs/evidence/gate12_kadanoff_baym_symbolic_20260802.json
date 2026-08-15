@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_12_KADANOFF_BAYM_SYMBOLIC",
+  "scope": "explicit two-time Langreth convolutions, Kadanoff–Baym Dyson equations, and Einstein-mode SCBA shift rules",
+  "checks": [
+    "explicit_time_convolution",
+    "two_time_langreth_lesser_rule",
+    "kadanoff_baym_initial_correlation_term",
+    "electron_boson_scba_shift_rule"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "targeted_pytest": "3 passed",
+    "verifier": "4/4 checks passed"
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 4,
+    "checks_ok": 4,
+    "comparisons": 7
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "targeted_pytest": "3 passed",
+    "verifier": "4/4 checks passed"
+  },
+  "implementation_change": [
+    "Add symbolic two-time convolution and Langreth component rules.",
+    "Add explicit initial lesser term to the two-time Kadanoff–Baym Dyson equations.",
+    "Add symbolic Einstein electron–boson SCBA lesser/greater energy-shift identities."
+  ],
+  "claim_boundary": [
+    "This gate validates symbolic structure only; it does not claim numerical time-dependent Kadanoff–Baym propagation.",
+    "Interacting Kane–Mele/Corbino transients and reservoir-memory kernels remain open gates."
+  ],
+  "artifacts": {
+    "module": "src/quantum_transport/kadanoff_baym_symbolic.py",
+    "verifier": "scripts/verify_gate12_kadanoff_baym_symbolic.py",
+    "test": "tests/test_kadanoff_baym_symbolic.py"
+  }
+}

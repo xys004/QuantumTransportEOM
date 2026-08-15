@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_60_REVIEW",
+  "scope": "ten-gate review after Gates51–59 and token checkpoint",
+  "token_checkpoint": {"tokens_used": 4625513, "remaining_tokens": null, "goal_status": "active"},
+  "regression": {"astra_engine": "257 passed", "astrum_engine": "257 passed, 3 warnings", "astra_app": "69 passed", "astrum_app": "69 passed", "evidence_json_files_checked": 10, "evidence_json_parse_errors": 0},
+  "completed": ["causal mixed-branch Volterra propagation", "same-grid real/mixed Hubbard second-Born iteration", "microscopic mixed-source attachment and propagated lesser term", "named two-time charge/spin Meir–Wingreen channels", "Kane–Mele Corbino reservoir mapping", "separate persistent-versus-reservoir comparison", "ideal/Rashba/disorder spin controls"],
+  "open_publication_gates": ["conserving real-lesser contour closure (Gate54 residual ratio 1.355)", "lead-size/continuum extrapolation for the interacting spinful Corbino device", "production-grade arbitrary time-dependent matrix self-energies", "specialist prior-art search for the exact flux-ramped interacting spin-transport combination", "topological-protection verdict only after bulk/edge/disorder/Rashba/contact/time-window criteria"],
+  "assessment": "REVIEW_PASS_WITH_OPEN_CONSERVING_AND_PUBLICATION_GATES",
+  "claim_boundary": "The project is technically substantial and reproducible on ASTRA/ASTRUM, but the current evidence supports a bounded transient EOM/Keldysh/spin workflow and a negative closure diagnosis—not yet a conserving interacting publication result or a topological-protection claim."
+}

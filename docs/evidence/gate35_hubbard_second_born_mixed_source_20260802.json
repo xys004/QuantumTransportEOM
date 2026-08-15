@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_35_HUBBARD_SECOND_BORN_MIXED_SOURCE",
+  "scope": "explicit mixed Sigma^rceil kernel and vertical contraction seeded by the finite-lead Keldysh branch",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "13 passed",
+    "engine_full_pytest": "247 passed",
+    "app_full_pytest": "69 passed",
+    "mixed_sigma_half_u_max": 0.0695972302174051,
+    "mixed_source_quarter_u_max": 0.0007912546244674992,
+    "mixed_source_half_u_max": 0.003165018497869997,
+    "mixed_source_quarter_hermiticity_error": 0.0,
+    "mixed_source_half_hermiticity_error": 0.0,
+    "u_squared_scaling_error": 0.0
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "13 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "13 passed",
+    "engine_full_pytest": "247 passed",
+    "app_full_pytest": "69 passed",
+    "mixed_sigma_half_u_max": 0.06959723021740502,
+    "mixed_source_quarter_u_max": 0.0007912546244674964,
+    "mixed_source_half_u_max": 0.0031650184978699856,
+    "mixed_source_quarter_hermiticity_error": 0.0,
+    "mixed_source_half_hermiticity_error": 0.0,
+    "u_squared_scaling_error": 0.0
+  },
+  "assessment": "PASS_MIXED_SECOND_BORN_SOURCE_KERNEL_EXPLICIT_SCALING_OPEN_CLOSURE",
+  "claim_boundary": "The second-Born mixed Sigma^rceil kernel is explicit, finite, Hermitian after the vertical contraction, and scales as U^2. The benchmark Green mixed branch is noninteracting; an interacting self-consistent mixed KBE solver and continuum source closure are still open and are not claimed here.",
+  "artifacts": {
+    "symbolic": "src/quantum_transport/kadanoff_baym_symbolic.py",
+    "numeric": "src/quantum_transport/kadanoff_baym.py",
+    "finite_lead_mixed_fields": "src/quantum_transport/finite_lead.py",
+    "verifier": "scripts/verify_gate35_hubbard_second_born_mixed_source.py",
+    "tests": ["tests/test_kadanoff_baym.py", "tests/test_finite_lead.py"]
+  }
+}

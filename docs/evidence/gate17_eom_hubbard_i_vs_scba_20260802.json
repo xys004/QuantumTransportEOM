@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_17_EOM_HUBBARD_I_VS_SCBA",
+  "scope": "noninteracting control and controlled distinction between EOM/Hubbard-I and electron–boson SCBA approximations",
+  "checks": [
+    "noninteracting_eom_scba_control",
+    "interacting_approximations_are_distinct",
+    "spectral_positivity_and_window_controls"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "maximum_noninteracting_retarded_error": 9.930136612989092e-16,
+    "maximum_interacting_retarded_difference": 1.7453186053714218,
+    "hubbard_i_sum_error": 0.010633837653325373,
+    "scba_sum_error": 0.010531807638017532,
+    "scba_min_spectral": 0.002709100731779875
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 3,
+    "checks_ok": 3,
+    "comparisons": 7
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 3,
+    "checks_ok": 3
+  },
+  "implementation_change": [
+    "Expose the stationary SCBA spectral sum diagnostic used in the comparison.",
+    "Add a reproducible EOM/Hubbard-I versus SCBA benchmark with a shared noninteracting limit."
+  ],
+  "claim_boundary": [
+    "The interacting comparison is intentionally a distinction test: electron–boson SCBA is not claimed to approximate the same Hubbard-U model.",
+    "An exact finite-U many-body benchmark and Hubbard electron–electron SCBA remain open."
+  ],
+  "artifacts": {
+    "verifier": "scripts/verify_gate17_eom_hubbard_i_vs_scba.py",
+    "related_module": "src/quantum_transport/scba.py"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_27_FINITE_LEAD_SIZE_RECURRENCE_AND_SPIN_CURRENTS",
+  "scope": "exact finite quadratic contacted spinful chain oracle before the first lead reflection",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 8,
+    "checks_ok": 8,
+    "lead_sizes": [2, 3, 4, 6],
+    "pre_recurrence_time_window": [0.0, 1.0],
+    "recurrence_lower_bound": 9.090909090909092,
+    "size4_density_vs_size6_max": 6.660693208093704e-08,
+    "size4_charge_current_vs_size6_max": 3.030445291582473e-08,
+    "size4_spin_current_vs_size6_max": 1.5093499204817118e-08,
+    "maximum_corrected_source_closure": 7.89903447278098e-08,
+    "maximum_spectral_identity_error": 1.9986190258330587e-15,
+    "maximum_spin_current": 0.007328884002571734
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 8,
+    "checks_ok": 8,
+    "maximum_corrected_source_closure": 7.89903447278098e-08,
+    "size4_density_vs_size6_max": 6.660693208093704e-08,
+    "size4_charge_current_vs_size6_max": 3.030445291582473e-08,
+    "size4_spin_current_vs_size6_max": 1.5093499204817118e-08,
+    "maximum_spin_current": 0.007328884002571734
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 8,
+    "checks_ok": 8,
+    "maximum_corrected_source_closure": 7.899034483688054e-08,
+    "size4_density_vs_size6_max": 6.660693196991474e-08,
+    "size4_charge_current_vs_size6_max": 3.030445307541929e-08,
+    "size4_spin_current_vs_size6_max": 1.5093499144101796e-08,
+    "maximum_spin_current": 0.007328884002571739
+  },
+  "assessment": "PASS_FINITE_LEAD_PRE_RECURRENCE_CONVERGENCE_CONTINUUM_AND_TOPOLOGY_OPEN",
+  "claim_boundary": "The exact finite quadratic contacted oracle closes the microscopic initial source for charge and spin and shows lead-size convergence before the first reflection. This is not a continuum/WBL or interacting result and does not assert topological protection.",
+  "artifacts": {
+    "verifier": "scripts/verify_gate27_lead_size_recurrence.py",
+    "finite_lead_module": "src/quantum_transport/finite_lead.py",
+    "prior_gate": "docs/evidence/gate26_finite_lead_initial_closure_20260802.json"
+  }
+}

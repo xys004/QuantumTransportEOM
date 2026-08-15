@@ -131,3 +131,29 @@ def test_high_level_anderson_self_consistent_occupations_converge_near_half_fill
     assert result.converged is True
     assert abs(result.occupations["up"] - 0.5) < 0.05
     assert abs(result.occupations["down"] - 0.5) < 0.05
+
+
+def test_advanced_green_does_not_flip_coefficients_equal_to_eta():
+    """``G^r.subs(eta, -eta)`` rewrites every occurrence of that value.
+
+    A level energy numerically equal to the broadening had its sign flipped
+    too, moving the pole from ``+eps`` to ``-eps``.  The advanced branch must
+    come from the resolvent evaluated at ``-eta``, not from a substitution.
+    """
+
+    import sympy as sp
+
+    from quantum_transport import CustomModel, n
+
+    omega = sp.Symbol("omega", real=True)
+    for level, eta in ((0.01, 0.01), (0.02, 0.01)):
+        view = CustomModel(level * n("d")).gf("c_d")
+        advanced = sp.simplify(view.advanced(omega=omega, eta=eta))
+        expected = sp.simplify(1 / (omega - level - sp.I * eta))
+        assert sp.simplify(advanced - expected) == 0, f"level={level}, eta={eta}"
+
+        spectral = sp.simplify(view.spectral_function(omega=omega, eta=eta))
+        expected_spectral = sp.simplify(
+            sp.I * (1 / (omega - level + sp.I * eta) - 1 / (omega - level - sp.I * eta))
+        )
+        assert sp.simplify(spectral - expected_spectral) == 0

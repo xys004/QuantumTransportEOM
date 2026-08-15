@@ -1,0 +1,62 @@
+{
+  "assessment": "REVIEW_PASS_WITH_BOUNDED_SOFTWARE_RESULT_AND_OPEN_PHYSICS_GATES",
+  "checks": {
+    "accuracy_boundary_is_retained": true,
+    "full_regression_is_current": true,
+    "nine_gate_records_exist": true,
+    "nine_gate_records_have_both_runtimes": true,
+    "nine_gate_records_pass": true,
+    "open_publication_gates_are_explicit": true,
+    "package_manifest_is_pass": true,
+    "protection_remains_not_ready": true,
+    "specialist_novelty_remains_unconfirmed": true
+  },
+  "closed_in_this_block": [
+    "self-consistent Matsubara software branch and explicit KMS diagnostics",
+    "full-size finite Corbino Hubbard edge/bulk crossover with persistent/reservoir separation",
+    "arbitrary finite-grid nonstationary matrix embedding interface",
+    "specialist primary-source novelty and claim-boundary audit",
+    "publication claim matrix with explicit allowed/not-ready claims",
+    "exact finite-contact interaction accuracy ledger over U=0..0.8",
+    "finite-ramp transient onset and persistent/reservoir separation",
+    "spinful Kane–Mele/trivial mass flux-ramp and torque controls",
+    "SHA-256 reproducible package manifest"
+  ],
+  "date": "2026-08-02",
+  "decision": "The project has a reproducible and technically substantial transient EOM/Green/Keldysh charge-spin workflow suitable for a draft as a bounded software/benchmark paper. The evidence does not establish broad method novelty, an interacting conserving continuum theorem, or topological protection. The finite spinful controls are diagnostic and include trivial comparisons; the correct status is unconfirmed/indeterminate outside the tested finite regimes.",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "NOT_RUN",
+    "script": "scripts/verify_gate80_review.py"
+  },
+  "gate": "GATE_80_REVIEW",
+  "next_block": "Gates81+ may target same-self-energy continuum continuity and controlled Corbino extrapolation; do not upgrade the protection label before those gates close.",
+  "open_publication_gates": [
+    "same-self-energy interacting real/mixed/lesser continuity and reservoir spin injection",
+    "controlled continuum or lead-size extrapolation for the extended Corbino device",
+    "specialist database search beyond the current arXiv/primary-source matrix",
+    "falsifiable width/time/contact/disorder/Rashba/flux-ramp observable before any protection claim"
+  ],
+  "passed": true,
+  "publication_readiness": {
+    "bounded_software_benchmark_result": "READY_FOR_DRAFT_WITH_EXPLICIT_LIMITATIONS",
+    "conserving_interacting_continuum_claim": "NOT_READY",
+    "narrow_integrated_novelty_candidate": "UNCONFIRMED",
+    "strong_new_physics_claim": "NOT_READY",
+    "topological_protection_claim": "NOT_READY"
+  },
+  "regression": {
+    "astra_app": "70 passed",
+    "astra_engine": "264 passed",
+    "astrum_app": "70 passed",
+    "astrum_engine": "264 passed"
+  },
+  "runtime": "ASTRA",
+  "schema_version": 1,
+  "scope": "ten-gate review after Gates71--79 and token checkpoint",
+  "token_checkpoint": {
+    "goal_status": "active",
+    "remaining_tokens": null,
+    "tokens_used": 5798099
+  }
+}

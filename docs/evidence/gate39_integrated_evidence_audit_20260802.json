@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_39_INTEGRATED_EVIDENCE_AND_CLAIM_AUDIT",
+  "scope": "cross-gate JSON/schema, ASTRA/ASTRUM status, regression-count and claim-boundary audit for Gates 31–38",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 50,
+    "checks_ok": 50,
+    "targeted_pytest": "13 passed",
+    "engine_full_pytest": "247 passed",
+    "app_full_pytest": "69 passed"
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 50,
+    "checks_ok": 50,
+    "targeted_pytest": "13 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 50,
+    "checks_ok": 50,
+    "targeted_pytest": "13 passed",
+    "engine_full_pytest": "247 passed (Gate35 regression)",
+    "app_full_pytest": "69 passed"
+  },
+  "assessment": "PASS_INTEGRATED_ASTRA_ASTRUM_AUDIT_OPEN_PUBLICATION_BOUNDARY",
+  "claim_boundary": "Gates 31–38 are internally consistent, reproducible on ASTRA and ASTRUM, and retain explicit open boundaries for interacting mixed closure, continuum convergence, and topological protection. This audit does not upgrade any bounded reference into a novelty claim.",
+  "audited_gates": [31, 32, 33, 34, 35, 36, 37, 38],
+  "artifacts": {"verifier": "scripts/verify_gate39_integrated_evidence_audit.py", "novelty_audit": "docs/NOVELTY_AUDIT_TRANSIENT_INTERACTING_SPIN.md"}
+}

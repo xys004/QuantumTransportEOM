@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_15_TWO_TIME_CHARGE_SPIN_CURRENTS",
+  "scope": "finite-memory Meir–Wingreen charge and Hermitian-observable spin currents from two-time Keldysh kernels",
+  "checks": [
+    "zero_injection_current",
+    "spin_charge_projection",
+    "interacting_two_time_current_pipeline"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "targeted_pytest": "2 passed",
+    "maximum_zero_injection_current": 0.0,
+    "charge_current_control": [-0.08, -0.08, -0.08, -0.08],
+    "spin_current_control": [-0.04, -0.04, -0.04, -0.04],
+    "interacting_current_min": -1.6583211041344692e-17,
+    "interacting_current_max": 5.082197683525802e-21
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 3,
+    "checks_ok": 3,
+    "comparisons": 3
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "targeted_pytest": "2 passed",
+    "checks_total": 3,
+    "checks_ok": 3
+  },
+  "implementation_change": [
+    "Add two_time_meir_wingreen_current with explicit finite-memory lead kernels.",
+    "Add two_time_spin_meir_wingreen_current for arbitrary Hermitian spin observables.",
+    "Connect the interacting two-time SCBA output to the current contraction."
+  ],
+  "claim_boundary": [
+    "The API supports charge/spin contractions but does not yet close a full interacting lead-plus-torque continuity equation.",
+    "Spin-polarized reservoir parameterization and Kane–Mele edge-current protection remain open gates."
+  ],
+  "artifacts": {
+    "module": "src/quantum_transport/kadanoff_baym.py",
+    "verifier": "scripts/verify_gate15_two_time_charge_spin_currents.py",
+    "test": "tests/test_two_time_currents.py"
+  }
+}

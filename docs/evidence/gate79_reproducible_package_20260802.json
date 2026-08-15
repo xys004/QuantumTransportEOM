@@ -1,0 +1,107 @@
+{
+  "assessment": "PASS_REPRODUCIBLE_ASTRA_ASTRUM_PACKAGE_WITH_OPEN_PHYSICS_GATES",
+  "checks": {
+    "all_gate_records_exist": true,
+    "all_gate_records_have_both_runtimes": true,
+    "all_gate_records_pass": true,
+    "all_gate_sources_exist": true,
+    "gate74_keeps_novelty_unconfirmed": true,
+    "gate75_keeps_protection_not_ready": true,
+    "gate76_retains_negative_closure": true,
+    "gate77_and_gate78_are_controls": true,
+    "package_does_not_overclaim_protection": true
+  },
+  "claim_boundary": "The manifest binds the latest engine and application gate records, source verifiers, documentation, and SHA-256 hashes into one reproducible package. It authorizes a bounded software/benchmark manuscript description only; the interacting continuum closure, specialist novelty candidate, and topological-protection decision remain open.",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate79_reproducible_package.py"
+  },
+  "gate": "GATE_79_REPRODUCIBLE_PACKAGE",
+  "manifest": [
+    {
+      "name": "gate71",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate71_self_consistent_matsubara_20260802.json",
+      "sha256": "1a0e63d667d8f40b702ca52bc648410e51ad3a8ccb73ba5c95a3334e3b116b03"
+    },
+    {
+      "name": "gate72",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\docs\\evidence\\gate72_hubbard_corbino_size_scaling_20260802.json",
+      "sha256": "7f5397d06e0e719fbb6d012bd90139945602f6e84b5c54ada7b96605f6bec903"
+    },
+    {
+      "name": "gate73",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate73_time_dependent_matrix_embedding_20260802.json",
+      "sha256": "0314f7fc32193f278be8f07bf84a5ca76ad6a29386e6fd3253633f650bce5ba0"
+    },
+    {
+      "name": "gate74",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate74_specialist_novelty_audit_20260802.json",
+      "sha256": "5465077b7ffdabdd0f5e188abb691fd5ecd9f156a0c1ac044e2a54a112934ead"
+    },
+    {
+      "name": "gate75",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate75_publication_claim_matrix_20260802.json",
+      "sha256": "0ec0c6f5a881b6ac2d40d313e42005d359f5f7e7e8c281135b08dc0e84201af5"
+    },
+    {
+      "name": "gate76",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate76_exact_interaction_accuracy_ledger_20260802.json",
+      "sha256": "404854fb9363b0dff9167e969802dfb2fa3137a0a1e102a5eb336d614f878155"
+    },
+    {
+      "name": "gate77",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\docs\\evidence\\gate77_transient_flux_ramp_memory_20260802.json",
+      "sha256": "4f2116de80dfd99be50e333f754f0cdca43ae1d1f1e908d6a9f84e01613ebf20"
+    },
+    {
+      "name": "gate78",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\docs\\evidence\\gate78_spinful_flux_ramp_controls_20260802.json",
+      "sha256": "6215d3021a0eab3ae0d1abebecb56467c58db8256517f8f65c11a8e8d5cbc17e"
+    },
+    {
+      "name": "engine_gate_protocol",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\GATE_PROTOCOL_TRANSIENT_KELDYSH_SPIN.md",
+      "sha256": "75acbaffecc1a0bfba3752dc8ea2b9e5d446f27abd012d303832cb062143fe8d"
+    },
+    {
+      "name": "engine_novelty_audit",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\NOVELTY_AUDIT_TRANSIENT_INTERACTING_SPIN.md",
+      "sha256": "c8be304abc613411a1189e273b0a8ab44f283aae9215463bb205968922370408"
+    },
+    {
+      "name": "gate74_script",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\scripts\\verify_gate74_specialist_novelty_audit.py",
+      "sha256": "1c4fa5f4b47882bc2c5dac31ad8543ce04d10fc21fe30517ed29b1f4463e0fbc"
+    },
+    {
+      "name": "gate75_script",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\scripts\\verify_gate75_publication_claim_matrix.py",
+      "sha256": "43cca42b156e6b502811da2bcb912f049d68f6278b111104503b3ea1472eeeb8"
+    },
+    {
+      "name": "gate76_script",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\scripts\\verify_gate76_exact_interaction_accuracy_ledger.py",
+      "sha256": "6778cac0d796683eacd94b0302ab2258d2060fd728bb872eddff352a9121fd3d"
+    },
+    {
+      "name": "gate77_script",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\scripts\\verify_gate77_transient_flux_ramp_memory.py",
+      "sha256": "27fd294290cbd6c81710af732c80603f24be8b78797b7e1b7df4d17bbd9c547d"
+    },
+    {
+      "name": "gate78_script",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\scripts\\verify_gate78_spinful_flux_ramp_controls.py",
+      "sha256": "04e491404e095f68324a014a686bf01fb69e3b9f1dd8dd8016570eb82943dc24"
+    }
+  ],
+  "passed": true,
+  "regression_snapshot": {
+    "astra_app": "70 passed",
+    "astra_engine": "264 passed",
+    "astrum_app": "70 passed",
+    "astrum_engine": "264 passed"
+  },
+  "runtime": "ASTRA+ASTRUM",
+  "schema_version": 1
+}

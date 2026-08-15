@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_41_EXACT_INTERACTING_MIXED_KELDYSH_BRANCH",
+  "scope": "exact finite interacting Fock-space G^lceil/G^rceil branch and second-Born source seed",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 8,
+    "checks_ok": 8,
+    "targeted_pytest": "5 passed",
+    "engine_full_pytest": "248 passed",
+    "app_full_pytest": "69 passed",
+    "u0_mixed_branch_max_error": 9.112670177047312e-16,
+    "finite_u_mixed_branch_change_max": 0.18566039155006944,
+    "exact_finite_u_second_born_source_max": 0.0345732633769756,
+    "exact_finite_u_source_hermiticity_error": 0.0,
+    "exact_vs_quadratic_seed_source_change_max": 0.03140824487910559,
+    "exact_real_time_spectral_identity_error": 4.449557262054371e-16
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 8,
+    "checks_ok": 8,
+    "targeted_pytest": "5 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 8,
+    "checks_ok": 8,
+    "targeted_pytest": "5 passed",
+    "engine_full_pytest": "248 passed",
+    "app_full_pytest": "69 passed",
+    "u0_mixed_branch_max_error": 2.2322607440552613e-15,
+    "finite_u_mixed_branch_change_max": 0.1856603915500681,
+    "exact_finite_u_second_born_source_max": 0.03457326337697545,
+    "exact_finite_u_source_hermiticity_error": 0.0,
+    "exact_vs_quadratic_seed_source_change_max": 0.0314082448791054,
+    "exact_real_time_spectral_identity_error": 4.441027621704298e-16
+  },
+  "assessment": "PASS_EXACT_INTERACTING_MIXED_ORACLE_SOURCE_READY_CONTOUR_CLOSURE_OPEN",
+  "claim_boundary": "The exact finite Fock-space oracle now supplies interacting G^lceil/G^rceil, and the mixed second-Born source can be evaluated from it. The U=0 branch matches the finite-lead quadratic oracle. This still does not solve the interacting contour Dyson equation self-consistently or establish a continuum Corbino result.",
+  "artifacts": {
+    "exact_oracle": "src/quantum_transport/exact_interacting.py",
+    "verifier": "scripts/verify_gate41_exact_interacting_mixed_branch.py",
+    "tests": "tests/test_exact_interacting.py"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_70_REVIEW",
+  "scope": "ten-gate review after Gates61--69 and token checkpoint",
+  "token_checkpoint": {
+    "tokens_used": 5028011,
+    "remaining_tokens": null,
+    "goal_status": "active"
+  },
+  "regression": {
+    "astra_engine": "259 passed",
+    "astrum_engine": "259 passed",
+    "astra_app": "70 passed",
+    "astrum_app": "70 passed",
+    "gate69_evidence_count": 8,
+    "gate69_evidence_verdict": "PASS"
+  },
+  "closed_in_this_block": [
+    "total embedding-plus-interaction self-energy bookkeeping",
+    "symbolic and numerical three-term vertical lesser reconstruction",
+    "selectable full-contour lesser solver branch",
+    "exact finite-contact charge and spin oracle comparison",
+    "mixed imaginary-grid and finite-lead-size controls",
+    "spinful Corbino Hubbard contour adapter",
+    "persistent-versus-reservoir separation after the closed-branch adapter",
+    "explicit robustness/topology criteria without forcing protection"
+  ],
+  "open_publication_gates": [
+    "self-consistent interacting Matsubara Sigma^M and conserving real/mixed/lesser closure",
+    "full-size Corbino bulk-edge scaling and continuum reservoir extrapolation under the closed branch",
+    "reduction of exact finite-contact charge/spin current discrepancies",
+    "arbitrary time-dependent matrix lead/flux kernels beyond the compact WBL adapter",
+    "specialist prior-art audit for the exact interacting spinful flux-ramp/ring intersection",
+    "final protection verdict only after bulk-edge, disorder/Rashba, contact, time-window and conservation criteria close"
+  ],
+  "publication_readiness": {
+    "bounded_methodological_software_result": "READY_FOR_DRAFT_WITH_EXPLICIT_LIMITATIONS",
+    "strong_new_physics_or_topological_protection_claim": "NOT_READY"
+  },
+  "assessment": "REVIEW_PASS_WITH_OPEN_CONSERVING_CONTINUUM_AND_NOVELTY_GATES",
+  "claim_boundary": "The project now has a reproducible ASTRA/ASTRUM transient EOM/Keldysh/spin workflow and a defensible bounded software-method result. It does not yet support a strong claim of a conserving interacting continuum calculation, topological protection, or broad method novelty."
+}

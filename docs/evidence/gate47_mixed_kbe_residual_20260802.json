@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_47_MIXED_KBE_RESIDUAL",
+  "scope": "finite-grid numerical residual evaluator for both mixed KBE branches",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "5 passed",
+    "engine_full_pytest": "251 passed",
+    "app_full_pytest": "69 passed",
+    "free_rceil_residual_max": 0.00031499992125075987,
+    "free_lceil_residual_max": 0.00031499992125075987,
+    "exact_rceil_residual_max": 0.12075791845810523,
+    "exact_lceil_residual_max": 0.08388457320463422
+  },
+  "astra": {"oracle": "local", "verdict": "PASS", "checks_total": 6, "checks_ok": 6, "targeted_pytest": "5 passed"},
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "5 passed",
+    "engine_full_pytest": "251 passed",
+    "app_full_pytest": "69 passed",
+    "free_rceil_residual_max": 0.00031499992125075987,
+    "free_lceil_residual_max": 0.00031499992125075987,
+    "exact_rceil_residual_max": 0.12075791845810518,
+    "exact_lceil_residual_max": 0.08388457320463356
+  },
+  "assessment": "PASS_NUMERICAL_MIXED_KBE_RESIDUAL_DIAGNOSTIC",
+  "claim_boundary": "The package now evaluates both mixed KBE residual branches with causal and vertical quadrature. The free control closes at finite difference accuracy; the exact finite benchmark is reported as a diagnostic, not relabeled as an interacting self-consistent solver.",
+  "artifacts": {"verifier": "scripts/verify_gate47_mixed_kbe_residual.py", "api": "mixed_kbe_residual"}
+}

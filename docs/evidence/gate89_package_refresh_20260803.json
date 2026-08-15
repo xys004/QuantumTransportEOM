@@ -1,0 +1,122 @@
+{
+  "assessment": "PASS_FINAL_ROUND_REPRODUCIBLE_PACKAGE",
+  "checks": {
+    "all_round_records_exist": true,
+    "all_round_records_have_both_runtimes": true,
+    "all_round_records_pass": true,
+    "all_round_sources_exist": true,
+    "noncommuting_spin_gate_is_present": true,
+    "protection_boundary_survives_refresh": true,
+    "rashba_gate_is_present": true,
+    "regression_refresh_is_267_70": true,
+    "symbolic_continuity_gate_is_present": true
+  },
+  "claim_boundary": "The final-round manifest binds the symbolic continuity, noncommuting spin-torque, Rashba Corbino, and refreshed regression records. It preserves the current bounded software/benchmark publication claim; broad novelty, conserving interacting continuum, and topological protection remain open.",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate89_package_refresh.py"
+  },
+  "gate": "GATE_89_PACKAGE_REFRESH",
+  "manifest": [
+    {
+      "name": "gate80",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate80_review_20260802.json",
+      "sha256": "70511a3e1473d761eb4a5b0de7a2030da8493ede9d0722eb6bdb8e25c6d87ac7"
+    },
+    {
+      "name": "gate81",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate81_same_self_energy_continuity_20260803.json",
+      "sha256": "d7127651fc8efe13a985f4960a3d9e37b5fb2d5eef9766635deb9c86056a04fa"
+    },
+    {
+      "name": "gate82",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\docs\\evidence\\gate82_lead_size_extrapolation_20260803.json",
+      "sha256": "86545b997c8081b290a663286a3a32d4a3ac609ae9af513acf5e6808be6e379d"
+    },
+    {
+      "name": "gate83",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate83_regression_refresh_20260803.json",
+      "sha256": "fb907239866589835254c426ccbf63b21701e6136695dc8d5fba29651b35c120"
+    },
+    {
+      "name": "gate84",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate84_package_refresh_20260803.json",
+      "sha256": "6ea2421b1aa3ec6f89f12da8a782c5a234afe770b8a2da57c4b59d129abc3368"
+    },
+    {
+      "name": "gate85",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate85_symbolic_continuity_20260803.json",
+      "sha256": "51900e4ccdababa210bc74cb7b25ccf241b8bb3cd8e0d334126d1f691638c91a"
+    },
+    {
+      "name": "gate86",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate86_regression_refresh_20260803.json",
+      "sha256": "8e32e36c7f7fbc3e066668d9eb7a35dc3236520fe2dce7bbb84d115f2f05d5ea"
+    },
+    {
+      "name": "gate87",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\evidence\\gate87_noncommuting_spin_torque_20260803.json",
+      "sha256": "d38531969a5a209f6f9a3fd28b43a9e54509aa9632806b3c6755d66da33ba0d5"
+    },
+    {
+      "name": "gate88",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\docs\\evidence\\gate88_rashba_spin_torque_20260803.json",
+      "sha256": "10f0ab63f4204d651eb4eafc50992c0db4b640895d54659626ee66c75bc65d39"
+    },
+    {
+      "name": "symbolic_module",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\src\\quantum_transport\\kadanoff_baym_symbolic.py",
+      "sha256": "8f616153918c303f4c4dd3fc5c68496abae9a9a3378fe0cff09e2051d4f44d1a"
+    },
+    {
+      "name": "symbolic_exports",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\src\\quantum_transport\\__init__.py",
+      "sha256": "cf59162f4c746640d12a62eafa95fe4b41c82e0c0e6963dec148be52dcb210f6"
+    },
+    {
+      "name": "symbolic_test",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\tests\\test_kadanoff_baym_symbolic.py",
+      "sha256": "a10e5fd0f5c6227b49cf2869ca1cbb157b67eff475e16af0eaec561ff30e2366"
+    },
+    {
+      "name": "gate85_script",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\scripts\\verify_gate85_symbolic_continuity.py",
+      "sha256": "5d8da3ddf7fe2ecc7e35840b2729f9718d7788fb4dbebeb23e3947ae9c38a37f"
+    },
+    {
+      "name": "gate86_script",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\scripts\\verify_gate86_regression_refresh.py",
+      "sha256": "2689336fe8473032a9b3bdf81aeda4141e3f83294925835fc1090b61c3ae6d7a"
+    },
+    {
+      "name": "gate87_script",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\scripts\\verify_gate87_noncommuting_spin_torque.py",
+      "sha256": "c6e149a91ee3b501bbfabc029f40098537dfff85b6b63480dda9e0af02d5fa00"
+    },
+    {
+      "name": "gate88_script",
+      "path": "C:\\Users\\Nelson\\Dev\\physics\\xene-ring-transport\\scripts\\verify_gate88_rashba_spin_torque.py",
+      "sha256": "740dcf0485542825ee5f4e41919e74259d6327eaeecb6040cc678295c9f94ae6"
+    },
+    {
+      "name": "protocol",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\GATE_PROTOCOL_TRANSIENT_KELDYSH_SPIN.md",
+      "sha256": "4b3392300c725674707e8402a48906dfcf85240d6ac9793d4bd7fc053abba2d9"
+    },
+    {
+      "name": "novelty_audit",
+      "path": "C:\\Users\\Nelson\\Dev\\quantum\\QuantumTransportEOM\\docs\\NOVELTY_AUDIT_TRANSIENT_INTERACTING_SPIN.md",
+      "sha256": "7b92c8de3471fcd6e53b71ae881a760e112df84280e34dfb54f9f5b83e47f0cb"
+    }
+  ],
+  "passed": true,
+  "regression": {
+    "astra_app": "70 passed",
+    "astra_engine": "267 passed",
+    "astrum_app": "70 passed",
+    "astrum_engine": "267 passed"
+  },
+  "runtime": "ASTRA+ASTRUM",
+  "schema_version": 1
+}

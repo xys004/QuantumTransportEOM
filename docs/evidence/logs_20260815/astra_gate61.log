@@ -1,0 +1,25 @@
+CHECK interacting_self_energy_is_nonzero: PASS
+CHECK total_balance_is_finite: PASS
+CHECK total_and_embedding_audits_differ: PASS
+CHECK vertical_term_changes_total_balance: PASS
+CHECK closed_branch_converges: PASS
+{
+  "assessment": "PASS_TOTAL_SELF_ENERGY_ACCOUNTING_AUDIT",
+  "checks": {
+    "closed_branch_converges": true,
+    "interacting_self_energy_is_nonzero": true,
+    "total_and_embedding_audits_differ": true,
+    "total_balance_is_finite": true,
+    "vertical_term_changes_total_balance": true
+  },
+  "claim_boundary": "The continuity audit now distinguishes embedding-only from total embedding-plus-interaction collision terms. This fixes bookkeeping ambiguity but does not by itself establish a conserving contour closure.",
+  "gate": "GATE_61_TOTAL_SELF_ENERGY_BALANCE",
+  "interaction_sigma_max": 10.695215084621609,
+  "lead_only_bare_residual_max": 0.07315298083493003,
+  "lead_only_closed_residual_max": 0.07625775434181116,
+  "passed": true,
+  "total_bare_residual_max": 0.07315297852237895,
+  "total_closed_residual_max": 0.07619240535250792,
+  "total_vertical_ratio": 1.0415489142277254
+}
+VERDICT: PASS

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-15",
+  "gate": "GATE_51_MIXED_VOLTERRA_STEPPER",
+  "scope": "causal finite-grid propagation of G^rceil with retarded memory and vertical source",
+  "supersedes": "gate51_mixed_volterra_stepper_20260802.json",
+  "regeneration_reason": "Regenerated after the causal-quadrature correction in initial_correlations._prefix_trapezoid_weights. Retarded and advanced kernels are stored with the theta(0)=1/2 convention, so applying the plain trapezoid endpoint weight on top halved the equal-time contribution twice and degraded every causal convolution from second to first order. The superseded record remains valid as the output of the pre-correction code.",
+  "targeted_pytest_command": "python -m pytest tests/test_initial_correlations.py -q",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "12 passed",
+    "engine_full_pytest": "302 passed",
+    "contacted_residual_max": 0.00883560732673691,
+    "free_control_error": 0.00025204473512927477
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "12 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "12 passed",
+    "engine_full_pytest": "302 passed",
+    "app_full_pytest": "82 passed",
+    "contacted_residual_max": 0.008835607326736869,
+    "free_control_error": 0.0002520447351291669
+  },
+  "astra_astrum_max_metric_difference": 1.0787811616230769e-16,
+  "assessment": "PASS_CAUSAL_MIXED_KBE_VOLTERRA_STEPPER",
+  "claim_boundary": "A finite-grid causal Volterra stepper now propagates G^rceil from an explicit initial slice, retarded memory, and vertical source. The free control closes at first-order discretization accuracy; this is a building block, not yet a self-consistent interacting contour solver.",
+  "artifacts": {
+    "verifier": "scripts/verify_gate51_mixed_volterra_stepper.py",
+    "api": "propagate_mixed_kbe_rceil"
+  }
+}

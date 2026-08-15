@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_02_TWO_TIME_IDENTITIES",
+  "scope": "finite quadratic systems and the tested temporal-gauge protocol",
+  "checks": [
+    "two_time_scalar_identities",
+    "noncommuting_equal_time_density",
+    "temporal_gauge_covariance",
+    "finite_embedding_continuity"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "targeted_pytest": "1 passed",
+    "maximum_gauge_covariance_error": 7.06490453025554e-07,
+    "maximum_continuity_error": 1.3877787807814457e-17
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 4,
+    "checks_ok": 4,
+    "comparisons": 5,
+    "maximum_spectral_identity_error": 2.237726045655905e-16,
+    "maximum_trace_drift": 9.325873406851315e-15
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "targeted_pytest": "1 passed",
+    "maximum_spectral_identity_error": 2.2237040697229177e-16,
+    "maximum_trace_drift": 8.770761894538737e-15,
+    "maximum_gauge_covariance_error": 7.064904523096229e-07,
+    "maximum_continuity_error": 2.7755575615628914e-17
+  },
+  "not_yet_claimed": [
+    "arbitrary-time interacting self-energies",
+    "smooth reservoir memory beyond the implemented protocols"
+  ],
+  "artifacts": {
+    "verifier": "scripts/verify_gate02_two_time_identities.py",
+    "test": "tests/test_gate02_two_time_identities.py"
+  }
+}

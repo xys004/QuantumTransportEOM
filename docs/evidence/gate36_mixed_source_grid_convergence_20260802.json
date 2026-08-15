@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_36_MIXED_SOURCE_GRID_CONVERGENCE",
+  "scope": "nested real/vertical grid convergence of the seeded mixed second-Born source",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 3,
+    "checks_ok": 3,
+    "targeted_pytest": "13 passed",
+    "engine_full_pytest": "247 passed (Gate35 regression; no source changes in Gate36)",
+    "app_full_pytest": "69 passed (Gate35 regression; no app/source changes in Gate36)",
+    "grids": [[5, 21], [9, 41], [17, 81]],
+    "source_max": [0.0031230113001604978, 0.003165018497869997, 0.0031755415675752754],
+    "coarse_to_fine_source_errors": [5.2530267414778106e-05, 1.0523069705279438e-05],
+    "source_max_spread": 5.253026741477767e-05
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 3,
+    "checks_ok": 3,
+    "targeted_pytest": "13 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 3,
+    "checks_ok": 3,
+    "targeted_pytest": "13 passed",
+    "engine_full_pytest": "247 passed (Gate35 regression)",
+    "app_full_pytest": "69 passed (Gate35 regression)",
+    "source_max": [0.0031230113001604882, 0.0031650184978699856, 0.0031755415675752633],
+    "coarse_to_fine_source_errors": [5.253026741477507e-05, 1.0523069705279005e-05],
+    "source_max_spread": 5.253026741477507e-05
+  },
+  "assessment": "PASS_MIXED_SOURCE_NESTED_GRID_CONVERGENCE_REFERENCE",
+  "claim_boundary": "The explicit mixed second-Born source is stable under nested real and vertical grid refinement on the finite quadratic reference. This is a convergence result for a seeded reference kernel; the self-consistent interacting continuum closure remains open.",
+  "artifacts": {
+    "verifier": "scripts/verify_gate36_mixed_source_grid_convergence.py",
+    "mixed_api": "src/quantum_transport/kadanoff_baym.py"
+  }
+}

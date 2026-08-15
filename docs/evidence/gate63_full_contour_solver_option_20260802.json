@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_63_FULL_CONTOUR_SOLVER_OPTION",
+  "scope": "optional solver branch selecting the complete three-term lesser contour correction",
+  "execution": {
+    "astra": "PASS",
+    "astrum": "PASS",
+    "script": "scripts/verify_gate63_full_contour_solver_option.py",
+    "targeted_tests": "23 passed on ASTRA and ASTRUM"
+  },
+  "checks": {
+    "full_branch_converges": true,
+    "legacy_branch_remains_available": true,
+    "full_correction_is_attached": true,
+    "all_three_terms_are_finite": true,
+    "full_branch_resolves_vertical_terms": true,
+    "full_and_legacy_lesser_differ": true
+  },
+  "metrics": {
+    "full_iterations": 60,
+    "legacy_iterations": 60,
+    "full_maximum_update": 9.8963847349e-08,
+    "full_correction_max": 0.04584266601973534,
+    "mixed_advanced_max": 0.04723819114371313,
+    "propagated_mixed_max": 0.04740350944143991,
+    "matsubara_max": 0.0,
+    "legacy_full_lesser_difference_max": 0.00399623720654290,
+    "antihermiticity_error": 0.00383767835803251
+  },
+  "passed": true,
+  "assessment": "PASS_OPTIONAL_FULL_CONTOUR_SOLVER_INTERFACE",
+  "claim_boundary": "The solver can select the explicit three-term lesser contour branch and retain the legacy branch. A zero supplied Matsubara interaction remains an approximation; no conserving closure or protection claim follows."
+}

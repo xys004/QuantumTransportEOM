@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_25_INITIAL_CORRELATION_BRANCH",
+  "scope": "mixed real-imaginary Keldysh branch and partition-free lead continuity diagnostic",
+  "checks": [
+    "vertical_branch_source_hermitian",
+    "vertical_branch_correction_identity",
+    "partition_free_lead_residual_is_finite",
+    "required_initial_source_is_hermitian",
+    "required_source_reconstructs_residual",
+    "lead_coupled_closure_remains_open"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "engine_full_pytest": "234 passed",
+    "app_full_pytest": "69 passed"
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "comparisons": 6,
+    "maximum_interior_residual": 0.06853866997501969,
+    "maximum_required_source": 0.06853866997501967,
+    "residual_after_required_source": 1.1146948230763389e-16,
+    "engine_targeted_pytest": "6 passed",
+    "engine_full_pytest": "234 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "maximum_interior_residual": 0.06853866997501926,
+    "maximum_required_source": 0.06853866997501924,
+    "residual_after_required_source": 1.1103585416259206e-16,
+    "engine_full_pytest": "234 passed",
+    "app_full_pytest": "69 passed",
+    "engine_targeted_pytest": "6 passed"
+  },
+  "assessment": "PASS_DIAGNOSTIC_WITH_MICROSCOPIC_LEAD_INITIAL_CORRELATION_OPEN",
+  "claim_boundary": "The vertical-branch API is validated, but the source inferred from the partition-free residual is not a microscopic lead initial-correlation closure. Exact lead-plus-interaction continuity remains open.",
+  "artifacts": {
+    "verifier": "scripts/verify_gate25_initial_correlation_branch.py",
+    "numeric_module": "src/quantum_transport/initial_correlations.py",
+    "symbolic_module": "src/quantum_transport/kadanoff_baym_symbolic.py"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_42_INTERACTING_SOURCE_PAIRING_DIAGNOSTIC",
+  "scope": "negative test of pairing an exact interacting mixed source with a real-time SCBA+Hartree solution",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "5 passed",
+    "engine_full_pytest": "248 passed (Gate41 regression)",
+    "app_full_pytest": "69 passed",
+    "scba_iterations": 58,
+    "raw_scba_continuity_residual_max": 0.030560473280923452,
+    "mismatched_exact_source_corrected_residual_max": 0.06513373665789905,
+    "quadratic_source_corrected_residual_max": 0.00011525326817456161,
+    "exact_interacting_source_max": 0.0345732633769756,
+    "mismatch_amplification": 2.1313065429047864
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "5 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "5 passed",
+    "engine_full_pytest": "248 passed (Gate41 regression)",
+    "app_full_pytest": "69 passed",
+    "scba_iterations": 58,
+    "raw_scba_continuity_residual_max": 0.030560473280925225,
+    "mismatched_exact_source_corrected_residual_max": 0.06513373665790066,
+    "quadratic_source_corrected_residual_max": 0.00011525326817278438,
+    "exact_interacting_source_max": 0.03457326337697545,
+    "mismatch_amplification": 2.1313065429047153
+  },
+  "assessment": "PASS_NEGATIVE_MISMATCHED_BRANCH_DIAGNOSTIC_JOINT_CLOSURE_REQUIRED",
+  "claim_boundary": "The quadratic source/self-energy pairing closes its reference, but attaching an exact-interacting mixed source to the real-time SCBA solution worsens the residual. This is a negative reproducible criterion: real and vertical interacting branches must be solved jointly. No interacting conservation or topological claim is made.",
+  "artifacts": {"verifier": "scripts/verify_gate42_interacting_source_pairing_diagnostic.py"}
+}

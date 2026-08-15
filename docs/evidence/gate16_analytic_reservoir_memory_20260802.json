@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_16_ANALYTIC_RESERVOIR_MEMORY",
+  "scope": "analytic finite-band Lorentzian retarded memory and exact scalar gauge dressing for smooth bias/flux protocols",
+  "checks": [
+    "lorentzian_analytic_retarded_exponential",
+    "smooth_gauge_phase_covariance"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "targeted_pytest": "2 passed",
+    "maximum_retarded_error": 0.0,
+    "memory_time": 0.8333333333333334,
+    "retarded_phase_error": 0.0,
+    "lesser_phase_error": 0.0,
+    "advanced_adjoint_error": 0.0
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 2,
+    "checks_ok": 2,
+    "comparisons": 6
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "targeted_pytest": "2 passed",
+    "checks_total": 2,
+    "checks_ok": 2
+  },
+  "implementation_change": [
+    "Add analytic Lorentzian retarded memory kernel with memory time 1/W.",
+    "Add finite-temperature lesser/greater quadrature on the same spectral density.",
+    "Add exact smooth scalar gauge-phase dressing for time-dependent bias or flux protocols."
+  ],
+  "claim_boundary": [
+    "Lesser and greater components still use an explicit finite energy quadrature.",
+    "The gate does not claim a full driven interacting Kane–Mele solution yet."
+  ],
+  "artifacts": {
+    "module": "src/quantum_transport/reservoir_memory.py",
+    "verifier": "scripts/verify_gate16_analytic_reservoir_memory.py",
+    "test": "tests/test_reservoir_memory.py"
+  }
+}

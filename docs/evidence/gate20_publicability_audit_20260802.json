@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_20_PUBLICABILITY_AUDIT",
+  "scope": "evidence, reproducibility, and novelty-boundary audit after Gates 11–19",
+  "checks": [
+    "nine_new_gate_records",
+    "all_new_gate_astra_pass",
+    "all_new_gate_astrum_pass",
+    "engine_full_pytest_latest",
+    "app_full_pytest_latest",
+    "novelty_audit_documented",
+    "nonprotection_boundary_explicit",
+    "no_protection_overclaim",
+    "open_gates_are_explicit"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "engine_full_pytest": "225 passed",
+    "app_full_pytest": "68 passed",
+    "new_gate_records": 9,
+    "novelty_audit": "docs/NOVELTY_AUDIT_TRANSIENT_INTERACTING_SPIN.md"
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 9,
+    "checks_ok": 9,
+    "comparisons": 11
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 9,
+    "checks_ok": 9
+  },
+  "assessment": "AUDIT_PASS_WITH_OPEN_PUBLICATION_GATES",
+  "candidate_novelty": "combined finite-grid two-time interaction-memory workflow for persistent/reservoir charge-spin channels in a Kane–Mele Corbino annulus",
+  "not_yet_claimed": [
+    "publication-grade novelty",
+    "exact continuum conservation",
+    "interacting topological protection"
+  ],
+  "next_required": [
+    "same-Hubbard-U exact benchmark",
+    "interacting lead-plus-torque continuity closure",
+    "specialist literature/database novelty search",
+    "production-width/time/contact convergence sweep"
+  ],
+  "artifacts": {
+    "verifier": "scripts/verify_gate20_publicability_audit.py",
+    "novelty_audit": "docs/NOVELTY_AUDIT_TRANSIENT_INTERACTING_SPIN.md"
+  }
+}

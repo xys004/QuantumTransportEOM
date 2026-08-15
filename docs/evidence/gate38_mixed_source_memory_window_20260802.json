@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_38_MIXED_SOURCE_MEMORY_WINDOW_CAUSALITY",
+  "scope": "causal time-window and memory sensitivity of the seeded mixed source on a finite lead",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 4,
+    "checks_ok": 4,
+    "targeted_pytest": "13 passed",
+    "engine_full_pytest": "247 passed (Gate35 regression)",
+    "app_full_pytest": "69 passed",
+    "windows": [[0.25, 0.0013492644522672887], [0.5, 0.002269845319798539], [1.0, 0.0037770428979409473]],
+    "prefix_short_medium_max": 3.428548309156935e-19,
+    "prefix_medium_long_max": 9.432558900623889e-18
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 4,
+    "checks_ok": 4,
+    "targeted_pytest": "13 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 4,
+    "checks_ok": 4,
+    "targeted_pytest": "13 passed",
+    "engine_full_pytest": "247 passed (Gate35 regression)",
+    "app_full_pytest": "69 passed",
+    "windows": [[0.25, 0.001349264452267288], [0.5, 0.002269845319798536], [1.0, 0.0037770428979409447]],
+    "prefix_short_medium_max": 2.168404344971009e-19,
+    "prefix_medium_long_max": 1.5178830414797062e-18
+  },
+  "assessment": "PASS_MIXED_SOURCE_CAUSAL_MEMORY_WINDOW",
+  "claim_boundary": "The mixed source is causal under nested time-window extension and its norm grows as later times are included. This is a finite-lead memory-window control; irreversible relaxation and the interacting continuum limit remain open.",
+  "artifacts": {"verifier": "scripts/verify_gate38_mixed_source_memory_window.py"}
+}

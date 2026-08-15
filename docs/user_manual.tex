@@ -91,7 +91,9 @@ QuantumTransportEOM/
     eom.py             # EOM closure checks
     hamiltonians.py    # Rashba-Hubbard ring builders
     greens.py          # equilibrium Green functions
-    keldysh.py         # numeric Keldysh self-energies and views
+    keldysh.py         # stationary numeric Keldysh self-energies and views
+    transient.py       # exact finite-system G^{r,a,<,>}(t,t')
+    resonant_level.py  # partitioned and partition-free WBL quench oracles
     keldysh_symbolic.py# contour algebra, Langreth, Dyson
     devices.py         # MatrixDevice, leads, transport views
     observables.py     # transmission, currents, conductance
@@ -100,7 +102,7 @@ QuantumTransportEOM/
     transport.py       # persistent currents, Drude proxy
     numerics.py        # backends, batched kernels, parallel sweeps
   examples/            # 20+ runnable demos incl. keldysh guide
-  tests/               # 169 tests incl. physics validation
+  tests/               # 190 tests incl. physics validation
   docs/
     user_manual.tex
     user_manual.pdf
@@ -258,6 +260,36 @@ lesser\_green\_equilibrium(...) & Returns \(G^<=f(G^a-G^r)\). Supports scalar/ve
 greater\_green\_equilibrium(...) & Returns \(G^>=(f-1)(G^a-G^r)\). \\
 \bottomrule
 \end{longtable}
+
+\subsection{\texttt{quantum\_transport.continuum\_two\_time}}
+\textbf{Purpose:} transform stationary continuum-reservoir NEGF quantities from
+frequency space to explicit two-time matrix kernels,
+\begin{equation}
+  X(t,t')=\int\frac{d\omega}{2\pi}
+  e^{-i\omega(t-t')}X(\omega).
+\end{equation}
+\texttt{stationary\_self\_energy\_two\_time} returns
+$\Sigma^{r,a,<,>}(t,t')$ for a \texttt{LeadSelfEnergy};
+\texttt{stationary\_greens\_two\_time} returns $G^{r,a,<,>}(t,t')$ for a
+\texttt{MatrixTransportView}. Both use the caller's possibly nonuniform
+frequency grid, trapezoid quadrature, blocked phase matrices, and a 512\,MiB
+allocation guard. The result objects report advanced-adjoint,
+lesser/greater anti-Hermiticity, and Keldysh spectral residuals; the Green
+result also exposes $\rho(t)=-iG^<(t,t)$ and its stationary drift.
+
+The finite frequency interval is an explicit band limit. In a wide-band lead
+it resolves the retarded delta kernel as a cutoff sinc, while the Fermi edge
+retains the physical two-time lesser/greater memory.
+
+For a sudden protocol, \texttt{partition\_free\_wide\_band\_matrix\_quench}
+starts from the fully contacted common equilibrium state and permits both a
+matrix Hamiltonian jump $h_0\to h_f$ and constant lead shifts
+$\Delta_\alpha$. It integrates the exact wide-band spectral amplitudes to
+return $\rho(t)$ and one current per lead, with positive sign into the device.
+The companion \texttt{partition\_free\_wide\_band\_two\_time\_greens} returns
+the post-quench $G^{r,a,<,>}(t,t')$. Both retain the initial Fermi sea and are
+not time-local injection approximations. Arbitrary smooth lead protocols and
+interacting Kadanoff--Baym memory kernels remain outside the current scope.
 
 \subsection{\texttt{quantum\_transport.mean\_field}}
 \textbf{Purpose:} self-consistent collinear-Hartree loop for on-site Hubbard decoupling.
@@ -578,6 +610,7 @@ occ = anderson_view.self_consistent_occupations(grid, workers=4)
   \item The equilibrium lesser/greater relations implemented here assume closed-system equilibrium.
   \item For open systems with leads, use the device layer (\texttt{MatrixDevice}, \texttt{LeadSelfEnergy}) or \texttt{AndersonImpurity.open}, which assemble the contact self-energies and Keldysh equations for you.
   \item Frequency integrals use \texttt{numpy.trapezoid} on user-supplied grids; resolve sharp resonances (width $\sim\Gamma$) with an adequate grid, especially at low temperature.
+  \item \texttt{stationary\_self\_energy\_two\_time} and \texttt{stationary\_greens\_two\_time} provide matrix-valued continuum kernels for stationary problems. \texttt{partition\_free\_wide\_band\_matrix\_quench} covers simultaneous sudden device/bias quenches and is checked against the resonant-level analytic oracle. General smooth-time lead protocols are not yet implemented.
   \item For production sweeps use \texttt{workers=} and, on CUDA hosts, \texttt{backend="cupy"}; \texttt{parallel\_map} parallelizes external parameter scans.
   \item \texttt{tests/test\_physics\_validation.py} pins the package to exact analytic results (Lorentzian transmission, spectral sum rule, fluctuation--dissipation, current conservation); run it after modifying physics code.
 \end{itemize}

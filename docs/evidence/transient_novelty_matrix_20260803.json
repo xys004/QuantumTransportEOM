@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "artifact": "TARGETED_TRANSIENT_CORBINO_XENE_NOVELTY_MATRIX",
+  "search_date": "2026-08-03",
+  "search_scope": "Targeted primary-source web/arXiv search; not a database-complete absence proof.",
+  "exact_combination_found": false,
+  "exact_combination_description": "Finite Xene Corbino annulus + smooth finite-time AB flux protocol + reservoir bias/coupling + two-time interacting Keldysh/EOM + persistent/reservoir separation + inner/outer/bulk decomposition + Rashba spin torque.",
+  "sources": [
+    {
+      "key": "corbino_graphene_equilibrium_rashba",
+      "title": "Equilibrium currents in a Corbino graphene ring",
+      "url": "https://arxiv.org/abs/1411.4905",
+      "category": "stationary_xene_corbino",
+      "scope": "Tight-binding graphene Corbino with kinetic and Rashba spin-orbit coupling; persistent equilibrium currents.",
+      "implication": "Stationary Corbino/Rashba persistent-current block is prior art."
+    },
+    {
+      "key": "graphene_ring_persistent_spin_charge",
+      "title": "Persistent charge and spin currents in the long wavelength regime for graphene rings",
+      "url": "https://arxiv.org/abs/1402.4103",
+      "category": "stationary_xene_ring",
+      "scope": "Graphene Corbino/ring Hamiltonian with intrinsic and Rashba spin-orbit coupling and persistent charge/spin currents.",
+      "implication": "Persistent charge/spin observables with ISO/Rashba are not new by themselves."
+    },
+    {
+      "key": "silicene_spin_valley_pumping",
+      "title": "Topological spin and valley pumping in silicene",
+      "url": "https://www.nature.com/articles/srep31325",
+      "category": "dynamic_xene_pumping",
+      "scope": "Time-dependent electric fields drive spin- and valley-dependent pumping in silicene.",
+      "implication": "Dynamic spin/valley response in silicene exists, although it is not the same reservoir-coupled Corbino protocol."
+    },
+    {
+      "key": "ab_dqd_real_time_soi",
+      "title": "Real-time dynamics of spin-dependent transport through a double-quantum-dot Aharonov-Bohm interferometer with spin-orbit interaction",
+      "url": "https://arxiv.org/abs/1406.6258",
+      "category": "transient_ab_spin_soi",
+      "scope": "Real-time spin-dependent currents, AB flux, spin-orbit phase and explicit connection to Keldysh Green functions in a double-dot interferometer.",
+      "implication": "Transient AB plus SOI spin currents are prior art in a different geometry."
+    },
+    {
+      "key": "ab_time_dependent_interferometers",
+      "title": "Time-dependent transport in Aharonov-Bohm interferometers",
+      "url": "https://doi.org/10.1088/1367-2630/14/5/053024",
+      "category": "transient_ab_generic",
+      "scope": "Time-dependent dynamics and AB oscillations in realistic quantum-Hall interferometers.",
+      "implication": "AB transients and flux-dependent interference are not methodologically new."
+    },
+    {
+      "key": "ab_wavepacket_ring_dot",
+      "title": "Time-dependent wave packet simulations of transport through Aharonov-Bohm rings with an embedded quantum dot",
+      "url": "https://doi.org/10.1088/1361-648X/aa605d",
+      "category": "transient_ab_generic",
+      "scope": "Time-dependent wave-packet transport through an AB ring with an embedded dot.",
+      "implication": "Finite-time AB-ring dynamics predate the present project, even without Xene topology."
+    },
+    {
+      "key": "graphene_transient_keldysh",
+      "title": "Time-resolved impurity-invisibility in graphene nanoribbons",
+      "url": "https://doi.org/10.1039/C9NR02738F",
+      "category": "transient_graphene_transport",
+      "scope": "Time-resolved charge transport and local current pathways in graphene nanoribbons after bias quenches.",
+      "implication": "Transient graphene transport and local pathway rearrangement are prior art; geometry and observables differ."
+    },
+    {
+      "key": "qsh_transient_spin_current",
+      "title": "All-electrical generation of spin-polarized currents in quantum spin Hall insulators",
+      "url": "https://doi.org/10.1103/PhysRevB.95.121407",
+      "category": "transient_qsh_spin",
+      "scope": "Transient and ac spin-polarized currents in a stanene QSH nanoribbon, with relevance to silicene and germanene.",
+      "implication": "Transient spin-polarized transport in Xene-like QSH systems is not unprecedented."
+    },
+    {
+      "key": "silicene_qsh_interferometry",
+      "title": "Electron interferometry and quantum spin Hall phase in silicene",
+      "url": "https://doi.org/10.1103/PhysRevB.99.165426",
+      "category": "stationary_xene_qsh_interferometry",
+      "scope": "Silicene quantum-ring/two-path interference and distinction between normal and QSH transport.",
+      "implication": "Silicene ring geometry and QSH/bulk-edge interference have direct stationary precedent."
+    },
+    {
+      "key": "kadanoff_baym_transient_method",
+      "title": "Kadanoff–Baym approach to quantum transport through interacting nanoscale systems",
+      "url": "https://arxiv.org/abs/0906.2136",
+      "category": "two_time_keldysh_method",
+      "scope": "Interacting two-time Kadanoff–Baym transport, embedding and conserving approximations.",
+      "implication": "Broad two-time KBE/EOM method novelty is prior art."
+    },
+    {
+      "key": "keldysh_transient_influence_functional",
+      "title": "A nonequilibrium theory for transient transport dynamics in nanostructures via the Feynman-Vernon influence functional approach",
+      "url": "https://arxiv.org/abs/0910.1675",
+      "category": "two_time_transient_method",
+      "scope": "Non-Markovian transient transport with time-dependent leads/biases and recovery of the Keldysh steady-state limit.",
+      "implication": "Memory, initial correlations and time-dependent reservoir driving are established topics."
+    },
+    {
+      "key": "kane_mele_quench",
+      "title": "Finite-rate quench in disordered Chern and Z2 topological insulators",
+      "url": "https://arxiv.org/abs/2502.13579",
+      "category": "dynamic_kane_mele",
+      "scope": "Finite-rate quenches and local bulk observables in the Kane–Mele model with disorder.",
+      "implication": "Dynamic Kane–Mele response itself is active prior art; the open-reservoir Corbino observable remains distinct."
+    }
+  ],
+  "claim_matrix": [
+    {"claim": "New Keldysh/EOM transient method", "status": "REJECTED_BY_PRIOR_ART"},
+    {"claim": "New Corbino/Xene persistent-current phenomenon", "status": "REJECTED_BY_PRIOR_ART"},
+    {"claim": "New transient spin current with AB and spin-orbit coupling", "status": "REJECTED_BY_PARTIAL_PRIOR_ART"},
+    {"claim": "Exact integrated persistent/reservoir + bulk/edge + torque observable in a finite Xene Corbino", "status": "UNCONFIRMED_CANDIDATE"},
+    {"claim": "Topological protection of the transient current", "status": "NOT_A_PRIOR_NOVELTY_CLAIM; TEST_SECONDARY"}
+  ],
+  "allowed_claim": "A targeted search did not find an exact primary-source match for the integrated finite-Xene-Corbino transient protocol; the integrated novelty candidate remains unconfirmed until specialist database searches and stronger controls are complete.",
+  "rejected_claims": [
+    "Keldysh/EOM transient transport is new.",
+    "Persistent spin/charge currents in AB/Xene rings are new.",
+    "Rashba-induced transient spin current is new.",
+    "Robustness or Z2=1 alone proves topological protection.",
+    "No prior work exists."
+  ],
+  "required_followup": [
+    "Repeat the exact-combination search in Scopus, Web of Science, INSPIRE and specialist arXiv categories.",
+    "Compare against stationary graphene Corbino, transient AB/SOI, dynamic silicene pumping, transient QSH spin and two-time KBE baselines.",
+    "Show ramp-time, width, contact, lead-size, Rashba and trivial-control scaling.",
+    "Keep compact-geometry topological verdict secondary and explicit."
+  ],
+  "verdict": "NARROW_INTEGRATED_TRANSIENT_CORBINO_XENE_CANDIDATE_UNCONFIRMED"
+}

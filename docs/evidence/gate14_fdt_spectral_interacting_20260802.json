@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-02",
+  "gate": "GATE_14_FDT_SPECTRAL_INTERACTING",
+  "scope": "equilibrium interacting FDT, finite-window spectral sum convergence, and transient Keldysh/positivity diagnostics",
+  "checks": [
+    "equilibrium_interacting_fdt",
+    "finite_window_spectral_sum_refinement",
+    "transient_adjoint_and_spectral_sum",
+    "transient_density_hermiticity_and_bounds"
+  ],
+  "local": {
+    "verdict": "PASS",
+    "fdt_error_by_cutoff": [
+      1.8227839353457398e-06,
+      8.881784197001252e-16,
+      8.881784197001252e-16
+    ],
+    "spectral_sum_error_by_cutoff": [
+      0.03965716183286494,
+      0.02374679671754021,
+      0.011753431164057915
+    ],
+    "transient_equal_time_spectral_sum_error": 5.834564388296215e-07,
+    "transient_density_hermiticity_error": 2.696583483096367e-13,
+    "transient_occupation_bounds_violation": 0.0
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "verdict_suspect": false,
+    "checks_total": 4,
+    "checks_ok": 4,
+    "comparisons": 9
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "targeted_pytest": "6 passed",
+    "checks_total": 4,
+    "checks_ok": 4
+  },
+  "implementation_change": [
+    "Expose spectral_sum_rule_error for stationary SCBA results.",
+    "Expose equal-time spectral sum, density Hermiticity, and occupation-bound diagnostics for numerical two-time KBE results.",
+    "Add interacting FDT and energy-window refinement gate."
+  ],
+  "claim_boundary": [
+    "The finite-window spectral sum is a convergence diagnostic; the cutoff=20 residual remains about 1.2e-2 and is not treated as exact normalization.",
+    "No claim of interacting reservoir spin injection or Kane–Mele transport is made yet."
+  ],
+  "artifacts": {
+    "modules": [
+      "src/quantum_transport/scba.py",
+      "src/quantum_transport/kadanoff_baym.py"
+    ],
+    "verifier": "scripts/verify_gate14_fdt_spectral_interacting.py",
+    "tests": [
+      "tests/test_scba.py",
+      "tests/test_kadanoff_baym.py"
+    ]
+  }
+}

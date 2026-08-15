@@ -19,6 +19,8 @@ probes (`I_p(E) = 0` at every energy), and an inelastic voltage probe
 | `generate_data_and_figures.py` | Baseline scans: probe-coupling scan, detuning map, mechanism/symmetry controls |
 | `extended_scans.py` | Bias, spin-orbit, polarization, length, temperature scans; fine detuning map |
 | `validation_checks.py` | Independent checks: grid convergence, pointwise reciprocity of the coherent and elastic-probe cases, linear-response limit |
+| `electrostatic_bias_scan.py` | Odd-in-V magnetocurrent from capacitive asymmetry (levels riding U(V) = eta_L mu_L + eta_R mu_R) |
+| `vibron_scans.py` | Microscopic SCBA electron-vibron verification (uses `../ciss_vibron_scba.py`): controls, coupling scan, mode-frequency scan |
 | `make_figures.py` | Journal-quality figures from the CSV data |
 | `data/` | All CSV outputs used in the paper |
 

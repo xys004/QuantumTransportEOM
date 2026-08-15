@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-15",
+  "gate": "GATE_54_LESSER_VERTICAL_INITIAL_CORRELATION",
+  "scope": "propagated mixed Keldysh source in the real lesser Dyson/KBE update",
+  "supersedes": "gate54_lesser_vertical_initial_correlation_20260802.json",
+  "regeneration_reason": "Regenerated after the causal-quadrature correction in initial_correlations._prefix_trapezoid_weights. Retarded and advanced kernels are stored with the theta(0)=1/2 convention, so applying the plain trapezoid endpoint weight on top halved the equal-time contribution twice and degraded every causal convolution from second to first order. The superseded record remains valid as the output of the pre-correction code.",
+  "targeted_pytest_command": "python -m pytest tests/test_initial_correlations.py -q",
+  "local": {
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "12 passed",
+    "engine_full_pytest": "302 passed",
+    "bare_residual_max": 0.07315298083493003,
+    "lesser_correction_max": 0.048511227189491836,
+    "required_source_error_max": 0.088364188878674,
+    "residual_ratio": 1.0424422008706256,
+    "source_charge_max": 0.015760900368685275,
+    "source_kernel_max": 0.1009480086252369,
+    "source_spin_max": 0.008451968729321638,
+    "vertical_residual_max": 0.07625775434181116
+  },
+  "astra": {
+    "oracle": "local",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "12 passed"
+  },
+  "astrum": {
+    "host": "astrum-X870E-AORUS-ELITE-WIFI7-ICE",
+    "verdict": "PASS",
+    "checks_total": 6,
+    "checks_ok": 6,
+    "targeted_pytest": "12 passed",
+    "engine_full_pytest": "302 passed",
+    "app_full_pytest": "82 passed",
+    "bare_residual_max": 0.07315298083492829,
+    "lesser_correction_max": 0.048511227189491794,
+    "required_source_error_max": 0.08836418887867757,
+    "residual_ratio": 1.0424422008706993,
+    "source_charge_max": 0.015760900368685268,
+    "source_kernel_max": 0.10094800862523681,
+    "source_spin_max": 0.008451968729321628,
+    "vertical_residual_max": 0.07625775434181473
+  },
+  "astra_astrum_max_metric_difference": 7.37188088351104e-14,
+  "assessment": "PASS_EXPLICIT_LESSER_VERTICAL_TERM_WITH_RESIDUAL_AUDIT",
+  "claim_boundary": "The real lesser update now accepts the causal propagated term G^R*(-i Sigma^rceil*G^lceil) plus its right-acting adjoint. In the contacted finite-U benchmark this changes the lesser branch but increases the continuity residual (ratio 1.042); the term is therefore implemented and falsified, not claimed to close conservation or topology.",
+  "artifacts": {
+    "verifier": "scripts/verify_gate54_lesser_vertical_closure.py",
+    "symbolic_api": "kadanoff_baym_lesser_initial_correlation_symbolic",
+    "numeric_api": "kbe_lesser_initial_correlation",
+    "dyson_flag": "initial_correlation_lesser",
+    "contour_flag": "include_vertical_lesser"
+  }
+}
