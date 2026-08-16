@@ -498,7 +498,7 @@ you used:
 
 | Release | Version DOI |
 |---|---|
-| v0.4.1 | minted on release |
+| v0.4.1 | [10.5281/zenodo.21960610](https://doi.org/10.5281/zenodo.21960610) |
 | v0.4.0 | [10.5281/zenodo.21959411](https://doi.org/10.5281/zenodo.21959411) — superseded, cite v0.4.1 |
 | v0.3.0 | [10.5281/zenodo.21265400](https://doi.org/10.5281/zenodo.21265400) |
 
